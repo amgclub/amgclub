@@ -1,0 +1,3 @@
+{
+  "extends": "@amgclub/config/tsconfig.base.json"
+}
