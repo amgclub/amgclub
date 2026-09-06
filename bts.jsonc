@@ -16,7 +16,12 @@
   "backend": "self",
   "runtime": "none",
   "frontend": ["next"],
-  "addons": ["biome", "husky", "turborepo"],
+  "addons": [
+		"biome",
+		"husky",
+		"turborepo",
+		"skills"
+	],
   "examples": [],
   "auth": "better-auth",
   "payments": "none",
