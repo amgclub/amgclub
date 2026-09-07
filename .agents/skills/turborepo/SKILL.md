@@ -201,6 +201,8 @@ Monorepo structure?
 ├─ Creating internal packages → references/best-practices/packages.md
 ├─ TypeScript configuration → references/best-practices/structure.md#typescript-configuration
 ├─ ESLint configuration → references/best-practices/structure.md#eslint-configuration
+├─ Biome configuration → references/biome/RULE.md
+├─ Vitest configuration → references/vitest/RULE.md
 ├─ Dependency management → references/best-practices/dependencies.md
 └─ Enforce package boundaries → references/boundaries/RULE.md
 ```
