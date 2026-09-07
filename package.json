@@ -1,44 +1,52 @@
 {
-  "name": "amgclub",
-  "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
-  "type": "module",
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "check-types": "turbo run check-types",
-    "dev:web": "turbo run dev -F web --",
-    "db:push": "turbo run db:push -F @amgclub/db --",
-    "db:studio": "turbo run db:studio -F @amgclub/db --",
-    "db:generate": "turbo run db:generate -F @amgclub/db --",
-    "db:migrate": "turbo run db:migrate -F @amgclub/db --",
-    "deploy": "turbo run deploy -F @amgclub/infra --",
-    "destroy": "turbo run destroy -F @amgclub/infra --",
-    "check": "biome check --write .",
-    "prepare": "husky"
-  },
-  "dependencies": {
-    "@amgclub/env": "workspace:*",
-    "dotenv": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@amgclub/config": "workspace:*",
-    "@biomejs/biome": "^2.5.11",
-    "@cloudflare/workers-types": "catalog:",
-    "@types/node": "catalog:",
-    "husky": "^9.1.7",
-    "lint-staged": "^17.4.1",
-    "turbo": "^2.10.12",
-    "typescript": "catalog:"
-  },
-  "lint-staged": {
-    "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
-      "biome check --write ."
-    ]
-  },
-  "packageManager": "pnpm@10.33.2"
+	"name": "amgclub",
+	"private": true,
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	],
+	"type": "module",
+	"scripts": {
+		"dev": "turbo run dev",
+		"build": "turbo run build",
+		"check-types": "turbo run check-types",
+		"dev:web": "turbo run dev -F web --",
+		"db:push": "turbo run db:push -F @amgclub/db --",
+		"db:studio": "turbo run db:studio -F @amgclub/db --",
+		"db:generate": "turbo run db:generate -F @amgclub/db --",
+		"db:migrate": "turbo run db:migrate -F @amgclub/db --",
+		"deploy": "turbo run deploy -F @amgclub/infra --",
+		"destroy": "turbo run destroy -F @amgclub/infra --",
+		"check": "biome check --write .",
+		"lint:design": "node scripts/lint-design.mjs",
+		"lint": "pnpm check && pnpm lint:design",
+		"prepare": "husky"
+	},
+	"dependencies": {
+		"@amgclub/env": "workspace:*",
+		"dotenv": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@amgclub/config": "workspace:*",
+		"@biomejs/biome": "^2.5.11",
+		"@cloudflare/workers-types": "catalog:",
+		"@types/node": "catalog:",
+		"husky": "^9.1.7",
+		"lint-staged": "^17.4.1",
+		"turbo": "^2.10.12",
+		"typescript": "catalog:"
+	},
+	"lint-staged": {
+		"*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}": [
+			"biome check --write --no-errors-on-unmatched"
+		],
+		"packages/ui/src/**/*.{ts,tsx}": [
+			"node scripts/lint-design.mjs"
+		],
+		"apps/**/src/**/*.{ts,tsx}": [
+			"node scripts/lint-design.mjs"
+		]
+	},
+	"packageManager": "pnpm@10.33.2"
 }
