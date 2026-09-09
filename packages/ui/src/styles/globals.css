@@ -7,208 +7,208 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Mercedes-AMG Dark Motion — design tokens (DESIGN.md)
+	/* Mercedes-AMG Dark Motion — design tokens (DESIGN.md)
      Colors stored as bare "L C H" triplets so Tailwind alpha utilities
      (e.g. bg-primary/50) compose via oklch(var(--token) / <alpha>). */
-  --background: 0 0 0;
-  --foreground: 1 0 0;
-  --card: 0 0 0;
-  --card-foreground: 1 0 0;
-  --popover: 0 0 0;
-  --popover-foreground: 1 0 0;
+	--background: 0 0 0;
+	--foreground: 1 0 0;
+	--card: 0 0 0;
+	--card-foreground: 1 0 0;
+	--popover: 0 0 0;
+	--popover-foreground: 1 0 0;
 
-  /* Primary: AMG motorsport red */
-  --primary: 0.4941 0.1822 25.8;
-  --primary-foreground: 1 0 0;
-  --primary-60: 0.5796 0.1596 21.7;
-  --primary-70: 0.654 0.1347 19.7;
+	/* Primary: AMG motorsport red */
+	--primary: 0.4941 0.1822 25.8;
+	--primary-foreground: 1 0 0;
+	--primary-60: 0.5796 0.1596 21.7;
+	--primary-70: 0.654 0.1347 19.7;
 
-  /* Neutral structure */
-  --secondary: 1 0 0;
-  --secondary-foreground: 0 0 0;
-  --muted: 0.1776 0 0;
-  --muted-foreground: 0.7155 0 0;
-  --accent: 0.1776 0 0;
-  --accent-foreground: 1 0 0;
+	/* Neutral structure */
+	--secondary: 1 0 0;
+	--secondary-foreground: 0 0 0;
+	--muted: 0.1776 0 0;
+	--muted-foreground: 0.7155 0 0;
+	--accent: 0.1776 0 0;
+	--accent-foreground: 1 0 0;
 
-  /* Surfaces */
-  --surface: 0 0 0;
-  --surface-weak: 0.1776 0 0;
-  --surface-strong: 0 0 0;
+	/* Surfaces */
+	--surface: 0 0 0;
+	--surface-weak: 0.1776 0 0;
+	--surface-strong: 0 0 0;
 
-  /* Structural */
-  --tertiary: 0.3729 0.0306 259.7;
-  --neutral: 0 0 0;
+	/* Structural */
+	--tertiary: 0.3729 0.0306 259.7;
+	--neutral: 0 0 0;
 
-  /* Error reuses the red family */
-  --destructive: 0.4941 0.1822 25.8;
+	/* Error reuses the red family */
+	--destructive: 0.4941 0.1822 25.8;
 
-  --border: 0.3729 0.0306 259.7;
-  --input: 0.1776 0 0;
-  --ring: 1 0 0;
+	--border: 0.3729 0.0306 259.7;
+	--input: 0.1776 0 0;
+	--ring: 1 0 0;
 
-  /* Charts on-brand: AMG red ramp, no soft blues */
-  --chart-1: 0.4941 0.1822 25.8;
-  --chart-2: 0.5796 0.1596 21.7;
-  --chart-3: 0.654 0.1347 19.7;
-  --chart-4: 1 0 0;
-  --chart-5: 0.3729 0.0306 259.7;
+	/* Charts on-brand: AMG red ramp, no soft blues */
+	--chart-1: 0.4941 0.1822 25.8;
+	--chart-2: 0.5796 0.1596 21.7;
+	--chart-3: 0.654 0.1347 19.7;
+	--chart-4: 1 0 0;
+	--chart-5: 0.3729 0.0306 259.7;
 
-  /* Spec: interactive controls stay at rounded.none (0px) */
-  --radius: 0;
+	/* Spec: interactive controls stay at rounded.none (0px) */
+	--radius: 0;
 
-  --sidebar: 0 0 0;
-  --sidebar-foreground: 1 0 0;
-  --sidebar-primary: 0.4941 0.1822 25.8;
-  --sidebar-primary-foreground: 1 0 0;
-  --sidebar-accent: 0.1776 0 0;
-  --sidebar-accent-foreground: 1 0 0;
-  --sidebar-border: 0.3729 0.0306 259.7;
-  --sidebar-ring: 1 0 0;
+	--sidebar: 0 0 0;
+	--sidebar-foreground: 1 0 0;
+	--sidebar-primary: 0.4941 0.1822 25.8;
+	--sidebar-primary-foreground: 1 0 0;
+	--sidebar-accent: 0.1776 0 0;
+	--sidebar-accent-foreground: 1 0 0;
+	--sidebar-border: 0.3729 0.0306 259.7;
+	--sidebar-ring: 1 0 0;
 
-  /* Type roles — these are *referenced* from @theme inline above; the @media
+	/* Type roles — these are *referenced* from @theme inline above; the @media
      block below re-declares the values that step up at the md breakpoint. */
 }
 
 @media (min-width: 768px) {
-  :root {
-    /* Headlines step up at md; body/label sizes step up where DESIGN.md
+	:root {
+		/* Headlines step up at md; body/label sizes step up where DESIGN.md
        spec demands larger long-form reading sizes. */
-    --text-headline-display: 2.125rem 1.0588 -0.005em;
-    --text-headline-lg: 1.75rem 1.125 0em;
-    --text-headline-md: 1.4375rem 1.2174 0em;
-    --text-headline-sm: 1.1875rem 1.2105 0em;
-    --text-body-md: 1rem 1.5 0em;
-    --text-label-lg: 1rem 1.5 0em;
-  }
+		--text-headline-display: 2.125rem 1.0588 -0.005em;
+		--text-headline-lg: 1.75rem 1.125 0em;
+		--text-headline-md: 1.4375rem 1.2174 0em;
+		--text-headline-sm: 1.1875rem 1.2105 0em;
+		--text-body-md: 1rem 1.5 0em;
+		--text-label-lg: 1rem 1.5 0em;
+	}
 }
 
 .dark {
-  --background: 0 0 0;
-  --foreground: 1 0 0;
-  --card: 0 0 0;
-  --card-foreground: 1 0 0;
-  --popover: 0 0 0;
-  --popover-foreground: 1 0 0;
-  --primary: 0.4941 0.1822 25.8;
-  --primary-foreground: 1 0 0;
-  --primary-60: 0.5796 0.1596 21.7;
-  --primary-70: 0.654 0.1347 19.7;
-  --secondary: 1 0 0;
-  --secondary-foreground: 0 0 0;
-  --muted: 0.1776 0 0;
-  --muted-foreground: 0.7155 0 0;
-  --accent: 0.1776 0 0;
-  --accent-foreground: 1 0 0;
-  --destructive: 0.4941 0.1822 25.8;
-  --border: 0.3729 0.0306 259.7;
-  --input: 0.1776 0 0;
-  --ring: 1 0 0;
-  --chart-1: 0.4941 0.1822 25.8;
-  --chart-2: 0.5796 0.1596 21.7;
-  --chart-3: 0.654 0.1347 19.7;
-  --chart-4: 1 0 0;
-  --chart-5: 0.3729 0.0306 259.7;
-  --sidebar: 0 0 0;
-  --sidebar-foreground: 1 0 0;
-  --sidebar-primary: 0.4941 0.1822 25.8;
-  --sidebar-primary-foreground: 1 0 0;
-  --sidebar-accent: 0.1776 0 0;
-  --sidebar-accent-foreground: 1 0 0;
-  --sidebar-border: 0.3729 0.0306 259.7;
-  --sidebar-ring: 1 0 0;
+	--background: 0 0 0;
+	--foreground: 1 0 0;
+	--card: 0 0 0;
+	--card-foreground: 1 0 0;
+	--popover: 0 0 0;
+	--popover-foreground: 1 0 0;
+	--primary: 0.4941 0.1822 25.8;
+	--primary-foreground: 1 0 0;
+	--primary-60: 0.5796 0.1596 21.7;
+	--primary-70: 0.654 0.1347 19.7;
+	--secondary: 1 0 0;
+	--secondary-foreground: 0 0 0;
+	--muted: 0.1776 0 0;
+	--muted-foreground: 0.7155 0 0;
+	--accent: 0.1776 0 0;
+	--accent-foreground: 1 0 0;
+	--destructive: 0.4941 0.1822 25.8;
+	--border: 0.3729 0.0306 259.7;
+	--input: 0.1776 0 0;
+	--ring: 1 0 0;
+	--chart-1: 0.4941 0.1822 25.8;
+	--chart-2: 0.5796 0.1596 21.7;
+	--chart-3: 0.654 0.1347 19.7;
+	--chart-4: 1 0 0;
+	--chart-5: 0.3729 0.0306 259.7;
+	--sidebar: 0 0 0;
+	--sidebar-foreground: 1 0 0;
+	--sidebar-primary: 0.4941 0.1822 25.8;
+	--sidebar-primary-foreground: 1 0 0;
+	--sidebar-accent: 0.1776 0 0;
+	--sidebar-accent-foreground: 1 0 0;
+	--sidebar-border: 0.3729 0.0306 259.7;
+	--sidebar-ring: 1 0 0;
 }
 
 @theme inline {
-  /* Typography — all roles resolve to Inter; only weight + size differ.
+	/* Typography — all roles resolve to Inter; only weight + size differ.
      Each --text-<role> bundles "<size> <line-height> <letter-spacing>" so a
      single utility class (e.g. text-headline-display) applies the whole role.
      Compose with font-sans (always Inter) + font-extrabold/font-bold/font-medium
      for the documented weight. Mobile default; the @media block in :root
      re-declares each role at the md breakpoint. */
-  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: ui-monospace, "JetBrains Mono", monospace;
+	--font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+	--font-mono: ui-monospace, "JetBrains Mono", monospace;
 
-  /* Weight tokens — also exposed as font-<name> utilities for role coupling. */
-  --font-weight-extra-bold: 800; /* titleExtraBold */
-  --font-weight-bold: 700; /* titleBold */
-  --font-weight-medium: 500; /* MBCorpoSText_Regular_Web (label family) */
-  --font-weight-normal: 400; /* textRegular */
+	/* Weight tokens — also exposed as font-<name> utilities for role coupling. */
+	--font-weight-extra-bold: 800; /* titleExtraBold */
+	--font-weight-bold: 700; /* titleBold */
+	--font-weight-medium: 500; /* MBCorpoSText_Regular_Web (label family) */
+	--font-weight-normal: 400; /* textRegular */
 
-  --text-headline-display: 1.75rem 1.0714 -0.005em; /* weight 800 */
-  --text-headline-lg: 1.4375rem 1.1304 0em; /* weight 800 */
-  --text-headline-md: 1.1875rem 1.2105 0em; /* weight 700 */
-  --text-headline-sm: 1.0625rem 1.2059 0em; /* weight 400 */
+	--text-headline-display: 1.75rem 1.0714 -0.005em; /* weight 800 */
+	--text-headline-lg: 1.4375rem 1.1304 0em; /* weight 800 */
+	--text-headline-md: 1.1875rem 1.2105 0em; /* weight 700 */
+	--text-headline-sm: 1.0625rem 1.2059 0em; /* weight 400 */
 
-  --text-body-lg: 1rem 1.5 0em; /* weight 400 */
-  --text-body-md: 0.875rem 1.4286 0em; /* weight 400 */
-  --text-body-sm: 0.875rem 1.4286 0em; /* weight 400 */
-  --text-caption: 0.75rem 1.3333 0em; /* weight 400 */
+	--text-body-lg: 1rem 1.5 0em; /* weight 400 */
+	--text-body-md: 0.875rem 1.4286 0em; /* weight 400 */
+	--text-body-sm: 0.875rem 1.4286 0em; /* weight 400 */
+	--text-caption: 0.75rem 1.3333 0em; /* weight 400 */
 
-  --text-label-lg: 0.875rem 1.5 0em; /* weight 500 */
-  --text-label-md: 0.875rem 1.4286 0em; /* weight 500 */
-  --text-label-sm: 0.75rem 1.3333 0.005em; /* weight 500 */
+	--text-label-lg: 0.875rem 1.5 0em; /* weight 500 */
+	--text-label-md: 0.875rem 1.4286 0em; /* weight 500 */
+	--text-label-sm: 0.75rem 1.3333 0.005em; /* weight 500 */
 
-  /* AMG red ramp — Tailwind alpha utilities compose via oklch(var(...) / <alpha>). */
-  --color-primary-70: oklch(var(--primary-70));
-  --color-primary-60: oklch(var(--primary-60));
-  --color-sidebar-ring: oklch(var(--sidebar-ring));
-  --color-sidebar-border: oklch(var(--sidebar-border));
-  --color-sidebar-accent-foreground: oklch(var(--sidebar-accent-foreground));
-  --color-sidebar-accent: oklch(var(--sidebar-accent));
-  --color-sidebar-primary-foreground: oklch(var(--sidebar-primary-foreground));
-  --color-sidebar-primary: oklch(var(--sidebar-primary));
-  --color-sidebar-foreground: oklch(var(--sidebar-foreground));
-  --color-sidebar: oklch(var(--sidebar));
-  --color-chart-5: oklch(var(--chart-5));
-  --color-chart-4: oklch(var(--chart-4));
-  --color-chart-3: oklch(var(--chart-3));
-  --color-chart-2: oklch(var(--chart-2));
-  --color-chart-1: oklch(var(--chart-1));
-  --color-ring: oklch(var(--ring));
-  --color-input: oklch(var(--input));
-  --color-border: oklch(var(--border));
-  --color-destructive: oklch(var(--destructive));
-  --color-accent-foreground: oklch(var(--accent-foreground));
-  --color-accent: oklch(var(--accent));
-  --color-muted-foreground: oklch(var(--muted-foreground));
-  --color-muted: oklch(var(--muted));
-  --color-secondary-foreground: oklch(var(--secondary-foreground));
-  --color-secondary: oklch(var(--secondary));
-  --color-primary-foreground: oklch(var(--primary-foreground));
-  --color-primary: oklch(var(--primary));
-  --color-popover-foreground: oklch(var(--popover-foreground));
-  --color-popover: oklch(var(--popover));
-  --color-card-foreground: oklch(var(--card-foreground));
-  --color-card: oklch(var(--card));
-  --color-foreground: oklch(var(--foreground));
-  --color-background: oklch(var(--background));
+	/* AMG red ramp — Tailwind alpha utilities compose via oklch(var(...) / <alpha>). */
+	--color-primary-70: oklch(var(--primary-70));
+	--color-primary-60: oklch(var(--primary-60));
+	--color-sidebar-ring: oklch(var(--sidebar-ring));
+	--color-sidebar-border: oklch(var(--sidebar-border));
+	--color-sidebar-accent-foreground: oklch(var(--sidebar-accent-foreground));
+	--color-sidebar-accent: oklch(var(--sidebar-accent));
+	--color-sidebar-primary-foreground: oklch(var(--sidebar-primary-foreground));
+	--color-sidebar-primary: oklch(var(--sidebar-primary));
+	--color-sidebar-foreground: oklch(var(--sidebar-foreground));
+	--color-sidebar: oklch(var(--sidebar));
+	--color-chart-5: oklch(var(--chart-5));
+	--color-chart-4: oklch(var(--chart-4));
+	--color-chart-3: oklch(var(--chart-3));
+	--color-chart-2: oklch(var(--chart-2));
+	--color-chart-1: oklch(var(--chart-1));
+	--color-ring: oklch(var(--ring));
+	--color-input: oklch(var(--input));
+	--color-border: oklch(var(--border));
+	--color-destructive: oklch(var(--destructive));
+	--color-accent-foreground: oklch(var(--accent-foreground));
+	--color-accent: oklch(var(--accent));
+	--color-muted-foreground: oklch(var(--muted-foreground));
+	--color-muted: oklch(var(--muted));
+	--color-secondary-foreground: oklch(var(--secondary-foreground));
+	--color-secondary: oklch(var(--secondary));
+	--color-primary-foreground: oklch(var(--primary-foreground));
+	--color-primary: oklch(var(--primary));
+	--color-popover-foreground: oklch(var(--popover-foreground));
+	--color-popover: oklch(var(--popover));
+	--color-card-foreground: oklch(var(--card-foreground));
+	--color-card: oklch(var(--card));
+	--color-foreground: oklch(var(--foreground));
+	--color-background: oklch(var(--background));
 
-  /* Surfaces exposed as utility colors */
-  --color-surface: oklch(var(--surface));
-  --color-surface-weak: oklch(var(--surface-weak));
-  --color-surface-strong: oklch(var(--surface-strong));
-  --color-tertiary: oklch(var(--tertiary));
-  --color-neutral: oklch(var(--neutral));
+	/* Surfaces exposed as utility colors */
+	--color-surface: oklch(var(--surface));
+	--color-surface-weak: oklch(var(--surface-weak));
+	--color-surface-strong: oklch(var(--surface-strong));
+	--color-tertiary: oklch(var(--tertiary));
+	--color-neutral: oklch(var(--neutral));
 
-  /* Spec: rounded.none = 0 across the scale */
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-  --radius-4xl: 0;
+	/* Spec: rounded.none = 0 across the scale */
+	--radius-sm: 0;
+	--radius-md: 0;
+	--radius-lg: 0;
+	--radius-xl: 0;
+	--radius-2xl: 0;
+	--radius-3xl: 0;
+	--radius-4xl: 0;
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply font-sans bg-background text-foreground;
-  }
-  html {
-    @apply font-sans;
-  }
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply font-sans bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
 }

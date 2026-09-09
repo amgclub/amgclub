@@ -1,0 +1,141 @@
+"use client";
+
+import { Button } from "@amgclub/ui/components/button";
+import { Field, FieldGroup, FieldLabel } from "@amgclub/ui/components/field";
+import { Input } from "@amgclub/ui/components/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import type { Route } from "next";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+
+import { authClient } from "@/lib/auth-client";
+
+const loginSchema = z.object({
+	email: z.email("Enter a valid email address"),
+	password: z.string().min(8, "Password must be at least 8 characters"),
+});
+
+type LoginValues = z.infer<typeof loginSchema>;
+
+interface LoginFormProps {
+	/** Where to navigate after a successful sign in (must be app-relative). */
+	redirectTo?: string;
+	/** Show a notice when the signed-in account is not an admin. */
+	forbidden?: boolean;
+}
+
+export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
+	const router = useRouter();
+	const [submitting, setSubmitting] = useState(false);
+
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors },
+	} = useForm<LoginValues>({
+		resolver: zodResolver(loginSchema),
+		defaultValues: { email: "", password: "" },
+	});
+
+	async function onSubmit(values: LoginValues) {
+		setSubmitting(true);
+		const { error } = await authClient.signIn.email({
+			email: values.email,
+			password: values.password,
+		});
+		setSubmitting(false);
+
+		if (error) {
+			setError("root", {
+				message: error.message ?? "Unable to sign in. Please try again.",
+			});
+			return;
+		}
+
+		toast.success("Welcome back");
+		const target = redirectTo?.startsWith("/") ? redirectTo : "/";
+		void router.push(target as Route);
+		router.refresh();
+	}
+
+	return (
+		<div className="flex w-full max-w-sm flex-col gap-6">
+			<div className="flex flex-col items-center gap-1 text-center">
+				<div className="mb-2 flex size-10 items-center justify-center bg-primary text-primary-foreground">
+					<span className="font-extrabold text-lg tracking-tight">A</span>
+				</div>
+				<h1 className="font-extrabold font-sans text-headline-md">
+					AMG Club UAE — Admin
+				</h1>
+				<p className="text-body-sm text-muted-foreground">
+					Sign in to the management console
+				</p>
+			</div>
+
+			{forbidden ? (
+				<p
+					role="alert"
+					className="border border-destructive/40 bg-surface-weak p-3 text-caption text-destructive"
+				>
+					This console is restricted to admin accounts.
+				</p>
+			) : null}
+
+			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+				<FieldGroup>
+					<Field>
+						<FieldLabel htmlFor="email">Email</FieldLabel>
+						<Input
+							id="email"
+							type="email"
+							placeholder="admin@amgclub.ae"
+							autoComplete="email"
+							autoFocus
+							aria-invalid={Boolean(errors.email)}
+							{...register("email")}
+						/>
+						{errors.email ? (
+							<p className="text-caption text-destructive">
+								{errors.email.message}
+							</p>
+						) : null}
+					</Field>
+					<Field>
+						<FieldLabel htmlFor="password">Password</FieldLabel>
+						<Input
+							id="password"
+							type="password"
+							autoComplete="current-password"
+							aria-invalid={Boolean(errors.password)}
+							{...register("password")}
+						/>
+						{errors.password ? (
+							<p className="text-caption text-destructive">
+								{errors.password.message}
+							</p>
+						) : null}
+					</Field>
+					{errors.root ? (
+						<p role="alert" className="text-caption text-destructive">
+							{errors.root.message}
+						</p>
+					) : null}
+					<Field>
+						<Button type="submit" disabled={submitting} className="w-full">
+							{submitting ? "Signing in…" : "Sign in"}
+						</Button>
+					</Field>
+				</FieldGroup>
+			</form>
+
+			<p className="text-caption text-muted-foreground">
+				Access is restricted to backend team members. Accounts are created by an
+				admin under Settings → Team.
+			</p>
+		</div>
+	);
+}
