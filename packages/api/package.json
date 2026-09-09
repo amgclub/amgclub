@@ -1,27 +1,28 @@
 {
-  "name": "@amgclub/api",
-  "type": "module",
-  "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./*": {
-      "default": "./src/*.ts"
-    }
-  },
-  "scripts": {},
-  "dependencies": {
-    "@amgclub/auth": "workspace:*",
-    "@amgclub/db": "workspace:*",
-    "@amgclub/env": "workspace:*",
-    "@trpc/client": "catalog:",
-    "@trpc/server": "catalog:",
-    "dotenv": "catalog:",
-    "next": "catalog:",
-    "zod": "catalog:"
-  },
-  "devDependencies": {
-    "@amgclub/config": "workspace:*",
-    "typescript": "catalog:"
-  }
+	"name": "@amgclub/api",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./*": {
+			"default": "./src/*.ts"
+		}
+	},
+	"scripts": {},
+	"dependencies": {
+		"@amgclub/auth": "workspace:*",
+		"@amgclub/db": "workspace:*",
+		"@amgclub/env": "workspace:*",
+		"@trpc/client": "catalog:",
+		"@trpc/server": "catalog:",
+		"dotenv": "catalog:",
+		"drizzle-orm": "^0.45.2",
+		"next": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@amgclub/config": "workspace:*",
+		"typescript": "catalog:"
+	}
 }

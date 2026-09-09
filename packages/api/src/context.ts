@@ -1,14 +1,13 @@
-import { createAuth } from "@amgclub/auth";
+import { getAuth } from "@amgclub/auth";
 import type { NextRequest } from "next/server";
 
 export async function createContext(req: NextRequest) {
-  const session = await createAuth().api.getSession({
-    headers: req.headers,
-  });
-  return {
-    auth: null,
-    session,
-  };
+	const session = await getAuth().api.getSession({
+		headers: req.headers,
+	});
+	return {
+		session,
+	};
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;
