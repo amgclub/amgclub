@@ -1,10 +1,12 @@
 {
-  "extends": "@amgclub/config/tsconfig.base.json",
-  "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "dist",
-    "composite": true
-  }
+	"extends": "@amgclub/config/tsconfig.base.json",
+	"compilerOptions": {
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"outDir": "dist",
+		"composite": true
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "scripts"]
 }
