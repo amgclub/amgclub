@@ -49,6 +49,12 @@
 			"skillPath": "skills/next-partial-prefetching-adoption/SKILL.md",
 			"computedHash": "0e8e6cfdc21684b7a359ffc5bbe1ba3b7ae7f26a068b9e7dc6b1d0f170c9e98d"
 		},
+		"react-hook-form": {
+			"source": "pproenca/dot-skills",
+			"sourceType": "github",
+			"skillPath": "skills/.curated/react-hook-form/SKILL.md",
+			"computedHash": "e9881245bb3f993f93c9fce336ca7a517ce39864aa46c95d04238fc5ebc4e4d1"
+		},
 		"shadcn": {
 			"source": "shadcn/ui",
 			"sourceType": "github",
@@ -90,6 +96,12 @@
 			"sourceType": "github",
 			"skillPath": "skills/vitest/SKILL.md",
 			"computedHash": "943d436114c677802426741980146c07560bf375297666b03062444f4b98a785"
+		},
+		"zod": {
+			"source": "pproenca/dot-skills",
+			"sourceType": "github",
+			"skillPath": "skills/.curated/zod/SKILL.md",
+			"computedHash": "c69b5133b65643317236707f2cd3e521b4fc6e5ee5fd6c6c00cf62a37dfd0144"
 		}
 	}
 }
