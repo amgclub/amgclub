@@ -18,7 +18,7 @@ interface StatCardProps {
 
 export function StatCard({ label, value, sub, emphasis }: StatCardProps) {
 	return (
-		<Card size="sm">
+		<Card size="sm" className="ring-tertiary">
 			<CardHeader>
 				<CardDescription className="font-medium font-sans text-label-sm">
 					{label}

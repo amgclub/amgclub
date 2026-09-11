@@ -52,12 +52,14 @@ function DialogContent({
 			<DialogPrimitive.Popup
 				data-slot="dialog-content"
 				className={cn(
-					"fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 bg-popover p-6 text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:scale-95 data-starting-style:scale-95 data-ending-style:opacity-0 data-starting-style:opacity-0 sm:max-w-lg",
+					"scrollbar-thumb-primary/30 scrollbar-thin fixed top-1/2 left-1/2 z-50 grid max-h-[90vh] w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 overflow-y-auto rounded-none border border-border bg-popover p-6 text-popover-foreground shadow-lg transition duration-200 ease-in-out data-ending-style:scale-95 data-starting-style:scale-95 data-ending-style:opacity-0 data-starting-style:opacity-0 sm:max-w-lg",
 					className,
 				)}
 				{...props}
 			>
+				{/* <div className="flex-1 overflow-y-auto p-6"> */}
 				{children}
+				{/* </div> */}
 				{showCloseButton && (
 					<DialogPrimitive.Close
 						data-slot="dialog-close"

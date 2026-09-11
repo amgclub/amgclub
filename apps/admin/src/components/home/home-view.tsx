@@ -138,7 +138,7 @@ export function HomeView() {
 			</div>
 
 			<div className="grid gap-4 lg:grid-cols-2">
-				<Card>
+				<Card className="ring-tertiary">
 					<CardHeader>
 						<CardTitle className="font-normal font-sans text-headline-sm">
 							Active & upcoming events
@@ -170,7 +170,7 @@ export function HomeView() {
 					</CardContent>
 				</Card>
 
-				<Card>
+				<Card className="ring-tertiary">
 					<CardHeader>
 						<CardTitle className="font-normal font-sans text-headline-sm">
 							Recent members
