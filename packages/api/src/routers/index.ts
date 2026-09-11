@@ -3,6 +3,7 @@ import { analyticsRouter } from "./analytics";
 import { eventsRouter } from "./events";
 import { membersRouter } from "./members";
 import { settingsRouter } from "./settings";
+import { storageRouter } from "./storage";
 
 export const appRouter = router({
 	healthCheck: publicProcedure.query(() => {
@@ -18,5 +19,6 @@ export const appRouter = router({
 	events: eventsRouter,
 	settings: settingsRouter,
 	analytics: analyticsRouter,
+	storage: storageRouter,
 });
 export type AppRouter = typeof appRouter;
