@@ -35,6 +35,8 @@ import {
 	Trash2Icon,
 } from "lucide-react";
 
+import Link from "next/link";
+
 import { type EventStatus, EventStatusBadge } from "@/components/status-badge";
 import { formatAED, formatDate, formatTime } from "@/lib/format";
 
@@ -157,7 +159,12 @@ function EventRow({
 						</div>
 					)}
 					<div className="min-w-0">
-						<p className="max-w-52 truncate font-medium">{event.title}</p>
+						<Link
+							href={`/events/${event.id}`}
+							className="max-w-52 truncate font-medium text-foreground hover:text-primary"
+						>
+							{event.title}
+						</Link>
 						{event.mapUrl ? (
 							<a
 								href={event.mapUrl}
