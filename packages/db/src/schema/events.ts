@@ -10,12 +10,18 @@ import {
 	text,
 	time,
 	timestamp,
+	uniqueIndex,
 	uuid,
 } from "drizzle-orm/pg-core";
 
 export const eventStatusEnum = pgEnum("event_status", [
 	"active",
 	"paused",
+	"canceled",
+]);
+
+export const eventAttendeeStatusEnum = pgEnum("event_attendee_status", [
+	"attending",
 	"canceled",
 ]);
 
@@ -59,3 +65,40 @@ export const events = pgTable(
 		),
 	],
 );
+
+/** Registered attendees for a club event. */
+export const eventAttendees = pgTable(
+	"event_attendees",
+	{
+		id: uuid("id").defaultRandom().primaryKey(),
+		eventId: uuid("event_id")
+			.notNull()
+			.references(() => events.id, { onDelete: "cascade" }),
+		userId: text("user_id"),
+		name: text("name").notNull(),
+		email: text("email").notNull(),
+		phone: text("phone").notNull(),
+		status: eventAttendeeStatusEnum("status").notNull().default("attending"),
+		createdAt: timestamp("created_at", { withTimezone: true })
+			.defaultNow()
+			.notNull(),
+		updatedAt: timestamp("updated_at", { withTimezone: true })
+			.defaultNow()
+			.notNull()
+			.$onUpdate(() => new Date()),
+	},
+	(table) => [
+		index("event_attendees_event_id_idx").on(table.eventId),
+		index("event_attendees_email_idx").on(table.email),
+		index("event_attendees_status_idx").on(table.status),
+		uniqueIndex("event_attendees_event_id_email_idx").on(
+			table.eventId,
+			table.email,
+		),
+	],
+);
+
+export type EventAttendee = typeof eventAttendees.$inferSelect;
+export type NewEventAttendee = typeof eventAttendees.$inferInsert;
+export type EventAttendeeStatus =
+	(typeof eventAttendeeStatusEnum.enumValues)[number];
