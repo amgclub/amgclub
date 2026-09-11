@@ -6,7 +6,7 @@ import { Input } from "@amgclub/ui/components/input";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { CalendarPlusIcon, SearchIcon } from "lucide-react";
 import dynamic from "next/dynamic";
-import { useDeferredValue, useState } from "react";
+import { useDeferredValue, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
@@ -38,6 +38,8 @@ export function EventsView() {
 	const [formOpen, setFormOpen] = useState(false);
 	const [editing, setEditing] = useState<EventDTO | null>(null);
 	const [deleteTarget, setDeleteTarget] = useState<EventDTO | null>(null);
+	// Image URL of the event being deleted (captured before the mutation runs).
+	const deleteTargetImageRef = useRef<string | null>(null);
 
 	const listQuery = useQuery(
 		trpc.events.list.queryOptions({
@@ -59,9 +61,21 @@ export function EventsView() {
 		},
 	});
 
+	const deleteFileMutation = useMutation(
+		trpc.storage.deleteFile.mutationOptions(),
+	);
+
 	const deleteMutation = useMutation({
 		...trpc.events.delete.mutationOptions(),
 		onSuccess: () => {
+			// Best-effort cleanup of the deleted event's stored image.
+			const storedImage = deleteTargetImageRef.current;
+			deleteTargetImageRef.current = null;
+			if (storedImage) {
+				void deleteFileMutation
+					.mutateAsync({ url: storedImage })
+					.catch(() => {});
+			}
 			toast.success("Event deleted");
 			queryClient.invalidateQueries();
 			setDeleteTarget(null);
@@ -178,6 +192,7 @@ export function EventsView() {
 				loading={deleteMutation.isPending}
 				onConfirm={() => {
 					if (deleteTarget) {
+						deleteTargetImageRef.current = deleteTarget.imageUrl ?? null;
 						deleteMutation.mutate(deleteTarget.id);
 					}
 				}}

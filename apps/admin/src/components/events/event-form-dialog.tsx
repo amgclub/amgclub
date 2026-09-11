@@ -15,11 +15,13 @@ import { Input } from "@amgclub/ui/components/input";
 import { Textarea } from "@amgclub/ui/components/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { queryClient, trpc } from "@/utils/trpc";
+
+import { ImageUpload } from "./image-upload";
 
 const eventFormSchema = z.object({
 	title: z.string().min(1, "Title is required").max(160),
@@ -45,7 +47,6 @@ const eventFormSchema = z.object({
 		.optional()
 		.or(z.literal("")),
 	price: z.coerce.number().min(0, "Price must be zero or more").max(1_000_000),
-	totalAttendees: z.coerce.number().int().min(0).max(1_000_000),
 	status: z.enum(["active", "paused", "canceled"]),
 });
 
@@ -74,7 +75,9 @@ export function EventFormDialog({
 	onOpenChange: (open: boolean) => void;
 	event?: EventDTO | null;
 }) {
-	const [freeEvent, setFreeEvent] = useState(!event || event.price === 0);
+	const [uncommittedUploads, setUncommittedUploads] = useState<string[]>([]);
+	// The image stored before this dialog opened (used to clean up replaced/removed files).
+	const previousImage = event?.imageUrl ?? null;
 
 	const {
 		register,
@@ -96,7 +99,6 @@ export function EventFormDialog({
 					startTime: event.startTime.slice(0, 5),
 					endTime: event.endTime ? event.endTime.slice(0, 5) : "",
 					price: event.price,
-					totalAttendees: event.totalAttendees,
 					status: event.status,
 				}
 			: {
@@ -109,16 +111,18 @@ export function EventFormDialog({
 					startTime: "",
 					endTime: "",
 					price: 0,
-					totalAttendees: 0,
 					status: "active",
 				},
 	});
 
 	const status = watch("status");
+	const imageUrl = watch("imageUrl");
 
 	const createMutation = useMutation({
 		...trpc.events.create.mutationOptions(),
 		onSuccess: () => {
+			// The saved image is committed — don't delete it on dialog close.
+			setUncommittedUploads([]);
 			toast.success("Event created");
 			queryClient.invalidateQueries();
 			onOpenChange(false);
@@ -131,6 +135,8 @@ export function EventFormDialog({
 	const updateMutation = useMutation({
 		...trpc.events.update.mutationOptions(),
 		onSuccess: () => {
+			// The saved image is committed — don't delete it on dialog close.
+			setUncommittedUploads([]);
 			toast.success("Event updated");
 			queryClient.invalidateQueries();
 			onOpenChange(false);
@@ -140,14 +146,11 @@ export function EventFormDialog({
 		},
 	});
 
-	const submitting = createMutation.isPending || updateMutation.isPending;
+	const deleteFileMutation = useMutation(
+		trpc.storage.deleteFile.mutationOptions(),
+	);
 
-	function toggleFree(next: boolean) {
-		setFreeEvent(next);
-		if (next) {
-			setValue("price", 0, { shouldValidate: true });
-		}
-	}
+	const submitting = createMutation.isPending || updateMutation.isPending;
 
 	async function onSubmit(values: EventFormOutput) {
 		const payload = {
@@ -159,8 +162,7 @@ export function EventFormDialog({
 			eventDate: values.eventDate,
 			startTime: values.startTime,
 			endTime: values.endTime || undefined,
-			price: freeEvent ? 0 : values.price,
-			totalAttendees: values.totalAttendees,
+			price: values.price,
 			status: values.status,
 		};
 
@@ -169,7 +171,28 @@ export function EventFormDialog({
 		} else {
 			await createMutation.mutateAsync(payload);
 		}
+
+		// The event now points at the new image (or none): release the previous
+		// stored file. Best-effort — a failed cleanup must not fail the save.
+		const savedImage = payload.imageUrl ?? null;
+		if (previousImage && previousImage !== savedImage) {
+			void deleteFileMutation
+				.mutateAsync({ url: previousImage })
+				.catch(() => {});
+		}
 	}
+
+	// When the dialog closes without saving, delete any freshly uploaded
+	// images so they don't become orphaned storage objects.
+	useEffect(() => {
+		if (open || uncommittedUploads.length === 0) {
+			return;
+		}
+		for (const url of uncommittedUploads) {
+			void deleteFileMutation.mutateAsync({ url }).catch(() => {});
+		}
+		setUncommittedUploads([]);
+	}, [open, uncommittedUploads, deleteFileMutation]);
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -258,15 +281,18 @@ export function EventFormDialog({
 						</div>
 
 						<Field>
-							<FieldLabel htmlFor="event-image">Image URL</FieldLabel>
-							<Input
-								id="event-image"
-								type="url"
-								placeholder="https://cdn.example.com/event.jpg"
-								aria-invalid={Boolean(errors.imageUrl)}
-								{...register("imageUrl")}
+							<FieldLabel htmlFor="event-image">Event image</FieldLabel>
+							<ImageUpload
+								imageUrl={imageUrl || null}
+								onUploaded={(url) => {
+									setUncommittedUploads((current) => [...current, url]);
+								}}
+								onChange={(url) => {
+									setValue("imageUrl", url ?? "", {
+										shouldValidate: true,
+									});
+								}}
 							/>
-							<FieldErrorText message={errors.imageUrl?.message} />
 						</Field>
 
 						<Field>
@@ -285,72 +311,43 @@ export function EventFormDialog({
 								<FieldLabel htmlFor="event-price">
 									Price (AED, 0 = free)
 								</FieldLabel>
-								<div className="flex items-center gap-2">
-									<Input
-										id="event-price"
-										type="number"
-										min={0}
-										step={1}
-										disabled={freeEvent}
-										aria-invalid={Boolean(errors.price)}
-										{...register("price")}
-									/>
-									<Button
-										type="button"
-										size="sm"
-										variant={freeEvent ? "default" : "outline"}
-										aria-pressed={freeEvent}
-										onClick={() => {
-											toggleFree(!freeEvent);
-										}}
-									>
-										Free
-									</Button>
-								</div>
-								<FieldErrorText message={errors.price?.message} />
-							</Field>
-							<Field>
-								<FieldLabel htmlFor="event-attendees">
-									Total attendees
-								</FieldLabel>
 								<Input
-									id="event-attendees"
+									id="event-price"
 									type="number"
 									min={0}
 									step={1}
-									aria-invalid={Boolean(errors.totalAttendees)}
-									{...register("totalAttendees")}
+									aria-invalid={Boolean(errors.price)}
+									{...register("price")}
 								/>
-								<FieldErrorText message={errors.totalAttendees?.message} />
+								<FieldErrorText message={errors.price?.message} />
+							</Field>
+							<Field>
+								<FieldLabel>Status</FieldLabel>
+								<div
+									role="radiogroup"
+									aria-label="Event status"
+									className="flex flex-wrap gap-1"
+								>
+									{statusOptions.map((option) => (
+										<Button
+											key={option.value}
+											type="button"
+											size="sm"
+											variant={status === option.value ? "default" : "outline"}
+											aria-pressed={status === option.value}
+											onClick={() => {
+												setValue("status", option.value, {
+													shouldValidate: true,
+												});
+											}}
+										>
+											{option.label}
+										</Button>
+									))}
+								</div>
+								<FieldErrorText message={errors.status?.message} />
 							</Field>
 						</div>
-
-						<Field>
-							<FieldLabel>Status</FieldLabel>
-							<div
-								role="radiogroup"
-								aria-label="Event status"
-								className="flex flex-wrap gap-1"
-							>
-								{statusOptions.map((option) => (
-									<Button
-										key={option.value}
-										type="button"
-										size="sm"
-										variant={status === option.value ? "default" : "outline"}
-										aria-pressed={status === option.value}
-										onClick={() => {
-											setValue("status", option.value, {
-												shouldValidate: true,
-											});
-										}}
-									>
-										{option.label}
-									</Button>
-								))}
-							</div>
-							<FieldErrorText message={errors.status?.message} />
-						</Field>
 					</FieldGroup>
 
 					<DialogFooter>
