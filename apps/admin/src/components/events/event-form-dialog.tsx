@@ -2,6 +2,7 @@
 
 import type { EventDTO } from "@amgclub/api/routers/events";
 import { Button } from "@amgclub/ui/components/button";
+import { Calendar } from "@amgclub/ui/components/calendar";
 import {
 	Dialog,
 	DialogContent,
@@ -12,9 +13,16 @@ import {
 } from "@amgclub/ui/components/dialog";
 import { Field, FieldGroup, FieldLabel } from "@amgclub/ui/components/field";
 import { Input } from "@amgclub/ui/components/input";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@amgclub/ui/components/popover";
 import { Textarea } from "@amgclub/ui/components/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -33,10 +41,7 @@ const eventFormSchema = z.object({
 		.url("Enter a valid Google Maps link")
 		.optional()
 		.or(z.literal("")),
-	eventDate: z
-		.string()
-		.min(1, "Date is required")
-		.regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date"),
+	eventDate: z.date({ message: "Date is required" }),
 	startTime: z
 		.string()
 		.min(1, "Start time is required")
@@ -76,6 +81,7 @@ export function EventFormDialog({
 	event?: EventDTO | null;
 }) {
 	const [uncommittedUploads, setUncommittedUploads] = useState<string[]>([]);
+	const [datePickerOpen, setDatePickerOpen] = useState(false);
 	// The image stored before this dialog opened (used to clean up replaced/removed files).
 	const previousImage = event?.imageUrl ?? null;
 
@@ -95,7 +101,7 @@ export function EventFormDialog({
 					imageUrl: event.imageUrl ?? "",
 					location: event.location,
 					mapUrl: event.mapUrl ?? "",
-					eventDate: event.eventDate,
+					eventDate: new Date(event.eventDate),
 					startTime: event.startTime.slice(0, 5),
 					endTime: event.endTime ? event.endTime.slice(0, 5) : "",
 					price: event.price,
@@ -107,9 +113,9 @@ export function EventFormDialog({
 					imageUrl: "",
 					location: "",
 					mapUrl: "",
-					eventDate: "",
-					startTime: "",
-					endTime: "",
+					eventDate: undefined,
+					startTime: "10:30",
+					endTime: "12:30",
 					price: 0,
 					status: "active",
 				},
@@ -117,6 +123,7 @@ export function EventFormDialog({
 
 	const status = watch("status");
 	const imageUrl = watch("imageUrl");
+	const eventDate = watch("eventDate");
 
 	const createMutation = useMutation({
 		...trpc.events.create.mutationOptions(),
@@ -159,7 +166,7 @@ export function EventFormDialog({
 			imageUrl: values.imageUrl || undefined,
 			location: values.location,
 			mapUrl: values.mapUrl || undefined,
-			eventDate: values.eventDate,
+			eventDate: format(values.eventDate, "yyyy-MM-dd"),
 			startTime: values.startTime,
 			endTime: values.endTime || undefined,
 			price: values.price,
@@ -213,7 +220,7 @@ export function EventFormDialog({
 				>
 					<FieldGroup>
 						<Field>
-							<FieldLabel htmlFor="event-title">Title</FieldLabel>
+							<FieldLabel>Title</FieldLabel>
 							<Input
 								id="event-title"
 								placeholder="Morning drive to Jebel Jais"
@@ -225,7 +232,7 @@ export function EventFormDialog({
 
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Field>
-								<FieldLabel htmlFor="event-location">Location</FieldLabel>
+								<FieldLabel>Location</FieldLabel>
 								<Input
 									id="event-location"
 									placeholder="Jebel Jais, Ras Al Khaimah"
@@ -235,7 +242,7 @@ export function EventFormDialog({
 								<FieldErrorText message={errors.location?.message} />
 							</Field>
 							<Field>
-								<FieldLabel htmlFor="event-map">Google Maps link</FieldLabel>
+								<FieldLabel>Google Maps link</FieldLabel>
 								<Input
 									id="event-map"
 									type="url"
@@ -249,31 +256,57 @@ export function EventFormDialog({
 
 						<div className="grid gap-4 sm:grid-cols-3">
 							<Field>
-								<FieldLabel htmlFor="event-date">Date</FieldLabel>
-								<Input
-									id="event-date"
-									type="date"
-									aria-invalid={Boolean(errors.eventDate)}
-									{...register("eventDate")}
-								/>
+								<FieldLabel>Date</FieldLabel>
+								<Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
+									<PopoverTrigger
+										render={
+											<Button
+												variant="outline"
+												id="event-date"
+												data-empty={!eventDate}
+												className="!border-tertiary w-full justify-between font-normal data-[empty=true]:text-muted-foreground"
+											/>
+										}
+									>
+										{eventDate ? format(eventDate, "PPP") : "Select date"}
+										<CalendarIcon data-icon="inline-end" />
+									</PopoverTrigger>
+									<PopoverContent className="w-auto p-0" align="start">
+										<Calendar
+											mode="single"
+											selected={eventDate}
+											onSelect={(date) => {
+												if (date) {
+													setValue("eventDate", date, {
+														shouldValidate: true,
+													});
+													setDatePickerOpen(false);
+												}
+											}}
+											defaultMonth={eventDate}
+										/>
+									</PopoverContent>
+								</Popover>
 								<FieldErrorText message={errors.eventDate?.message} />
 							</Field>
 							<Field>
-								<FieldLabel htmlFor="event-start">Start time</FieldLabel>
+								<FieldLabel>Start time</FieldLabel>
 								<Input
 									id="event-start"
 									type="time"
 									aria-invalid={Boolean(errors.startTime)}
+									className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
 									{...register("startTime")}
 								/>
 								<FieldErrorText message={errors.startTime?.message} />
 							</Field>
 							<Field>
-								<FieldLabel htmlFor="event-end">End time</FieldLabel>
+								<FieldLabel>End time</FieldLabel>
 								<Input
 									id="event-end"
 									type="time"
 									aria-invalid={Boolean(errors.endTime)}
+									className="appearance-none bg-background [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
 									{...register("endTime")}
 								/>
 								<FieldErrorText message={errors.endTime?.message} />
@@ -281,7 +314,7 @@ export function EventFormDialog({
 						</div>
 
 						<Field>
-							<FieldLabel htmlFor="event-image">Event image</FieldLabel>
+							<FieldLabel>Event image</FieldLabel>
 							<ImageUpload
 								imageUrl={imageUrl || null}
 								onUploaded={(url) => {
@@ -296,7 +329,7 @@ export function EventFormDialog({
 						</Field>
 
 						<Field>
-							<FieldLabel htmlFor="event-description">Description</FieldLabel>
+							<FieldLabel>Description</FieldLabel>
 							<Textarea
 								id="event-description"
 								rows={3}
@@ -308,9 +341,7 @@ export function EventFormDialog({
 
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Field>
-								<FieldLabel htmlFor="event-price">
-									Price (AED, 0 = free)
-								</FieldLabel>
+								<FieldLabel>Price (AED, 0 = free)</FieldLabel>
 								<Input
 									id="event-price"
 									type="number"
