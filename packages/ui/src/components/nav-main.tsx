@@ -6,6 +6,7 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
+	useSidebar,
 } from "@amgclub/ui/components/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -32,6 +33,7 @@ export interface NavMainGroup {
  */
 export function NavMain({ groups }: { groups: NavMainGroup[] }) {
 	const pathname = usePathname();
+	const { isMobile, setOpenMobile } = useSidebar();
 
 	return (
 		<>
@@ -48,6 +50,11 @@ export function NavMain({ groups }: { groups: NavMainGroup[] }) {
 										(item.url !== "/" && pathname.startsWith(item.url))
 									}
 									render={<Link href={item.url as HrefType} />}
+									onClick={() => {
+										if (isMobile) {
+											setOpenMobile(false);
+										}
+									}}
 								>
 									{item.icon}
 									<span>{item.title}</span>
