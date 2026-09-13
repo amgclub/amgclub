@@ -1,22 +1,23 @@
-import { getSessionCookie } from "better-auth/cookies";
-import { type NextRequest, NextResponse } from "next/server";
+import { getAuth } from "@amgclub/auth";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-/**
- * Cheap cookie presence check (the full session is verified server-side in
- * layouts and tRPC procedures). Redirects unauthenticated visitors to /login.
- */
-export function proxy(request: NextRequest) {
-	const sessionCookie = getSessionCookie(request);
+export async function proxy(request: NextRequest) {
+	const session = await getAuth().api.getSession({ headers: request.headers });
 
-	if (!sessionCookie) {
-		const loginUrl = new URL("/login", request.url);
-		loginUrl.searchParams.set("redirect", request.nextUrl.pathname);
-		return NextResponse.redirect(loginUrl);
+	if (!session) {
+		return NextResponse.redirect(new URL("/login", request.url));
+	}
+
+	if (session.user.role !== "admin") {
+		return NextResponse.redirect(
+			new URL("/login?error=forbidden", request.url),
+		);
 	}
 
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/((?!api/auth|login|_next|favicon.ico).*)"],
+	matcher: ["/(dashboard)/:path*", "/api/trpc/:path*"],
 };
