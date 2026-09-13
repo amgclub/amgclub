@@ -17,10 +17,6 @@ function createEnvProxy(
 }
 
 function resolveEnvValue(key: keyof Env & string): EnvValue | undefined {
-	if (key === "DB") {
-		return undefined;
-	}
-
 	return process.env[key];
 }
 
