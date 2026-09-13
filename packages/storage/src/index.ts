@@ -85,7 +85,8 @@ type EnvKey = keyof Env & string;
 
 /** Reads a string env value via the runtime proxy; yields undefined when unset. */
 function getEnvString(key: EnvKey | string): string | undefined {
-	const value = (env as Record<string, unknown>)[key] ?? process.env[key];
+	const value =
+		(env as unknown as Record<string, unknown>)[key] ?? process.env[key];
 	return typeof value === "string" ? value : undefined;
 }
 
