@@ -1,16 +1,20 @@
-import type { WebEnv as ServerEnv } from "@amgclub/infra/alchemy.run";
-
-// This file infers types for the cloudflare:workers environment from your Alchemy Worker.
-// @see https://alchemy.run/cloudflare/compute/workers
-
-export type CloudflareEnv = ServerEnv;
-
 declare global {
-	type Env = CloudflareEnv;
-}
-
-declare module "cloudflare:workers" {
-	namespace Cloudflare {
-		export interface Env extends CloudflareEnv {}
+	interface Env {
+		DATABASE_URL: string;
+		DIRECT_URL?: string;
+		BETTER_AUTH_SECRET: string;
+		BETTER_AUTH_URL: string;
+		SUPABASE_URL?: string;
+		SUPABASE_SECRET_KEY?: string;
+		SUPABASE_STORAGE_BUCKET?: string;
+		STORAGE_PROVIDER?: string;
+		AWS_ACCESS_KEY_ID?: string;
+		AWS_SECRET_ACCESS_KEY?: string;
+		AWS_MEDIA_BUCKET_NAME?: string;
+		AWS_MEDIA_CUSTOM_DOMAIN?: string;
+		AWS_S3_ENDPOINT_URL?: string;
+		AWS_S3_REGION?: string;
 	}
 }
+
+export {};

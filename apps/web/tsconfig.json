@@ -23,7 +23,7 @@
 			"@/*": ["./src/*"],
 			"@amgclub/ui/*": ["../../packages/ui/src/*"]
 		},
-		"types": ["@cloudflare/workers-types"]
+		"types": []
 	},
 	"include": [
 		"next-env.d.ts",

@@ -17,8 +17,6 @@
 		"db:studio": "turbo run db:studio -F @amgclub/db --",
 		"db:generate": "turbo run db:generate -F @amgclub/db --",
 		"db:migrate": "turbo run db:migrate -F @amgclub/db --",
-		"deploy": "turbo run deploy -F @amgclub/infra --",
-		"destroy": "turbo run destroy -F @amgclub/infra --",
 		"check": "biome check --write .",
 		"lint:design": "node scripts/lint-design.mjs",
 		"lint": "pnpm check && pnpm lint:design",
@@ -32,7 +30,6 @@
 	"devDependencies": {
 		"@amgclub/config": "workspace:*",
 		"@biomejs/biome": "^2.5.11",
-		"@cloudflare/workers-types": "catalog:",
 		"@types/node": "catalog:",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.4.1",
