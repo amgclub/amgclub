@@ -23,12 +23,14 @@ export interface SidebarUser {
 export interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 	user: SidebarUser;
 	groups: NavMainGroup[];
+	logo?: string;
 	onSignOut?: () => Promise<void> | void;
 }
 
 export function AppSidebar({
 	user,
 	groups,
+	logo,
 	onSignOut,
 	...props
 }: AppSidebarProps) {
@@ -38,17 +40,27 @@ export function AppSidebar({
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton size="lg" className="pointer-events-none">
-							<div className="flex size-8 shrink-0 items-center justify-center bg-primary text-primary-foreground">
-								<span className="font-extrabold text-sm tracking-tight">A</span>
-							</div>
-							<div className="grid flex-1 text-left leading-tight">
-								<span className="truncate font-semibold text-sm">
-									AMG Club UAE
-								</span>
-								<span className="truncate text-muted-foreground text-xs">
-									Admin Console
-								</span>
-							</div>
+							{logo ? (
+								<div className="grid flex-1 items-center">
+									<img src={logo} alt="Logo" className="max-w-36" />
+								</div>
+							) : (
+								<>
+									<div className="flex size-8 shrink-0 items-center justify-center bg-primary text-primary-foreground">
+										<span className="font-extrabold text-sm tracking-tight">
+											A
+										</span>
+									</div>
+									<div className="grid flex-1 text-left leading-tight">
+										<span className="truncate font-semibold text-sm">
+											AMG Club UAE
+										</span>
+										<span className="truncate text-muted-foreground text-xs">
+											Admin Console
+										</span>
+									</div>
+								</>
+							)}
 						</SidebarMenuButton>
 					</SidebarMenuItem>
 				</SidebarMenu>
