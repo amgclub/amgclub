@@ -19,6 +19,8 @@
 		"@amgclub/storage": "workspace:*",
 		"@trpc/client": "catalog:",
 		"@trpc/server": "catalog:",
+		"@upstash/ratelimit": "^2.0.5",
+		"@upstash/redis": "^1.34.5",
 		"dotenv": "catalog:",
 		"drizzle-orm": "^0.45.2",
 		"next": "catalog:",

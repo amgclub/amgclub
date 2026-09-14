@@ -14,6 +14,8 @@ declare global {
 		AWS_MEDIA_CUSTOM_DOMAIN?: string;
 		AWS_S3_ENDPOINT_URL?: string;
 		AWS_S3_REGION?: string;
+		UPSTASH_REDIS_REST_URL?: string;
+		UPSTASH_REDIS_REST_TOKEN?: string;
 	}
 }
 

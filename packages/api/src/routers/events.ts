@@ -2,8 +2,11 @@ import { eventAttendees, events, getDb } from "@amgclub/db";
 import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, ilike, or, type SQL, sql } from "drizzle-orm";
 import { z } from "zod";
-
-import { adminProcedure, publicProcedure, router } from "../index";
+import { adminProcedure, router } from "../index";
+import {
+	rateLimitedPublicProcedure,
+	registerRateLimitedProcedure,
+} from "../rate-limit";
 
 export const eventStatusSchema = z.enum(["active", "paused", "canceled"]);
 
@@ -218,7 +221,7 @@ export async function registerEventAttendee(
 }
 
 export const eventsRouter = router({
-	publicList: publicProcedure.query(async () => {
+	publicList: rateLimitedPublicProcedure.query(async () => {
 		const db = getDb();
 		const rows = await db
 			.select()
@@ -234,7 +237,7 @@ export const eventsRouter = router({
 		return rows.map(toEventDTO);
 	}),
 
-	register: publicProcedure
+	register: registerRateLimitedProcedure
 		.input(registerAttendeeSchema)
 		.mutation(async ({ ctx, input }) => {
 			return await registerEventAttendee({
