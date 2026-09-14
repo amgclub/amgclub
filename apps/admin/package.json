@@ -6,6 +6,7 @@
 		"dev": "next dev --port 3002",
 		"dev:bare": "next dev --port 3002",
 		"build": "next build",
+		"build:cloudflare": "opennextjs-cloudflare build",
 		"check-types": "tsc --noEmit",
 		"start": "next start"
 	},
@@ -16,6 +17,7 @@
 		"@amgclub/storage": "workspace:*",
 		"@amgclub/ui": "workspace:*",
 		"@hookform/resolvers": "^5.9.1",
+		"@opennextjs/cloudflare": "catalog:",
 		"@tanstack/react-query": "^5.101.4",
 		"@trpc/client": "catalog:",
 		"@trpc/server": "catalog:",
@@ -34,11 +36,13 @@
 	},
 	"devDependencies": {
 		"@amgclub/config": "workspace:*",
+		"@cloudflare/workers-types": "catalog:",
 		"@tailwindcss/postcss": "catalog:",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"tailwindcss": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"wrangler": "^4.115.0"
 	}
 }

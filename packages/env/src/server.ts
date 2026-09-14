@@ -1,4 +1,21 @@
 /// <reference path="../env.d.ts" />
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+
+function getNodeEnvValue(key: string) {
+	if (key === "DB") {
+		return undefined;
+	}
+
+	return process.env[key];
+}
+
+function getCloudflareEnvSync() {
+	try {
+		return getCloudflareContext().env as unknown as Env;
+	} catch {
+		return undefined;
+	}
+}
 
 type EnvValue = Env[keyof Env];
 
@@ -17,12 +34,30 @@ function createEnvProxy(
 }
 
 function resolveEnvValue(key: keyof Env & string): EnvValue | undefined {
-	return process.env[key];
+	const nodeValue = getNodeEnvValue(key);
+	if (nodeValue !== undefined) {
+		return nodeValue as EnvValue;
+	}
+
+	return getCloudflareEnvSync()?.[key as keyof Env];
 }
 
-// Next.js (Vercel) injects env vars directly into process.env.
+// Next.js local dev runs in Node.js, where env vars are exposed on process.env.
+// In the Cloudflare runtime, fall back to OpenNext's Cloudflare context bindings.
+// For static routes (ISR/SSG), use getEnvAsync() so OpenNext can resolve bindings
+// with the async Cloudflare context API.
 export async function getEnvAsync() {
-	return createEnvProxy(resolveEnvValue);
+	const cloudflareEnv = (await getCloudflareContext({ async: true }))
+		.env as unknown as Env;
+
+	return createEnvProxy((key) => {
+		const nodeValue = getNodeEnvValue(key);
+		if (nodeValue !== undefined) {
+			return nodeValue;
+		}
+
+		return cloudflareEnv[key as keyof Env];
+	});
 }
 
 export const env = createEnvProxy(resolveEnvValue);

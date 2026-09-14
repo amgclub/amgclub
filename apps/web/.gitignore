@@ -25,6 +25,8 @@
 # Deployment
 .vercel
 .netlify
+.wrangler
+.alchemy
 
 # Environment & local files
 .env*
@@ -51,3 +53,8 @@ next-env.d.ts
 
 # Other
 dev-dist
+
+.wrangler
+.dev.vars*
+
+.open-next

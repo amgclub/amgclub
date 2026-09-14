@@ -1,0 +1,4 @@
+{
+	"extends": "@amgclub/config/tsconfig.base.json",
+	"include": ["shared-env.ts", "admin.alchemy.run.ts", "web.alchemy.run.ts"]
+}

@@ -1,0 +1,26 @@
+{
+	"name": "@amgclub/infra",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"check-types": "tsc --noEmit",
+		"dev:admin": "alchemy dev --config admin.alchemy.run.ts",
+		"dev:web": "alchemy dev --config web.alchemy.run.ts",
+		"deploy:admin": "alchemy deploy --config admin.alchemy.run.ts",
+		"deploy:web": "alchemy deploy --config web.alchemy.run.ts",
+		"destroy:admin": "alchemy destroy --config admin.alchemy.run.ts",
+		"destroy:web": "alchemy destroy --config web.alchemy.run.ts"
+	},
+	"dependencies": {
+		"dotenv": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@amgclub/config": "workspace:*",
+		"@effect/platform-bun": "4.0.0-rc.112",
+		"@effect/platform-node": "4.0.0-rc.112",
+		"alchemy": "2.0.0-beta.75",
+		"effect": "4.0.0-rc.112",
+		"typescript": "catalog:"
+	}
+}

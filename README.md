@@ -73,17 +73,20 @@ If you want to add app-specific blocks instead of shared primitives, run the sha
 
 ## Deployment
 
-### Vercel
+### Alchemy
 
-- Target: web on Vercel
-- Connect your Git repository in the [Vercel Dashboard](https://vercel.com/new)
-- Set environment variables in the Vercel project settings
-- Deployments happen automatically on push to `main`
+- Target: web on Cloudflare
+- Configure provider login: `cd packages/infra && pnpm exec alchemy login --configure`
+- Dev: pnpm run dev
+- Deploy: pnpm run deploy
+- Destroy: pnpm run destroy
 
-For manual deploys:
+`alchemy login --configure` stores the selected Cloudflare, Neon, PlanetScale, and/or Prisma provider profiles under `~/.alchemy`; no provider-specific setup command is required by this scaffold.
+
+Deploys are staged and default to a personal `dev_<username>` stage. For production, run the deploy with an explicit stage from `packages/infra`:
 
 ```bash
-npx vercel --prod
+cd packages/infra && pnpm exec alchemy deploy --stage production
 ```
 
 ## Git Hooks and Formatting
