@@ -14,6 +14,7 @@
 		"dev:admin": "turbo run dev -F admin --",
 		"admin:create": "node packages/auth/scripts/create-admin.ts",
 		"db:push": "turbo run db:push -F @amgclub/db --",
+		"db:push:prod": "turbo run db:push:prod -F @amgclub/db --",
 		"db:studio": "turbo run db:studio -F @amgclub/db --",
 		"db:generate": "turbo run db:generate -F @amgclub/db --",
 		"db:migrate": "turbo run db:migrate -F @amgclub/db --",

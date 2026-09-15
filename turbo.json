@@ -21,6 +21,10 @@
 			"cache": false,
 			"interactive": true
 		},
+		"db:push:prod": {
+			"cache": false,
+			"interactive": true
+		},
 		"db:generate": {
 			"cache": false,
 			"interactive": true
