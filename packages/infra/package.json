@@ -4,12 +4,12 @@
 	"type": "module",
 	"scripts": {
 		"check-types": "tsc --noEmit",
-		"dev:admin": "alchemy dev --config admin.alchemy.run.ts",
-		"dev:web": "alchemy dev --config web.alchemy.run.ts",
-		"deploy:admin": "alchemy deploy --config admin.alchemy.run.ts",
-		"deploy:web": "alchemy deploy --config web.alchemy.run.ts",
-		"destroy:admin": "alchemy destroy --config admin.alchemy.run.ts",
-		"destroy:web": "alchemy destroy --config web.alchemy.run.ts"
+		"dev:admin": "alchemy dev admin.alchemy.run.ts",
+		"dev:web": "alchemy dev web.alchemy.run.ts",
+		"deploy:admin": "alchemy deploy admin.alchemy.run.ts",
+		"deploy:web": "alchemy deploy web.alchemy.run.ts",
+		"destroy:admin": "alchemy destroy admin.alchemy.run.ts",
+		"destroy:web": "alchemy destroy web.alchemy.run.ts"
 	},
 	"dependencies": {
 		"dotenv": "catalog:",

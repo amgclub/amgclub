@@ -1,4 +1,8 @@
 {
 	"extends": "@amgclub/config/tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"allowImportingTsExtensions": true
+	},
 	"include": ["shared-env.ts", "admin.alchemy.run.ts", "web.alchemy.run.ts"]
 }

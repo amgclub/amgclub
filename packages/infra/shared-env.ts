@@ -30,12 +30,26 @@ export const commonEnv = {
 	SUPABASE_URL: Config.redacted("SUPABASE_URL"),
 	SUPABASE_SECRET_KEY: Config.redacted("SUPABASE_SECRET_KEY"),
 	SUPABASE_STORAGE_BUCKET: Config.redacted("SUPABASE_STORAGE_BUCKET"),
-	AWS_ACCESS_KEY_ID: Config.redacted("AWS_ACCESS_KEY_ID"),
-	AWS_SECRET_ACCESS_KEY: Config.redacted("AWS_SECRET_ACCESS_KEY"),
-	AWS_MEDIA_BUCKET_NAME: Config.redacted("AWS_MEDIA_BUCKET_NAME"),
-	AWS_MEDIA_CUSTOM_DOMAIN: Config.redacted("AWS_MEDIA_CUSTOM_DOMAIN"),
-	AWS_S3_ENDPOINT_URL: Config.redacted("AWS_S3_ENDPOINT_URL"),
-	AWS_S3_REGION: Config.redacted("AWS_S3_REGION"),
-	UPSTASH_REDIS_REST_URL: Config.redacted("UPSTASH_REDIS_REST_URL"),
-	UPSTASH_REDIS_REST_TOKEN: Config.redacted("UPSTASH_REDIS_REST_TOKEN"),
+	AWS_ACCESS_KEY_ID: Config.redacted("AWS_ACCESS_KEY_ID").pipe(
+		Config.withDefault(""),
+	),
+	AWS_SECRET_ACCESS_KEY: Config.redacted("AWS_SECRET_ACCESS_KEY").pipe(
+		Config.withDefault(""),
+	),
+	AWS_MEDIA_BUCKET_NAME: Config.redacted("AWS_MEDIA_BUCKET_NAME").pipe(
+		Config.withDefault(""),
+	),
+	AWS_MEDIA_CUSTOM_DOMAIN: Config.redacted("AWS_MEDIA_CUSTOM_DOMAIN").pipe(
+		Config.withDefault(""),
+	),
+	AWS_S3_ENDPOINT_URL: Config.redacted("AWS_S3_ENDPOINT_URL").pipe(
+		Config.withDefault(""),
+	),
+	AWS_S3_REGION: Config.redacted("AWS_S3_REGION").pipe(Config.withDefault("")),
+	UPSTASH_REDIS_REST_URL: Config.redacted("UPSTASH_REDIS_REST_URL").pipe(
+		Config.withDefault(""),
+	),
+	UPSTASH_REDIS_REST_TOKEN: Config.redacted("UPSTASH_REDIS_REST_TOKEN").pipe(
+		Config.withDefault(""),
+	),
 };
