@@ -41,7 +41,23 @@
 			"cache": false,
 			"interactive": true
 		},
+		"deploy:admin": {
+			"cache": false,
+			"interactive": true
+		},
+		"deploy:web": {
+			"cache": false,
+			"interactive": true
+		},
 		"destroy": {
+			"cache": false,
+			"interactive": true
+		},
+		"destroy:admin": {
+			"cache": false,
+			"interactive": true
+		},
+		"destroy:web": {
 			"cache": false,
 			"interactive": true
 		}
