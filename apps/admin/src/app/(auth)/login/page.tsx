@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { LoginForm } from "@/components/login-form";
+import LoginPage from "@/components/login-page";
 import { getServerSession } from "@/lib/auth-server";
 
 export const metadata: Metadata = {
 	title: "Sign in",
 };
 
-export default async function LoginPage({
+export default async function AdminLoginRoute({
 	searchParams,
 }: {
 	searchParams: Promise<{ redirect?: string; error?: string }>;
@@ -21,11 +21,9 @@ export default async function LoginPage({
 	}
 
 	return (
-		<div className="flex min-h-svh items-center justify-center p-4">
-			<LoginForm
-				redirectTo={params.redirect}
-				forbidden={params.error === "forbidden"}
-			/>
-		</div>
+		<LoginPage
+			redirectTo={params.redirect}
+			forbidden={params.error === "forbidden"}
+		/>
 	);
 }

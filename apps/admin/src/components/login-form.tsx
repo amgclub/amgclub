@@ -63,23 +63,20 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 	}
 
 	return (
-		<div className="flex w-full max-w-sm flex-col gap-6">
+		<div className="flex flex-col gap-6">
 			<div className="flex flex-col items-center gap-1 text-center">
-				<div className="mb-2 flex size-10 items-center justify-center bg-primary text-primary-foreground">
-					<span className="font-extrabold text-lg tracking-tight">A</span>
-				</div>
-				<h1 className="font-extrabold font-sans text-headline-md">
-					AMG Club UAE — Admin
+				<h1 className="font-bold font-sans text-foreground text-headline-lg">
+					Login to your account
 				</h1>
-				<p className="text-body-sm text-muted-foreground">
-					Sign in to the management console
+				<p className="font-sans text-muted-foreground text-sm">
+					Enter your email below to login to your account
 				</p>
 			</div>
 
 			{forbidden ? (
 				<p
 					role="alert"
-					className="border border-destructive/40 bg-surface-weak p-3 text-caption text-destructive"
+					className="border border-destructive/40 bg-surface-weak p-3 font-sans text-caption text-destructive"
 				>
 					This console is restricted to admin accounts.
 				</p>
@@ -92,14 +89,14 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 						<Input
 							id="email"
 							type="email"
-							placeholder="admin@amgclub.ae"
+							placeholder="user@example.com"
 							autoComplete="email"
 							autoFocus
 							aria-invalid={Boolean(errors.email)}
 							{...register("email")}
 						/>
 						{errors.email ? (
-							<p className="text-caption text-destructive">
+							<p className="font-sans text-caption text-destructive">
 								{errors.email.message}
 							</p>
 						) : null}
@@ -114,13 +111,13 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 							{...register("password")}
 						/>
 						{errors.password ? (
-							<p className="text-caption text-destructive">
+							<p className="font-sans text-caption text-destructive">
 								{errors.password.message}
 							</p>
 						) : null}
 					</Field>
 					{errors.root ? (
-						<p role="alert" className="text-caption text-destructive">
+						<p role="alert" className="font-sans text-caption text-destructive">
 							{errors.root.message}
 						</p>
 					) : null}
@@ -131,11 +128,6 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 					</Field>
 				</FieldGroup>
 			</form>
-
-			<p className="text-caption text-muted-foreground">
-				Access is restricted to backend team members. Accounts are created by an
-				admin under Settings → Team.
-			</p>
 		</div>
 	);
 }
