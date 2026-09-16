@@ -21,7 +21,8 @@ import {
 import { Textarea } from "@amgclub/ui/components/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
-import { format } from "date-fns";
+import dayjs from "dayjs";
+import localizedFormat from "dayjs/plugin/localizedFormat";
 import { CalendarIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,6 +31,8 @@ import { z } from "zod";
 import { queryClient, trpc } from "@/utils/trpc";
 
 import { ImageUpload } from "./image-upload";
+
+dayjs.extend(localizedFormat);
 
 const eventFormSchema = z.object({
 	title: z.string().min(1, "Title is required").max(160),
@@ -166,7 +169,7 @@ export function EventFormDialog({
 			imageUrl: values.imageUrl || undefined,
 			location: values.location,
 			mapUrl: values.mapUrl || undefined,
-			eventDate: format(values.eventDate, "yyyy-MM-dd"),
+			eventDate: dayjs(values.eventDate).format("YYYY-MM-DD"),
 			startTime: values.startTime,
 			endTime: values.endTime || undefined,
 			price: values.price,
@@ -268,7 +271,9 @@ export function EventFormDialog({
 											/>
 										}
 									>
-										{eventDate ? format(eventDate, "PPP") : "Select date"}
+										{eventDate
+											? dayjs(eventDate).format("MMMM D, YYYY")
+											: "Select date"}
 										<CalendarIcon data-icon="inline-end" />
 									</PopoverTrigger>
 									<PopoverContent className="w-auto p-0" align="start">

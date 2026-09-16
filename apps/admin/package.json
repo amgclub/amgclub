@@ -24,7 +24,7 @@
 		"@trpc/tanstack-react-query": "^11.18.0",
 		"babel-plugin-react-compiler": "^1.0.0",
 		"better-auth": "catalog:",
-		"date-fns": "^4.4.0",
+		"dayjs": "^1.11.13",
 		"lucide-react": "catalog:",
 		"next": "catalog:",
 		"next-themes": "catalog:",
