@@ -14,7 +14,10 @@ export const admin = Cloudflare.Website.StaticSite("admin", {
 	memo: false,
 	outdir: ".open-next/assets",
 	main: "../../apps/admin/.open-next/worker.js",
-	bundle: false,
+	// NOTE: intentionally no `bundle: false` here. The prebuilt path uploads
+	// .open-next byte-for-byte and fast-glob follows pnpm's symlinked dirs,
+	// uploading node_modules 2-3x (~85 MB > 64 MiB limit). Letting alchemy
+	// bundle with rolldown dedupes by realpath, like stock `wrangler deploy`.
 	compatibility: {
 		flags: ["nodejs_compat", "global_fetch_strictly_public"],
 	},
