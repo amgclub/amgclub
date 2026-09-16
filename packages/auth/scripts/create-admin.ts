@@ -3,6 +3,10 @@
  *
  * Usage (from the repo root):
  *   pnpm admin:create <email> <password> [name] [role]
+ *   pnpm admin:create:prod <email> <password> [name] [role]
+ *
+ * Set ENV_FILE (relative to the repo root) to target another environment,
+ * e.g. `pnpm admin:create:prod` loads apps/admin/.env.production (live DB).
  *
  * The admin console has no public sign-up — accounts are created here or from
  * the dashboard (Settings → Team) once an admin exists.
@@ -23,14 +27,19 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(here, "../../..");
 
 // Admin app env first (it owns BETTER_AUTH_URL for the console), web as fallback.
-dotenvConfig({ path: path.join(repoRoot, "apps/admin/.env") });
-dotenvConfig({ path: path.join(repoRoot, "apps/web/.env") });
+// Override with ENV_FILE (relative to the repo root) for another environment.
+if (process.env.ENV_FILE) {
+	dotenvConfig({ path: path.resolve(repoRoot, process.env.ENV_FILE) });
+} else {
+	dotenvConfig({ path: path.join(repoRoot, "apps/admin/.env") });
+	dotenvConfig({ path: path.join(repoRoot, "apps/web/.env") });
+}
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3002";
 
 if (!process.env.BETTER_AUTH_SECRET || !process.env.DATABASE_URL) {
 	console.error(
-		"Missing BETTER_AUTH_SECRET or DATABASE_URL. Ensure apps/admin/.env exists.",
+		"Missing BETTER_AUTH_SECRET or DATABASE_URL. Ensure apps/admin/.env exists (or the file set via ENV_FILE).",
 	);
 	process.exit(1);
 }
