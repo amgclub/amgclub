@@ -9,6 +9,7 @@ config({ path: "./.env" });
 config({ path: "../../apps/admin/.env.production" });
 
 export const admin = Cloudflare.Website.StaticSite("admin", {
+	name: "admin",
 	cwd: "../../apps/admin",
 	command: "pnpm run build:cloudflare",
 	memo: false,

@@ -9,12 +9,14 @@ config({ path: "./.env" });
 config({ path: "../../apps/web/.env.production" });
 
 export const web = Cloudflare.Website.StaticSite("web", {
+	name: "web",
 	cwd: "../../apps/web",
 	command: "pnpm run build:cloudflare",
 	memo: false,
 	outdir: ".open-next/assets",
 	main: "../../apps/web/.open-next/worker.js",
-	bundle: false,
+	// NOTE: intentionally no `bundle: false` here — see admin.alchemy.run.ts.
+	// The prebuilt path follows pnpm symlinks and uploads ~85 MB (> 64 MiB).
 	compatibility: {
 		flags: ["nodejs_compat", "global_fetch_strictly_public"],
 	},
