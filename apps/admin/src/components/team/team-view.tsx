@@ -30,6 +30,7 @@ import {
 	BanIcon,
 	CircleCheckIcon,
 	EllipsisVerticalIcon,
+	KeyRoundIcon,
 	ShieldIcon,
 	Trash2Icon,
 	UserPlusIcon,
@@ -41,6 +42,7 @@ import { toast } from "sonner";
 
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { AddTeamMemberDialog } from "@/components/team/add-team-member-dialog";
+import { ChangePasswordDialog } from "@/components/team/change-password-dialog";
 import { authClient } from "@/lib/auth-client";
 import { formatDateTime } from "@/lib/format";
 
@@ -81,6 +83,7 @@ function useTeamUsers() {
 export function TeamView() {
 	const [addOpen, setAddOpen] = useState(false);
 	const [removeTarget, setRemoveTarget] = useState<TeamUser | null>(null);
+	const [passwordTarget, setPasswordTarget] = useState<TeamUser | null>(null);
 	const usersQuery = useTeamUsers();
 
 	async function setRole(user: TeamUser, role: "admin" | "user") {
@@ -216,6 +219,7 @@ export function TeamView() {
 									onRoleChange={setRole}
 									onBanChange={setBanned}
 									onRemove={setRemoveTarget}
+									onPasswordChange={setPasswordTarget}
 								/>
 							))
 						)}
@@ -224,6 +228,21 @@ export function TeamView() {
 			</div>
 
 			<AddTeamMemberDialog open={addOpen} onOpenChange={setAddOpen} />
+
+			<ChangePasswordDialog
+				open={passwordTarget !== null}
+				onOpenChange={(next) => {
+					if (!next) {
+						setPasswordTarget(null);
+					}
+				}}
+				user={passwordTarget}
+				onSuccess={() => {
+					usersQuery.refetch().catch(() => {
+						toast.error("Refresh failed");
+					});
+				}}
+			/>
 
 			<ConfirmDialog
 				open={removeTarget !== null}
@@ -254,11 +273,13 @@ function TeamRow({
 	onRoleChange,
 	onBanChange,
 	onRemove,
+	onPasswordChange,
 }: {
 	user: TeamUser;
 	onRoleChange: (user: TeamUser, role: "admin" | "user") => Promise<void>;
 	onBanChange: (user: TeamUser, banned: boolean) => Promise<void>;
 	onRemove: (user: TeamUser) => void;
+	onPasswordChange: (user: TeamUser) => void;
 }) {
 	return (
 		<TableRow>
@@ -334,6 +355,14 @@ function TeamRow({
 								Ban
 							</DropdownMenuItem>
 						)}
+						<DropdownMenuItem
+							onClick={() => {
+								onPasswordChange(user);
+							}}
+						>
+							<KeyRoundIcon />
+							Change password
+						</DropdownMenuItem>
 						<DropdownMenuSeparator />
 						<DropdownMenuItem
 							variant="destructive"
