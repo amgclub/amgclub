@@ -3,10 +3,10 @@ import * as Cloudflare from "alchemy/Cloudflare";
 import { config } from "dotenv";
 import * as Effect from "effect/Effect";
 
-import { commonEnv } from "./shared-env";
+import { commonEnv } from "./shared-env.ts";
 
 config({ path: "./.env" });
-config({ path: "../../apps/admin/.env" });
+config({ path: "../../apps/admin/.env.production" });
 
 export const admin = Cloudflare.Website.StaticSite("admin", {
 	cwd: "../../apps/admin",
@@ -31,7 +31,7 @@ export default Alchemy.Stack(
 	"amgclub-admin",
 	{
 		providers: Cloudflare.providers(),
-		state: Cloudflare.state(),
+		state: Alchemy.localState(),
 	},
 	Effect.gen(function* () {
 		const adminWorker = yield* admin;

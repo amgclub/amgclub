@@ -3,10 +3,10 @@ import * as Cloudflare from "alchemy/Cloudflare";
 import { config } from "dotenv";
 import * as Effect from "effect/Effect";
 
-import { commonEnv } from "./shared-env";
+import { commonEnv } from "./shared-env.ts";
 
 config({ path: "./.env" });
-config({ path: "../../apps/web/.env" });
+config({ path: "../../apps/web/.env.production" });
 
 export const web = Cloudflare.Website.StaticSite("web", {
 	cwd: "../../apps/web",
@@ -31,7 +31,7 @@ export default Alchemy.Stack(
 	"amgclub-web",
 	{
 		providers: Cloudflare.providers(),
-		state: Cloudflare.state(),
+		state: Alchemy.localState(),
 	},
 	Effect.gen(function* () {
 		const webWorker = yield* web;
