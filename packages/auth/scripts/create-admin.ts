@@ -44,10 +44,17 @@ if (!process.env.BETTER_AUTH_SECRET || !process.env.DATABASE_URL) {
 	process.exit(1);
 }
 
-const db = drizzle({
-	client: postgres(process.env.DATABASE_URL, { max: 1 }),
-	schema: authSchema,
+const sql = postgres(process.env.DATABASE_URL, {
+	// prepare:false required when talking to the Supabase pooler directly —
+	// server-side prepared statements are dropped across the pooler's
+	// connection handoff and queries hang.
+	prepare: false,
+	max: 3,
+	connect_timeout: 10,
+	idle_timeout: 30,
 });
+
+const db = drizzle(sql, { schema: authSchema });
 
 const auth = betterAuth({
 	database: drizzleAdapter(db, { provider: "pg", schema: authSchema }),

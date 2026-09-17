@@ -47,6 +47,9 @@ lerna-debug.log*
 .alchemy
 .vercel
 
+# Infra certs (uploaded out-of-band to Cloudflare; kept locally as backup)
+packages/infra/certs/
+
 # Testing
 coverage
 .nyc_output

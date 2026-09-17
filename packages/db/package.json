@@ -23,10 +23,12 @@
 		"dotenv": "catalog:",
 		"drizzle-orm": "^0.45.2",
 		"postgres": "^3.4.9",
+		"react": "catalog:",
 		"zod": "catalog:"
 	},
 	"devDependencies": {
 		"@amgclub/config": "workspace:*",
+		"@types/react": "catalog:",
 		"drizzle-kit": "^0.31.10",
 		"typescript": "catalog:"
 	}

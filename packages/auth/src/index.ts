@@ -5,6 +5,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins/admin";
+import { cache } from "react";
 
 export function createAuth() {
 	const db = createDb();
@@ -25,14 +26,13 @@ export function createAuth() {
 	});
 }
 
-const globalForAuth = globalThis as unknown as {
-	__amgclubAuth?: ReturnType<typeof createAuth>;
-};
-
-/** Memoized auth instance (reuses one db pool across requests / hot reloads). */
-export function getAuth() {
-	if (!globalForAuth.__amgclubAuth) {
-		globalForAuth.__amgclubAuth = createAuth();
-	}
-	return globalForAuth.__amgclubAuth;
-}
+/**
+ * Per-request auth instance.
+ *
+ * In the Workers runtime, the underlying DB pool must not be shared across
+ * requests — reusing a connection created inside another request's context
+ * trips the runtime's cross-request promise guard and the isolate hangs.
+ * `cache()` dedupes to a single auth + pool per request while guaranteeing a
+ * fresh instance for every request.
+ */
+export const getAuth = cache(createAuth);

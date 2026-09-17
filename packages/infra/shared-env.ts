@@ -1,9 +1,20 @@
 import * as Cloudflare from "alchemy/Cloudflare";
 import * as Config from "effect/Config";
 
+/**
+ * Narrowest worker-side Hyperdrive binding shape we rely on: the pooled
+ * connection string. (The full runtime `Hyperdrive` object also exposes
+ * host/port/user/password/database, which we don't need.)
+ */
+export interface HyperdriveBinding {
+	readonly connectionString: string;
+}
+
 export interface CloudflareEnv {
 	readonly IMAGES: unknown;
 	readonly DATABASE_URL: string;
+	/** Present only in the Cloudflare worker; absent in Node/local runtimes. */
+	readonly HYPERDRIVE?: HyperdriveBinding;
 	readonly BETTER_AUTH_SECRET: string;
 	readonly BETTER_AUTH_URL: string;
 	readonly STORAGE_PROVIDER: string;
