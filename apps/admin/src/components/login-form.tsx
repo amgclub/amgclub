@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { LoadingOverlay } from "@/components/loading-overlay";
 import { authClient } from "@/lib/auth-client";
 
 const loginSchema = z.object({
@@ -47,9 +48,9 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 			email: values.email,
 			password: values.password,
 		});
-		setSubmitting(false);
 
 		if (error) {
+			setSubmitting(false);
 			setError("root", {
 				message: error.message ?? "Unable to sign in. Please try again.",
 			});
@@ -58,76 +59,84 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 
 		toast.success("Welcome back");
 		const target = redirectTo?.startsWith("/") ? redirectTo : "/";
+		// Keep the overlay up through the dashboard redirect so the transition
+		// doesn't look like a frozen page.
 		void router.push(target as Route);
 		router.refresh();
 	}
 
 	return (
-		<div className="flex flex-col gap-6">
-			<div className="flex flex-col items-center gap-1 text-center">
-				<h1 className="font-bold font-sans text-foreground text-headline-lg">
-					Login to your account
-				</h1>
-				<p className="font-sans text-muted-foreground text-sm">
-					Enter your email below to login to your account
-				</p>
+		<>
+			{submitting ? <LoadingOverlay label="Signing you in…" /> : null}
+			<div className="flex flex-col gap-6">
+				<div className="flex flex-col items-center gap-1 text-center">
+					<h1 className="font-bold font-sans text-foreground text-headline-lg">
+						Login to your account
+					</h1>
+					<p className="font-sans text-muted-foreground text-sm">
+						Enter your email below to login to your account
+					</p>
+				</div>
+
+				{forbidden ? (
+					<p
+						role="alert"
+						className="border border-destructive/40 bg-surface-weak p-3 font-sans text-caption text-destructive"
+					>
+						This console is restricted to admin accounts.
+					</p>
+				) : null}
+
+				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
+					<FieldGroup>
+						<Field>
+							<FieldLabel htmlFor="email">Email</FieldLabel>
+							<Input
+								id="email"
+								type="email"
+								placeholder="user@example.com"
+								autoComplete="email"
+								autoFocus
+								aria-invalid={Boolean(errors.email)}
+								{...register("email")}
+							/>
+							{errors.email ? (
+								<p className="font-sans text-caption text-destructive">
+									{errors.email.message}
+								</p>
+							) : null}
+						</Field>
+						<Field>
+							<FieldLabel htmlFor="password">Password</FieldLabel>
+							<Input
+								id="password"
+								type="password"
+								autoComplete="current-password"
+								aria-invalid={Boolean(errors.password)}
+								{...register("password")}
+							/>
+							{errors.password ? (
+								<p className="font-sans text-caption text-destructive">
+									{errors.password.message}
+								</p>
+							) : null}
+						</Field>
+						{errors.root ? (
+							<p
+								role="alert"
+								className="font-sans text-caption text-destructive"
+							>
+								{errors.root.message}
+							</p>
+						) : null}
+						<Field>
+							<Button type="submit" disabled={submitting} className="w-full">
+								{submitting ? "Signing in…" : "Sign in"}
+							</Button>
+						</Field>
+					</FieldGroup>
+				</form>
 			</div>
-
-			{forbidden ? (
-				<p
-					role="alert"
-					className="border border-destructive/40 bg-surface-weak p-3 font-sans text-caption text-destructive"
-				>
-					This console is restricted to admin accounts.
-				</p>
-			) : null}
-
-			<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
-				<FieldGroup>
-					<Field>
-						<FieldLabel htmlFor="email">Email</FieldLabel>
-						<Input
-							id="email"
-							type="email"
-							placeholder="user@example.com"
-							autoComplete="email"
-							autoFocus
-							aria-invalid={Boolean(errors.email)}
-							{...register("email")}
-						/>
-						{errors.email ? (
-							<p className="font-sans text-caption text-destructive">
-								{errors.email.message}
-							</p>
-						) : null}
-					</Field>
-					<Field>
-						<FieldLabel htmlFor="password">Password</FieldLabel>
-						<Input
-							id="password"
-							type="password"
-							autoComplete="current-password"
-							aria-invalid={Boolean(errors.password)}
-							{...register("password")}
-						/>
-						{errors.password ? (
-							<p className="font-sans text-caption text-destructive">
-								{errors.password.message}
-							</p>
-						) : null}
-					</Field>
-					{errors.root ? (
-						<p role="alert" className="font-sans text-caption text-destructive">
-							{errors.root.message}
-						</p>
-					) : null}
-					<Field>
-						<Button type="submit" disabled={submitting} className="w-full">
-							{submitting ? "Signing in…" : "Sign in"}
-						</Button>
-					</Field>
-				</FieldGroup>
-			</form>
-		</div>
+		</>
 	);
 }
