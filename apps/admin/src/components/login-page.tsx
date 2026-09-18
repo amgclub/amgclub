@@ -2,6 +2,11 @@ import Image from "next/image";
 
 import { LoginForm } from "@/components/login-form";
 
+// Tiny blurred preview of login-cover.webp — shown while the full-res cover
+// lazy-loads, so the panel isn't blank during the transition.
+const loginCoverBlur =
+	"data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACQAwCdASogACsAPrVYpk6nJSOiJWgA4BaJaQDK8A+i/0LQfzgAAP7x8niX1PfDhCSMKj4gMQUhgWYvOA3WAAAA";
+
 interface LoginPageProps {
 	redirectTo?: string;
 	forbidden?: boolean;
@@ -37,7 +42,10 @@ export default function LoginPage({ redirectTo, forbidden }: LoginPageProps) {
 						width={2880}
 						height={1920}
 						className="h-full w-full object-cover"
-						priority
+						placeholder="blur"
+						blurDataURL={loginCoverBlur}
+						loading="lazy"
+						sizes="50vw"
 					/>
 				</div>
 			</div>
