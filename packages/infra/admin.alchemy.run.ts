@@ -55,7 +55,7 @@ export const hyperdriveDb = Cloudflare.Hyperdrive.Connection("hyperdrive", {
 	// Production posture: Hyperdrive query caching MUST stay enabled — with
 	// `disabled: true` every query parks forever. Small windows keep
 	// session/ban/password propagation to seconds on this internal tool.
-	caching: { disabled: false, maxAge: 10, staleWhileRevalidate: 5 },
+	caching: { disabled: false, maxAge: 60, staleWhileRevalidate: 15 },
 	// Supabase serves a private CA chain ("Supabase Root 2021 CA"), which fails
 	// WebPKI validation under the default `require` mode — worker queries hung
 	// until Hyperdrive's 10-minute idle kill. verify-ca checks the chain against

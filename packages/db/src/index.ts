@@ -20,6 +20,14 @@ export function createDb() {
 		// connection handoff and cause queries to silently hang. postgres.js
 		// defaults to prepare:true, so it must be disabled explicitly.
 		prepare: false,
+		// Skip the pg_catalog type-discovery roundtrip. By default postgres.js
+		// queries pg_type on first use of each data type, which adds a full
+		// network roundtrip per type before your actual query executes. Over
+		// Hyperdrive that roundtrip costs 10-15 ms of edge latency. With this
+		// flag the driver uses its built-in type map — byte-identical for all
+		// standard types (text, int4, int8, bool, timestamptz, jsonb, uuid,
+		// numeric, date, time, …) and for enums which are transmitted as text.
+		fetch_types: false,
 		// A single client per request. Cloudflare Workers do not allow a
 		// connection pool to be shared across request contexts — reusing a
 		// socket made in another request trips the runtime's cross-request

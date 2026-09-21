@@ -49,6 +49,7 @@ const sql = postgres(process.env.DATABASE_URL, {
 	// server-side prepared statements are dropped across the pooler's
 	// connection handoff and queries hang.
 	prepare: false,
+	fetch_types: false,
 	max: 3,
 	connect_timeout: 10,
 	idle_timeout: 30,
