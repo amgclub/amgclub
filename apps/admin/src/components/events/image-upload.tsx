@@ -3,45 +3,114 @@
 import { Button } from "@amgclub/ui/components/button";
 import { useMutation } from "@tanstack/react-query";
 import { ImageIcon, Trash2Icon, UploadIcon } from "lucide-react";
-import { useRef, useState } from "react";
+import {
+	useCallback,
+	useEffect,
+	useImperativeHandle,
+	useRef,
+	useState,
+} from "react";
 import { trpc } from "@/utils/trpc";
 
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
 
+export interface ImageUploadHandle {
+	uploadFile: () => Promise<string | null>;
+}
+
 /**
- * Image picker for the event form. Requests a pre-signed upload URL via tRPC
- * and uploads directly to storage, passing the resulting URL back through `onChange`.
- * Track every successful upload with `onUploaded` so callers can delete unsaved
- * files when the dialog closes.
+ * Image picker for the event form. Holds the selected file in memory and shows
+ * a local preview. The actual upload to storage is deferred — callers invoke
+ * `uploadFile()` (via a ref) only after the parent entity is persisted, so no
+ * orphaned storage objects are created when the user cancels.
  */
 export function ImageUpload({
 	imageUrl,
 	onChange,
 	onUploaded,
+	ref,
 }: {
 	imageUrl: string | null;
 	onChange: (url: string | null) => void;
 	onUploaded?: (url: string) => void;
+	ref?: React.Ref<ImageUploadHandle>;
 }) {
 	const inputRef = useRef<HTMLInputElement>(null);
+	const [pendingFile, setPendingFile] = useState<File | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 	const [uploading, setUploading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 	const [announcement, setAnnouncement] = useState<string | null>(null);
-	const [fileName, setFileName] = useState<string | null>(null);
 
 	const getUploadUrlMutation = useMutation(
 		trpc.storage.getUploadUrl.mutationOptions(),
 	);
 
+	// Revoke object URLs on unmount or when the preview changes.
+	useEffect(() => {
+		return () => {
+			if (previewUrl) URL.revokeObjectURL(previewUrl);
+		};
+	}, [previewUrl]);
+
+	const uploadFile = useCallback(async (): Promise<string | null> => {
+		const file = pendingFile;
+		if (!file) return imageUrl;
+
+		setUploading(true);
+		setError(null);
+		setAnnouncement("Uploading…");
+
+		try {
+			const { uploadUrl, publicUrl } = await getUploadUrlMutation.mutateAsync({
+				contentType: file.type,
+				size: file.size,
+				fileName: file.name,
+			});
+
+			const uploadResponse = await fetch(uploadUrl, {
+				method: "PUT",
+				headers: { "Content-Type": file.type },
+				body: file,
+			});
+			if (!uploadResponse.ok) {
+				let detail = "";
+				try {
+					const body = await uploadResponse.text();
+					detail = body ? `: ${body}` : "";
+				} catch {
+					// response body unreadable
+				}
+				throw new Error(
+					`Failed to upload image to storage (${uploadResponse.status})${detail}`,
+				);
+			}
+
+			setAnnouncement("Image uploaded.");
+			onUploaded?.(publicUrl);
+			return publicUrl;
+		} catch (uploadError) {
+			const message =
+				uploadError instanceof Error && uploadError.message !== ""
+					? uploadError.message
+					: "Upload failed.";
+			setError(message);
+			setAnnouncement(`Upload failed: ${message}`);
+			return null;
+		} finally {
+			setUploading(false);
+		}
+	}, [pendingFile, imageUrl, getUploadUrlMutation, onUploaded]);
+
+	useImperativeHandle(ref, () => ({ uploadFile }), [uploadFile]);
+
 	function openPicker() {
 		inputRef.current?.click();
 	}
 
-	async function handleFiles(files: FileList | null | undefined) {
+	function handleFiles(files: FileList | null | undefined) {
 		const file = files?.[0];
-		if (!file) {
-			return;
-		}
+		if (!file) return;
 
 		if (!file.type.startsWith("image/")) {
 			const message = "Only image files are allowed.";
@@ -56,67 +125,30 @@ export function ImageUpload({
 			return;
 		}
 
+		if (previewUrl) URL.revokeObjectURL(previewUrl);
+
 		setError(null);
-		setUploading(true);
-		setAnnouncement("Uploading…");
-
-		try {
-			const { uploadUrl, publicUrl } = await getUploadUrlMutation.mutateAsync({
-				contentType: file.type,
-				size: file.size,
-				fileName: file.name,
-			});
-
-			const uploadResponse = await fetch(uploadUrl, {
-				method: "PUT",
-				headers: {
-					"Content-Type": file.type,
-				},
-				body: file,
-			});
-			if (!uploadResponse.ok) {
-				let detail = "";
-				try {
-					const body = await uploadResponse.text();
-					detail = body ? `: ${body}` : "";
-				} catch {
-					// response body unreadable — leave detail empty
-				}
-				throw new Error(
-					`Failed to upload image to storage (${uploadResponse.status})${detail}`,
-				);
-			}
-
-			setFileName(file.name);
-			setAnnouncement("Image uploaded.");
-			onUploaded?.(publicUrl);
-			onChange(publicUrl);
-		} catch (uploadError) {
-			const message =
-				uploadError instanceof Error && uploadError.message !== ""
-					? uploadError.message
-					: "Upload failed.";
-			setError(message);
-			setAnnouncement(`Upload failed: ${message}`);
-		} finally {
-			setUploading(false);
-		}
+		setPendingFile(file);
+		setPreviewUrl(URL.createObjectURL(file));
+		setAnnouncement("Image selected.");
+		onChange(null);
 	}
 
+	const preview = previewUrl ?? imageUrl;
 	const isUploading = uploading || getUploadUrlMutation.isPending;
 
 	return (
 		<div className="flex w-full flex-col gap-2" aria-busy={isUploading}>
-			{imageUrl ? (
+			{preview ? (
 				<div className="flex items-center gap-3">
 					<img
-						src={imageUrl}
+						src={preview}
 						alt=""
 						className="size-32 shrink-0 border object-cover"
 					/>
 					<div className="flex flex-col items-start gap-2">
 						<p className="max-w-48 truncate text-caption text-muted-foreground">
-							{fileName ?? "Image uploaded"}
+							{pendingFile?.name ?? "Image uploaded"}
 						</p>
 						<div className="flex items-center gap-2">
 							<Button
@@ -135,7 +167,9 @@ export function ImageUpload({
 								size="sm"
 								disabled={isUploading}
 								onClick={() => {
-									setFileName(null);
+									if (previewUrl) URL.revokeObjectURL(previewUrl);
+									setPendingFile(null);
+									setPreviewUrl(null);
 									setAnnouncement("Image removed.");
 									onChange(null);
 								}}
@@ -156,7 +190,7 @@ export function ImageUpload({
 					}}
 					onDrop={(event) => {
 						event.preventDefault();
-						void handleFiles(event.dataTransfer.files);
+						handleFiles(event.dataTransfer.files);
 					}}
 					className="flex w-full cursor-pointer flex-col items-center gap-2 border-border border-dashed bg-surface-weak p-6 text-center text-caption text-muted-foreground"
 				>
@@ -177,7 +211,7 @@ export function ImageUpload({
 				className="hidden"
 				aria-label="Upload event image"
 				onChange={(event) => {
-					void handleFiles(event.target.files);
+					handleFiles(event.target.files);
 					event.target.value = "";
 				}}
 			/>

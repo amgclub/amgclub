@@ -24,13 +24,13 @@ import { useMutation } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import { CalendarIcon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { queryClient, trpc } from "@/utils/trpc";
 
-import { ImageUpload } from "./image-upload";
+import { ImageUpload, type ImageUploadHandle } from "./image-upload";
 
 dayjs.extend(localizedFormat);
 
@@ -83,7 +83,7 @@ export function EventFormDialog({
 	onOpenChange: (open: boolean) => void;
 	event?: EventDTO | null;
 }) {
-	const [uncommittedUploads, setUncommittedUploads] = useState<string[]>([]);
+	const imageUploadRef = useRef<ImageUploadHandle>(null);
 	const [datePickerOpen, setDatePickerOpen] = useState(false);
 	// The image stored before this dialog opened (used to clean up replaced/removed files).
 	const previousImage = event?.imageUrl ?? null;
@@ -130,13 +130,6 @@ export function EventFormDialog({
 
 	const createMutation = useMutation({
 		...trpc.events.create.mutationOptions(),
-		onSuccess: () => {
-			// The saved image is committed — don't delete it on dialog close.
-			setUncommittedUploads([]);
-			toast.success("Event created");
-			queryClient.invalidateQueries();
-			onOpenChange(false);
-		},
 		onError: (error) => {
 			toast.error(error.message);
 		},
@@ -144,13 +137,6 @@ export function EventFormDialog({
 
 	const updateMutation = useMutation({
 		...trpc.events.update.mutationOptions(),
-		onSuccess: () => {
-			// The saved image is committed — don't delete it on dialog close.
-			setUncommittedUploads([]);
-			toast.success("Event updated");
-			queryClient.invalidateQueries();
-			onOpenChange(false);
-		},
 		onError: (error) => {
 			toast.error(error.message);
 		},
@@ -182,27 +168,30 @@ export function EventFormDialog({
 			await createMutation.mutateAsync(payload);
 		}
 
-		// The event now points at the new image (or none): release the previous
-		// stored file. Best-effort — a failed cleanup must not fail the save.
-		const savedImage = payload.imageUrl ?? null;
+		// Upload the pending image now that the event is persisted.
+		const uploadedUrl = await imageUploadRef.current?.uploadFile();
+		if (uploadedUrl) {
+			const eventId = event?.id;
+			if (eventId) {
+				await updateMutation.mutateAsync({
+					id: eventId,
+					data: { ...payload, imageUrl: uploadedUrl },
+				});
+			}
+		}
+
+		// Clean up the previous image if it was replaced.
+		const savedImage = uploadedUrl ?? payload.imageUrl ?? null;
 		if (previousImage && previousImage !== savedImage) {
 			void deleteFileMutation
 				.mutateAsync({ url: previousImage })
 				.catch(() => {});
 		}
-	}
 
-	// When the dialog closes without saving, delete any freshly uploaded
-	// images so they don't become orphaned storage objects.
-	useEffect(() => {
-		if (open || uncommittedUploads.length === 0) {
-			return;
-		}
-		for (const url of uncommittedUploads) {
-			void deleteFileMutation.mutateAsync({ url }).catch(() => {});
-		}
-		setUncommittedUploads([]);
-	}, [open, uncommittedUploads, deleteFileMutation]);
+		toast.success(event ? "Event updated" : "Event created");
+		queryClient.invalidateQueries();
+		onOpenChange(false);
+	}
 
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -321,10 +310,8 @@ export function EventFormDialog({
 						<Field>
 							<FieldLabel>Event image</FieldLabel>
 							<ImageUpload
+								ref={imageUploadRef}
 								imageUrl={imageUrl || null}
-								onUploaded={(url) => {
-									setUncommittedUploads((current) => [...current, url]);
-								}}
 								onChange={(url) => {
 									setValue("imageUrl", url ?? "", {
 										shouldValidate: true,
