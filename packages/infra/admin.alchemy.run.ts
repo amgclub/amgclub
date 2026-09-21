@@ -12,7 +12,7 @@ config({ path: "../../apps/admin/.env.production" });
 const directUrl = process.env.DIRECT_URL;
 if (!directUrl) {
 	throw new Error(
-		"Missing DIRECT_URL (packages/infra/.env or apps/admin/.env.production). Cannot configure the Hyperdrive origin.",
+		"Missing DIRECT_URL in env file. Cannot configure the Hyperdrive origin.",
 	);
 }
 
@@ -61,12 +61,12 @@ export const hyperdriveDb = Cloudflare.Hyperdrive.Connection("hyperdrive", {
 	// until Hyperdrive's 10-minute idle kill. verify-ca checks the chain against
 	// the uploaded CA instead (no hostname matching, the conservative choice).
 	// CA cert uploaded out-of-band; ID is a non-secret reference to the full
-	// chain bundle (packages/infra/certs/supabase-chain-2021-ca.pem),
+	// chain bundle (packages/infra/certs/xxx.pem),
 	// not the root-only file.
-	mtls: {
-		caCertificateId: "09ee5502-6d20-435f-88d9-6e623c082ab4",
-		sslmode: "verify-ca",
-	},
+	// mtls: {
+	// 	caCertificateId: "09ee5502-6d20-435f-88d9-6e623c082ab4",
+	// 	sslmode: "verify-ca",
+	// },
 });
 
 export const admin = Cloudflare.Website.StaticSite("admin", {
