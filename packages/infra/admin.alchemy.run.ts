@@ -83,6 +83,12 @@ export const admin = Cloudflare.Website.StaticSite("admin", {
 	compatibility: {
 		flags: ["nodejs_compat", "global_fetch_strictly_public"],
 	},
+	// Smart Placement: run the Worker in the Cloudflare PoP closest to the
+	// DB origin (and to the admin user) to cut the worker↔database round-trip
+	// latency that dominates dashboard request wall-time.
+	placement: {
+		mode: "smart",
+	},
 	env: {
 		...commonEnv,
 		HYPERDRIVE: hyperdriveDb,
