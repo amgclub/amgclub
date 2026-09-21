@@ -75,7 +75,16 @@ export function ImageUpload({
 				body: file,
 			});
 			if (!uploadResponse.ok) {
-				throw new Error("Failed to upload image to storage.");
+				let detail = "";
+				try {
+					const body = await uploadResponse.text();
+					detail = body ? `: ${body}` : "";
+				} catch {
+					// response body unreadable — leave detail empty
+				}
+				throw new Error(
+					`Failed to upload image to storage (${uploadResponse.status})${detail}`,
+				);
 			}
 
 			setFileName(file.name);

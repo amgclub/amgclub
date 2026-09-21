@@ -183,18 +183,24 @@ export async function getSignedUploadUrl(
 	const { bucket } = supabaseStorageTarget();
 	try {
 		const client = getSupabaseClient();
-		const { data, error } = await client.storage
+		const { data, error: storageError } = await client.storage
 			.from(bucket)
 			.createSignedUploadUrl(key);
 
-		if (error || !data?.signedUrl) {
-			throw new Error(error?.message ?? "Failed to create signed upload URL");
+		if (storageError || !data?.signedUrl) {
+			const msg = storageError?.message ?? "Failed to create signed upload URL";
+			throw new StorageError("upload-failed", `Supabase: ${msg}`);
 		}
 
 		const publicUrl = getPublicUrl(bucket, key);
 		return { uploadUrl: data.signedUrl, key, publicUrl };
 	} catch (cause) {
-		throw new StorageError("upload-failed", undefined, cause);
+		if (cause instanceof StorageError) throw cause;
+		throw new StorageError(
+			"upload-failed",
+			cause instanceof Error ? cause.message : undefined,
+			cause,
+		);
 	}
 }
 
@@ -268,6 +274,12 @@ function getSupabaseClient(): SupabaseClient {
 				"SUPABASE_SECRET_KEY is not configured.",
 			);
 		}
+		if (baseUrl === "") {
+			throw new StorageError(
+				"upload-failed",
+				"SUPABASE_URL is not configured.",
+			);
+		}
 		supabaseClient = createClient(baseUrl, secretKey, {
 			auth: {
 				persistSession: false,
@@ -293,17 +305,25 @@ async function uploadToSupabase(
 	const { bucket } = supabaseStorageTarget();
 	try {
 		const client = getSupabaseClient();
-		const { error } = await client.storage
+		const { error: storageError } = await client.storage
 			.from(bucket)
 			.upload(key, file.bytes, {
 				contentType: file.contentType,
 				upsert: false,
 			});
-		if (error) {
-			throw new Error(error.message);
+		if (storageError) {
+			throw new StorageError(
+				"upload-failed",
+				`Supabase: ${storageError.message}`,
+			);
 		}
 	} catch (cause) {
-		throw new StorageError("upload-failed", undefined, cause);
+		if (cause instanceof StorageError) throw cause;
+		throw new StorageError(
+			"upload-failed",
+			cause instanceof Error ? cause.message : undefined,
+			cause,
+		);
 	}
 	return { url: supabasePublicUrl(bucket, key), key };
 }
@@ -312,12 +332,22 @@ async function deleteFromSupabase(key: string): Promise<void> {
 	const { bucket } = supabaseStorageTarget();
 	try {
 		const client = getSupabaseClient();
-		const { error } = await client.storage.from(bucket).remove([key]);
-		if (error) {
-			throw new Error(error.message);
+		const { error: storageError } = await client.storage
+			.from(bucket)
+			.remove([key]);
+		if (storageError) {
+			throw new StorageError(
+				"delete-failed",
+				`Supabase: ${storageError.message}`,
+			);
 		}
 	} catch (cause) {
-		throw new StorageError("delete-failed", undefined, cause);
+		if (cause instanceof StorageError) throw cause;
+		throw new StorageError(
+			"delete-failed",
+			cause instanceof Error ? cause.message : undefined,
+			cause,
+		);
 	}
 }
 
