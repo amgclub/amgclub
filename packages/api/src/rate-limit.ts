@@ -38,6 +38,31 @@ function getClientIp(headers: Headers): string {
 	);
 }
 
+/** Cache custom limiters by name so we don't reconstruct on every call. */
+const customLimiters = new Map<string, Ratelimit>();
+
+function getLimiter(
+	name: string,
+	opts?: {
+		limit?: number;
+		window?: `${number} ${"ms" | "s" | "m" | "h" | "d"}`;
+	},
+): Ratelimit {
+	if (!opts) return globalRatelimit!;
+
+	const cached = customLimiters.get(name);
+	if (cached) return cached;
+
+	const limiter = new Ratelimit({
+		redis: redis!,
+		limiter: Ratelimit.slidingWindow(opts.limit ?? 30, opts.window ?? "60 s"),
+		analytics: true,
+		timeout: 1000,
+	});
+	customLimiters.set(name, limiter);
+	return limiter;
+}
+
 function withRateLimit(
 	name: string,
 	opts?: {
@@ -50,22 +75,10 @@ function withRateLimit(
 			return next({ ctx });
 		}
 
-		const reqHeaders =
-			(ctx as any).req?.headers ?? (ctx as any).inputHeaders ?? new Headers();
-		const ip = getClientIp(reqHeaders);
+		const ip = getClientIp(ctx.headers);
 		const key = `${name}:${ip}`;
 
-		const limiter = opts
-			? new Ratelimit({
-					redis,
-					limiter: Ratelimit.slidingWindow(
-						opts.limit ?? 30,
-						opts.window ?? "60 s",
-					),
-					analytics: true,
-					timeout: 1000,
-				})
-			: globalRatelimit;
+		const limiter = getLimiter(name, opts);
 
 		const { success, remaining, reset } = await limiter.limit(key);
 

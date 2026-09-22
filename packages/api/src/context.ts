@@ -14,11 +14,11 @@ function snapshotHeaders(req: NextRequest): Headers {
 }
 
 export async function createContext(req: NextRequest) {
-	const session = await getAuth().api.getSession({
-		headers: snapshotHeaders(req),
-	});
+	const headers = snapshotHeaders(req);
+	const session = await getAuth().api.getSession({ headers });
 	return {
 		session,
+		headers,
 	};
 }
 
