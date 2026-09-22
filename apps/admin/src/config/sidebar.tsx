@@ -1,7 +1,6 @@
 import {
 	CalendarDaysIcon,
 	HomeIcon,
-	LayersIcon,
 	PackageIcon,
 	SettingsIcon,
 	ShoppingBagIcon,
@@ -43,8 +42,16 @@ export const navGroups: NavGroup[] = [
 		title: "Shop",
 		items: [
 			{ title: "Products", url: "/shop/products", icon: <PackageIcon /> },
-			{ title: "Categories", url: "/shop/categories", icon: <TagIcon /> },
-			{ title: "Collections", url: "/shop/collections", icon: <LayersIcon /> },
+			{
+				title: "Orders",
+				url: "/shop/orders" as Route,
+				icon: <ShoppingBagIcon />,
+			},
+			{
+				title: "Customers",
+				url: "/shop/customers" as Route,
+				icon: <UsersIcon />,
+			},
 		],
 	},
 	{
