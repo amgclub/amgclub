@@ -113,7 +113,21 @@ export const membersRouter = router({
 
 		const [rows, totals] = await Promise.all([
 			db
-				.select()
+				.select({
+					id: memberships.id,
+					memberName: memberships.memberName,
+					email: memberships.email,
+					phone: memberships.phone,
+					plan: memberships.plan,
+					status: memberships.status,
+					price: memberships.price,
+					startDate: memberships.startDate,
+					endDate: memberships.endDate,
+					source: memberships.source,
+					notes: memberships.notes,
+					createdAt: memberships.createdAt,
+					updatedAt: memberships.updatedAt,
+				})
 				.from(memberships)
 				.where(where)
 				.orderBy(desc(memberships.createdAt))
