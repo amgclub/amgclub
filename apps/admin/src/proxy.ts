@@ -39,6 +39,8 @@ export const config = {
 		"/events/:path*",
 		"/settings/:path*",
 		"/shop/:path*",
-		"/api/trpc/:path*",
+		// /api/trpc routes are excluded: the tRPC context + protectedProcedure
+		// middleware already verify the session. Running the proxy here would
+		// duplicate the auth DB round-trip on every API call.
 	],
 };
