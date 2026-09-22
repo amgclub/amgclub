@@ -3,6 +3,7 @@
 import { Toaster } from "@amgclub/ui/components/sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { CartProvider } from "@/contexts/cart";
 
 import { queryClient } from "@/utils/trpc";
 
@@ -17,7 +18,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 			disableTransitionOnChange
 		>
 			<QueryClientProvider client={queryClient}>
-				{children}
+				<CartProvider>{children}</CartProvider>
 				<ReactQueryDevtools />
 			</QueryClientProvider>
 			<Toaster richColors />
