@@ -1,11 +1,11 @@
-import { createAuth } from "@amgclub/auth";
+import { getAuth } from "@amgclub/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import Dashboard from "./dashboard";
 
 export default async function DashboardPage() {
-	const session = await createAuth().api.getSession({
+	const session = await getAuth().api.getSession({
 		headers: await headers(),
 	});
 
