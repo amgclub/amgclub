@@ -384,7 +384,22 @@ export const eventsRouter = router({
 
 		const [rows, totals] = await Promise.all([
 			db
-				.select()
+				.select({
+					id: events.id,
+					title: events.title,
+					description: events.description,
+					imageUrl: events.imageUrl,
+					location: events.location,
+					mapUrl: events.mapUrl,
+					eventDate: events.eventDate,
+					startTime: events.startTime,
+					endTime: events.endTime,
+					status: events.status,
+					price: events.price,
+					totalAttendees: events.totalAttendees,
+					createdAt: events.createdAt,
+					updatedAt: events.updatedAt,
+				})
 				.from(events)
 				.where(where)
 				// Upcoming events first (soonest date at the top), past events after.
@@ -407,6 +422,22 @@ export const eventsRouter = router({
 			page: input.page,
 			pageSize: input.pageSize,
 		};
+	}),
+
+	getById: adminProcedure.input(z.uuid()).query(async ({ input }) => {
+		const db = getDb();
+		const [row] = await db
+			.select()
+			.from(events)
+			.where(eq(events.id, input))
+			.limit(1);
+		if (!row) {
+			throw new TRPCError({
+				code: "NOT_FOUND",
+				message: "Event not found",
+			});
+		}
+		return toEventDTO(row);
 	}),
 
 	create: adminProcedure

@@ -71,14 +71,9 @@ export function EventAttendeesView({ eventId }: { eventId: string }) {
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
 
-	const eventQuery = useQuery(
-		trpc.events.list.queryOptions({
-			page: 1,
-			pageSize: 100,
-		}),
-	);
+	const eventQuery = useQuery(trpc.events.getById.queryOptions(eventId));
 
-	const event = eventQuery.data?.items.find((e) => e.id === eventId);
+	const event = eventQuery.data;
 
 	const attendeesQuery = useQuery(
 		trpc.events.listAttendees.queryOptions({
