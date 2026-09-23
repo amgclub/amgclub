@@ -79,6 +79,10 @@ export const eventAttendees = pgTable(
 		email: text("email").notNull(),
 		phone: text("phone").notNull(),
 		status: eventAttendeeStatusEnum("status").notNull().default("attending"),
+		/** Payment status for paid events. null/empty = free event or not yet paid. */
+		paymentStatus: text("payment_status").default("pending"),
+		/** Ziina payment intent ID — links this registration to its payment. */
+		paymentIntentId: text("payment_intent_id"),
 		createdAt: timestamp("created_at", { withTimezone: true })
 			.defaultNow()
 			.notNull(),

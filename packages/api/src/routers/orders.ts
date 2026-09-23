@@ -1,4 +1,12 @@
-import { customers, getDb, orderItems, orders, products } from "@amgclub/db";
+import {
+	customers,
+	getDb,
+	orderItems,
+	orders,
+	paymentSettings,
+	products,
+} from "@amgclub/db";
+import { env } from "@amgclub/env/server";
 import { TRPCError } from "@trpc/server";
 import {
 	and,
@@ -14,6 +22,11 @@ import {
 } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, router } from "../index";
+import {
+	aedToFils,
+	createPaymentIntent,
+	type ZiinaPaymentIntent,
+} from "../lib/ziina";
 import { rateLimitedPublicProcedure } from "../rate-limit";
 
 // ---------------------------------------------------------------------------
@@ -139,7 +152,7 @@ export const ordersRouter = router({
 		.mutation(async ({ input }) => {
 			const db = getDb();
 
-			return await db.transaction(async (tx) => {
+			const result = await db.transaction(async (tx) => {
 				// Fetch products for all items
 				const productIds = input.items.map((i) => i.productId);
 				const productRows = await tx
@@ -262,12 +275,119 @@ export const ordersRouter = router({
 				);
 
 				return {
-					success: true as const,
-					orderNumber: order.orderNumber,
 					orderId: order.id,
+					orderNumber: order.orderNumber,
 					total,
 				};
 			});
+
+			// Create Ziina payment intent (outside transaction — external API call)
+			let paymentIntent: ZiinaPaymentIntent | null = null;
+			try {
+				const db = getDb();
+				const [settings] = await db
+					.select()
+					.from(paymentSettings)
+					.where(eq(paymentSettings.id, 1))
+					.limit(1);
+
+				const appUrl = env.PUBLIC_APP_URL;
+				const isTestMode = !settings || settings.ziinaMode === "test";
+
+				paymentIntent = await createPaymentIntent({
+					amount: aedToFils(result.total),
+					currency_code: "AED",
+					message: `AMG Club Order #${result.orderNumber}`,
+					success_url: `${appUrl}/payment/success?intent={PAYMENT_INTENT_ID}`,
+					cancel_url: `${appUrl}/payment/cancel?intent={PAYMENT_INTENT_ID}`,
+					test: isTestMode,
+				});
+
+				// Store payment intent ID on the order
+				const updateDb = getDb();
+				await updateDb
+					.update(orders)
+					.set({ paymentIntentId: paymentIntent.id })
+					.where(eq(orders.id, result.orderId));
+			} catch {
+				// Payment intent creation failed — order remains pending
+				// User can retry from confirmation page
+			}
+
+			return {
+				success: true as const,
+				orderNumber: result.orderNumber,
+				orderId: result.orderId,
+				total: result.total,
+				redirectUrl: paymentIntent?.redirect_url ?? null,
+			};
+		}),
+
+	// ── Public: verify payment after redirect from Ziina ────────────────
+
+	verifyPayment: rateLimitedPublicProcedure
+		.input(z.object({ paymentIntentId: z.string().min(1) }))
+		.query(async ({ input }) => {
+			const db = getDb();
+
+			// Find order by payment intent ID
+			const [order] = await db
+				.select()
+				.from(orders)
+				.where(eq(orders.paymentIntentId, input.paymentIntentId))
+				.limit(1);
+
+			if (!order) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "No order found for this payment",
+				});
+			}
+
+			// If already paid, skip Ziina API call
+			if (order.paymentStatus === "paid") {
+				return {
+					paymentStatus: "paid" as const,
+					orderNumber: order.orderNumber,
+				};
+			}
+
+			// Fetch payment intent status from Ziina
+			try {
+				const { getPaymentIntent } = await import("../lib/ziina");
+				const intent = await getPaymentIntent(input.paymentIntentId);
+
+				let paymentStatus: "pending" | "paid" | "failed";
+				switch (intent.status) {
+					case "completed":
+						paymentStatus = "paid";
+						break;
+					case "failed":
+					case "canceled":
+						paymentStatus = "failed";
+						break;
+					default:
+						paymentStatus = "pending";
+				}
+
+				if (paymentStatus !== order.paymentStatus) {
+					await db
+						.update(orders)
+						.set({ paymentStatus })
+						.where(eq(orders.id, order.id));
+				}
+
+				return {
+					paymentStatus,
+					orderNumber: order.orderNumber,
+				};
+			} catch {
+				// Ziina API call failed — return current DB status
+				return {
+					paymentStatus: order.paymentStatus as "pending" | "paid" | "failed",
+					orderNumber: order.orderNumber,
+				};
+			}
 		}),
 
 	// ── Public: get order by number (for confirmation page) ───────────────

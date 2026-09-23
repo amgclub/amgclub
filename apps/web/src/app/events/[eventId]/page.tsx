@@ -105,7 +105,7 @@ export default function EventDetailPage() {
 					</CardTitle>
 				</CardHeader>
 				<CardContent>
-					<EventRegisterForm eventId={event.id} />
+					<EventRegisterForm eventId={event.id} eventPrice={event.price} />
 				</CardContent>
 			</Card>
 		</div>

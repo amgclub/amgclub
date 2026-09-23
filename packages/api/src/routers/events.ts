@@ -1,8 +1,14 @@
-import { eventAttendees, events, getDb } from "@amgclub/db";
+import { eventAttendees, events, getDb, paymentSettings } from "@amgclub/db";
+import { env } from "@amgclub/env/server";
 import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, ilike, or, type SQL, sql } from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, router } from "../index";
+import {
+	aedToFils,
+	createPaymentIntent,
+	type ZiinaPaymentIntent,
+} from "../lib/ziina";
 import {
 	rateLimitedPublicProcedure,
 	registerRateLimitedProcedure,
@@ -81,6 +87,8 @@ export type EventAttendeeDTO = {
 	email: string;
 	phone: string;
 	status: "attending" | "canceled";
+	paymentStatus: string | null;
+	paymentIntentId: string | null;
 	createdAt: string;
 	updatedAt: string;
 };
@@ -117,6 +125,8 @@ export function toAttendeeDTO(
 		email: row.email,
 		phone: row.phone,
 		status: row.status,
+		paymentStatus: row.paymentStatus ?? null,
+		paymentIntentId: row.paymentIntentId ?? null,
 		createdAt: row.createdAt.toISOString(),
 		updatedAt: row.updatedAt.toISOString(),
 	};
@@ -130,31 +140,39 @@ export type RegisterAttendeeInput = z.infer<typeof registerAttendeeSchema> & {
  * Shared registration logic used by both tRPC and REST endpoints.
  * Validates event existence/status, manages attendee records,
  * and updates dynamic total attendees count.
+ *
+ * For paid events, also creates a Ziina payment intent and returns
+ * a redirectUrl for the payment page.
  */
 export async function registerEventAttendee(
 	input: RegisterAttendeeInput,
 	db = getDb(),
 ) {
-	return await db.transaction(async (tx) => {
-		const [event] = await tx
-			.select({ id: events.id, status: events.status })
-			.from(events)
-			.where(eq(events.id, input.eventId));
+	// Fetch event details first (need price for payment logic)
+	const [eventRow] = await db
+		.select()
+		.from(events)
+		.where(eq(events.id, input.eventId))
+		.limit(1);
 
-		if (!event) {
-			throw new TRPCError({
-				code: "NOT_FOUND",
-				message: "Event not found",
-			});
-		}
+	if (!eventRow) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "Event not found",
+		});
+	}
 
-		if (event.status !== "active") {
-			throw new TRPCError({
-				code: "BAD_REQUEST",
-				message: "Event is not open for registration",
-			});
-		}
+	if (eventRow.status !== "active") {
+		throw new TRPCError({
+			code: "BAD_REQUEST",
+			message: "Event is not open for registration",
+		});
+	}
 
+	const isPaidEvent = eventRow.price > 0;
+
+	// Register attendee inside transaction
+	await db.transaction(async (tx) => {
 		const [existing] = await tx
 			.select()
 			.from(eventAttendees)
@@ -178,6 +196,7 @@ export async function registerEventAttendee(
 				.update(eventAttendees)
 				.set({
 					status: "attending",
+					paymentStatus: isPaidEvent ? "pending" : "paid",
 					name: input.name,
 					phone: input.phone,
 					userId: input.userId ?? existing.userId,
@@ -192,6 +211,7 @@ export async function registerEventAttendee(
 				email: input.email,
 				phone: input.phone,
 				status: "attending",
+				paymentStatus: isPaidEvent ? "pending" : "paid",
 			});
 		}
 
@@ -211,13 +231,57 @@ export async function registerEventAttendee(
 			.update(events)
 			.set({ totalAttendees: newCount })
 			.where(eq(events.id, input.eventId));
-
-		return {
-			success: true as const,
-			message: "Registration confirmed",
-			totalAttendees: newCount,
-		};
 	});
+
+	// For paid events, create Ziina payment intent (outside transaction)
+	let redirectUrl: string | null = null;
+	let paymentIntent: ZiinaPaymentIntent | null = null;
+
+	if (isPaidEvent) {
+		try {
+			const [settings] = await db
+				.select()
+				.from(paymentSettings)
+				.where(eq(paymentSettings.id, 1))
+				.limit(1);
+
+			const appUrl = env.PUBLIC_APP_URL;
+			const isTestMode = !settings || settings.ziinaMode === "test";
+
+			paymentIntent = await createPaymentIntent({
+				amount: aedToFils(eventRow.price),
+				currency_code: "AED",
+				message: `AMG Club — ${eventRow.title}`,
+				success_url: `${appUrl}/payment/success?intent={PAYMENT_INTENT_ID}`,
+				cancel_url: `${appUrl}/payment/cancel?intent={PAYMENT_INTENT_ID}`,
+				test: isTestMode,
+			});
+
+			redirectUrl = paymentIntent.redirect_url;
+
+			// Store payment intent ID on the attendee
+			await db
+				.update(eventAttendees)
+				.set({ paymentIntentId: paymentIntent.id })
+				.where(
+					and(
+						eq(eventAttendees.eventId, input.eventId),
+						eq(eventAttendees.email, input.email),
+					),
+				);
+		} catch {
+			// Payment intent creation failed — registration stands but payment is pending
+		}
+	}
+
+	return {
+		success: true as const,
+		message: isPaidEvent
+			? "Registration confirmed. Please complete payment."
+			: "Registration confirmed",
+		totalAttendees: 0, // caller can refetch
+		redirectUrl,
+	};
 }
 
 export const eventsRouter = router({

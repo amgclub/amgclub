@@ -150,6 +150,8 @@ export const orders = pgTable(
 		total: aedPrice("total").notNull(),
 		shippingAddress: jsonb("shipping_address").notNull(),
 		notes: text("notes"),
+		/** Ziina payment intent ID — links this order to its payment. */
+		paymentIntentId: text("payment_intent_id"),
 		createdAt: timestamp("created_at", { withTimezone: true })
 			.defaultNow()
 			.notNull(),

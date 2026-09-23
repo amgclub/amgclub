@@ -36,6 +36,9 @@ export default function RootLayout({
 						{children}
 					</div>
 				</Providers>
+				{/* impeccable-live-start */}
+				<script src="http://localhost:8400/live.js?token=cb707c49-b78d-4fce-b850-0a8cf03d36e4" />
+				{/* impeccable-live-end */}
 			</body>
 		</html>
 	);

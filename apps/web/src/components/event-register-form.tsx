@@ -22,12 +22,23 @@ const registerSchema = z.object({
 
 type RegisterInput = z.infer<typeof registerSchema>;
 
-export default function EventRegisterForm({ eventId }: { eventId: string }) {
+export default function EventRegisterForm({
+	eventId,
+	eventPrice,
+}: {
+	eventId: string;
+	eventPrice: number;
+}) {
 	const queryClient = useQueryClient();
+	const isPaid = eventPrice > 0;
 
 	const register = useMutation(
 		trpc.events.register.mutationOptions({
 			onSuccess: (data) => {
+				if (data.redirectUrl) {
+					window.location.href = data.redirectUrl;
+					return;
+				}
 				toast.success(data.message);
 				queryClient.invalidateQueries({
 					queryKey: trpc.events.publicList.queryKey(),
@@ -136,7 +147,13 @@ export default function EventRegisterForm({ eventId }: { eventId: string }) {
 						disabled={!canSubmit || isSubmitting || register.isPending}
 						className="w-full"
 					>
-						{isSubmitting || register.isPending ? "Registering..." : "Register"}
+						{isSubmitting || register.isPending
+							? isPaid
+								? "Redirecting to payment…"
+								: "Registering..."
+							: isPaid
+								? "Register & Pay"
+								: "Register"}
 					</Button>
 				)}
 			</form.Subscribe>

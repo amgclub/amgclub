@@ -29,6 +29,9 @@ export interface CloudflareEnv {
 	readonly AWS_S3_REGION: string;
 	readonly UPSTASH_REDIS_REST_URL: string;
 	readonly UPSTASH_REDIS_REST_TOKEN: string;
+	readonly ZIINA_API_TOKEN: string;
+	/** Public URL of the web app (used for Ziina payment callback URLs). */
+	readonly PUBLIC_APP_URL: string;
 	readonly ASSETS: { fetch: typeof globalThis.fetch };
 }
 
@@ -62,5 +65,11 @@ export const commonEnv = {
 	),
 	UPSTASH_REDIS_REST_TOKEN: Config.redacted("UPSTASH_REDIS_REST_TOKEN").pipe(
 		Config.withDefault(""),
+	),
+	ZIINA_API_TOKEN: Config.redacted("ZIINA_API_TOKEN").pipe(
+		Config.withDefault(""),
+	),
+	PUBLIC_APP_URL: Config.redacted("PUBLIC_APP_URL").pipe(
+		Config.withDefault("http://localhost:3001"),
 	),
 };

@@ -42,3 +42,31 @@ export const membershipSettings = pgTable(
 		check("membership_settings_singleton_check", sql`${table.id} = 1`),
 	],
 );
+
+// ---------------------------------------------------------------------------
+// Payment settings (Ziina)
+// ---------------------------------------------------------------------------
+
+export const paymentSettings = pgTable(
+	"payment_settings",
+	{
+		id: integer("id").primaryKey().default(1),
+		/** "test" or "live" — controls whether payment intents use Ziina test mode. */
+		ziinaMode: text("ziina_mode").notNull().default("test"),
+		/** Shared secret for verifying Ziina webhook HMAC signatures. */
+		ziinaWebhookSecret: text("ziina_webhook_secret"),
+		/** The registered webhook URL (stored for display in admin). */
+		ziinaWebhookUrl: text("ziina_webhook_url"),
+		updatedAt: timestamp("updated_at", { withTimezone: true })
+			.defaultNow()
+			.notNull()
+			.$onUpdate(() => new Date()),
+	},
+	(table) => [
+		check("payment_settings_singleton_check", sql`${table.id} = 1`),
+		check(
+			"payment_settings_ziina_mode_check",
+			sql`${table.ziinaMode} in ('test', 'live')`,
+		),
+	],
+);

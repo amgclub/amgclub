@@ -58,8 +58,12 @@ export default function CheckoutPage() {
 		...trpc.orders.create.mutationOptions(),
 		onSuccess: (data) => {
 			clearCart();
-			toast.success("Order placed successfully!");
-			router.push(`/checkout/confirmation/${data.orderNumber}` as Route);
+			if (data.redirectUrl) {
+				window.location.href = data.redirectUrl;
+			} else {
+				toast.success("Order placed successfully!");
+				router.push(`/checkout/confirmation/${data.orderNumber}` as Route);
+			}
 		},
 		onError: (error) => {
 			toast.error(error.message);
@@ -247,7 +251,9 @@ export default function CheckoutPage() {
 									className="mt-2 w-full"
 									disabled={orderMutation.isPending}
 								>
-									{orderMutation.isPending ? "Placing order…" : "Place order"}
+									{orderMutation.isPending
+										? "Placing order…"
+										: "Proceed to payment"}
 								</Button>
 							</CardContent>
 						</Card>
