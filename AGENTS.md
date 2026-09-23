@@ -102,3 +102,15 @@ All type roles resolve to **Inter** (`--font-sans`), loaded via `next/font/googl
 **Responsive step:** every role has a mobile default in `:root` and a larger value at the `md` (768px) breakpoint, declared via `@media (min-width: 768px) { :root { --text-<role>: … } }`. Tailwind v4 reads the in-cascade variable when applying the utility, so a single class auto-scales — no `md:text-[34px]` workarounds.
 
 **Add a new role:** add `--text-<name>: <size> <line-height> <letter-spacing>` inside `@theme inline` in `packages/ui/src/styles/globals.css` (mobile default) and redeclare it in the `@media (min-width: 768px) { :root { … } }` block if the spec calls for a desktop step. The `text-<name>` utility becomes available immediately.
+
+<!-- antislop:start -->
+## antislop
+For UI, copy, people, mobile layout, or code comments work, load the antislop skill for the task:
+- Core filter, always on: `antislop`
+- Copy & text: `antislop-copywriting`
+- People: `antislop-human`
+- Mobile / responsive: `antislop-layoutmobile`
+- Code comments: `antislop-code`
+- UI / visual: `antislop-ui`
+Before starting, ask the user when antislop applies: during the work, or after it is done.
+<!-- antislop:end -->
