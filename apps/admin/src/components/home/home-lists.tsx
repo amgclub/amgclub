@@ -20,12 +20,13 @@ export function QueryErrorCard({ onRetry }: { onRetry: () => void }) {
 	return (
 		<Card>
 			<CardContent className="flex flex-col items-start gap-2">
-				<p className="text-body-sm text-destructive">
+				<p className="text-body-sm text-destructive-70">
 					Something went wrong loading the dashboard.
 				</p>
 				<Button
 					variant="outline"
 					size="sm"
+					className="min-h-11 min-w-11"
 					onClick={() => {
 						onRetry();
 					}}

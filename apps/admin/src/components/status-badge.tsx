@@ -2,7 +2,7 @@ import { Badge } from "@amgclub/ui/components/badge";
 
 export type MembershipStatus = "in_review" | "active" | "paused" | "canceled";
 
-export type EventStatus = "active" | "paused" | "canceled";
+export type EventStatus = "active" | "paused" | "canceled" | "completed";
 
 const membershipLabels: Record<MembershipStatus, string> = {
 	in_review: "In review",
@@ -15,6 +15,7 @@ const eventLabels: Record<EventStatus, string> = {
 	active: "Active",
 	paused: "Paused",
 	canceled: "Canceled",
+	completed: "Completed",
 };
 
 export function MembershipStatusBadge({
@@ -37,6 +38,7 @@ export function EventStatusBadge({ status }: { status: EventStatus }) {
 		active: "default",
 		paused: "subtle",
 		canceled: "destructive",
+		completed: "muted",
 	} as const;
 
 	return <Badge variant={variant[status]}>{eventLabels[status]}</Badge>;

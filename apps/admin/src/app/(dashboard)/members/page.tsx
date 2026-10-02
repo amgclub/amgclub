@@ -10,7 +10,7 @@ export default function MembersPage() {
 	return (
 		<MembersView
 			title="All Members"
-			description="Every club membership — website applications and manually added members."
+			description="Every club membership, website applications and manually added members."
 		/>
 	);
 }

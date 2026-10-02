@@ -15,7 +15,7 @@ const badgeVariants = cva(
 				/** Outlined, default foreground. */
 				outline: "text-foreground",
 				/** Outlined, brand red — attention / destructive states. */
-				destructive: "border-destructive/40 text-destructive",
+				destructive: "border-destructive/40 text-destructive-70",
 			},
 		},
 		defaultVariants: {

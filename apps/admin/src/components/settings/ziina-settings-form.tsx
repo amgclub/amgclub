@@ -119,6 +119,7 @@ export function ZiinaSettingsForm() {
 						<Button
 							variant="outline"
 							size="sm"
+							className="min-h-11 min-w-11"
 							onClick={() => {
 								settingsQuery.refetch().catch(() => {
 									toast.error("Retry failed");
@@ -207,7 +208,7 @@ export function ZiinaSettingsForm() {
 								{...register("ziinaWebhookSecret")}
 							/>
 							{errors.ziinaWebhookSecret ? (
-								<p className="text-caption text-destructive">
+								<p className="text-caption text-destructive-70">
 									{errors.ziinaWebhookSecret.message}
 								</p>
 							) : null}

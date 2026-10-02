@@ -29,6 +29,7 @@ const statusFilters: { value: EventStatus | "all"; label: string }[] = [
 	{ value: "active", label: "Active" },
 	{ value: "paused", label: "Paused" },
 	{ value: "canceled", label: "Canceled" },
+	{ value: "completed", label: "Completed" },
 ];
 
 export function EventsView() {
@@ -95,7 +96,7 @@ export function EventsView() {
 						All Events
 					</h1>
 					<p className="text-body-sm text-muted-foreground">
-						Create, pause, cancel and manage club events.
+						Create, pause, complete, cancel and manage club events.
 					</p>
 				</div>
 				<Button

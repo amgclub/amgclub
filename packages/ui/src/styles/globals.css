@@ -28,6 +28,7 @@
 	--secondary-foreground: 0 0 0;
 	--muted: 0.1776 0 0;
 	--muted-foreground: 0.7155 0 0;
+	--on-surface-muted: 0.869944 0 0;
 	--accent: 0.1776 0 0;
 	--accent-foreground: 1 0 0;
 
@@ -42,6 +43,7 @@
 
 	/* Error reuses the red family */
 	--destructive: 0.4941 0.1822 25.8;
+	--destructive-70: 0.654 0.1347 19.7;
 
 	--border: 0.3729 0.0306 259.7;
 	--input: 0.1776 0 0;
@@ -66,20 +68,27 @@
 	--sidebar-border: 0.3729 0.0306 259.7;
 	--sidebar-ring: 1 0 0;
 
-	/* Type roles — these are *referenced* from @theme inline above; the @media
-     block below re-declares the values that step up at the md breakpoint. */
+	/* Type roles live in the @theme block below; utilities reference these
+     variables at runtime, so the @media block below re-declares the ones
+     that step up at the md breakpoint. */
 }
 
 @media (min-width: 768px) {
 	:root {
 		/* Headlines step up at md; body/label sizes step up where DESIGN.md
        spec demands larger long-form reading sizes. */
-		--text-headline-display: 2.125rem 1.0588 -0.005em;
-		--text-headline-lg: 1.75rem 1.125 0em;
-		--text-headline-md: 1.4375rem 1.2174 0em;
-		--text-headline-sm: 1.1875rem 1.2105 0em;
-		--text-body-md: 1rem 1.5 0em;
-		--text-label-lg: 1rem 1.5 0em;
+		--text-headline-display: 2.125rem;
+		--text-headline-display--line-height: 1.0588;
+		--text-headline-lg: 1.75rem;
+		--text-headline-lg--line-height: 1.125;
+		--text-headline-md: 1.4375rem;
+		--text-headline-md--line-height: 1.2174;
+		--text-headline-sm: 1.1875rem;
+		--text-headline-sm--line-height: 1.2105;
+		--text-body-md: 1rem;
+		--text-body-md--line-height: 1.5;
+		--text-label-lg: 1rem;
+		--text-label-lg--line-height: 1.5;
 	}
 }
 
@@ -98,9 +107,11 @@
 	--secondary-foreground: 0 0 0;
 	--muted: 0.1776 0 0;
 	--muted-foreground: 0.7155 0 0;
+	--on-surface-muted: 0.869944 0 0;
 	--accent: 0.1776 0 0;
 	--accent-foreground: 1 0 0;
 	--destructive: 0.4941 0.1822 25.8;
+	--destructive-70: 0.654 0.1347 19.7;
 	--border: 0.3729 0.0306 259.7;
 	--input: 0.1776 0 0;
 	--ring: 1 0 0;
@@ -119,14 +130,11 @@
 	--sidebar-ring: 1 0 0;
 }
 
-@theme inline {
-	/* Typography — all roles resolve to Inter; only weight + size differ.
-     Each --text-<role> bundles "<size> <line-height> <letter-spacing>" so a
-     single utility class (e.g. text-headline-display) applies the whole role.
-     Compose with font-sans (always Inter) + font-extrabold/font-bold/font-medium
-     for the documented weight. Mobile default; the @media block in :root
-     re-declares each role at the md breakpoint. */
-	--font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+@theme {
+	/* Families resolve at runtime: next/font sets --font-sans on <body> from
+     apps/web/src/app/layout.tsx, so the utility must reference the variable
+     rather than inline a family name. */
+	--font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: ui-monospace, "JetBrains Mono", monospace;
 
 	/* Weight tokens — also exposed as font-<name> utilities for role coupling. */
@@ -135,20 +143,59 @@
 	--font-weight-medium: 500; /* MBCorpoSText_Regular_Web (label family) */
 	--font-weight-normal: 400; /* textRegular */
 
-	--text-headline-display: 1.75rem 1.0714 -0.005em; /* weight 800 */
-	--text-headline-lg: 1.4375rem 1.1304 0em; /* weight 800 */
-	--text-headline-md: 1.1875rem 1.2105 0em; /* weight 700 */
-	--text-headline-sm: 1.0625rem 1.2059 0em; /* weight 400 */
+	/* Typography — all roles resolve to Satoshi; only weight + size differ.
+     Tailwind wants each slot of a role in its own variable, so a role is
+     declared as <size> plus the --line-height / --letter-spacing companions
+     and one utility class (e.g. text-headline-display) applies the whole role.
+     Compose with font-sans (always Satoshi) + font-extrabold/font-bold/font-medium
+     for the documented weight. Mobile default; the @media block in :root
+     re-declares each role at the md breakpoint. */
+	--text-headline-display: 1.75rem;
+	--text-headline-display--line-height: 1.0714;
+	--text-headline-display--letter-spacing: -0.005em; /* weight 800 */
 
-	--text-body-lg: 1rem 1.5 0em; /* weight 400 */
-	--text-body-md: 0.875rem 1.4286 0em; /* weight 400 */
-	--text-body-sm: 0.875rem 1.4286 0em; /* weight 400 */
-	--text-caption: 0.75rem 1.3333 0em; /* weight 400 */
+	--text-headline-lg: 1.4375rem;
+	--text-headline-lg--line-height: 1.1304;
+	--text-headline-lg--letter-spacing: 0em; /* weight 800 */
 
-	--text-label-lg: 0.875rem 1.5 0em; /* weight 500 */
-	--text-label-md: 0.875rem 1.4286 0em; /* weight 500 */
-	--text-label-sm: 0.75rem 1.3333 0.005em; /* weight 500 */
+	--text-headline-md: 1.1875rem;
+	--text-headline-md--line-height: 1.2105;
+	--text-headline-md--letter-spacing: 0em; /* weight 700 */
 
+	--text-headline-sm: 1.0625rem;
+	--text-headline-sm--line-height: 1.2059;
+	--text-headline-sm--letter-spacing: 0em; /* weight 400 */
+
+	--text-body-lg: 1rem;
+	--text-body-lg--line-height: 1.5;
+	--text-body-lg--letter-spacing: 0em; /* weight 400 */
+
+	--text-body-md: 0.875rem;
+	--text-body-md--line-height: 1.4286;
+	--text-body-md--letter-spacing: 0em; /* weight 400 */
+
+	--text-body-sm: 0.875rem;
+	--text-body-sm--line-height: 1.4286;
+	--text-body-sm--letter-spacing: 0em; /* weight 400 */
+
+	--text-caption: 0.75rem;
+	--text-caption--line-height: 1.3333;
+	--text-caption--letter-spacing: 0em; /* weight 400 */
+
+	--text-label-lg: 0.875rem;
+	--text-label-lg--line-height: 1.5;
+	--text-label-lg--letter-spacing: 0em; /* weight 500 */
+
+	--text-label-md: 0.875rem;
+	--text-label-md--line-height: 1.4286;
+	--text-label-md--letter-spacing: 0em; /* weight 500 */
+
+	--text-label-sm: 0.75rem;
+	--text-label-sm--line-height: 1.3333;
+	--text-label-sm--letter-spacing: 0.005em; /* weight 500 */
+}
+
+@theme inline {
 	/* AMG red ramp — Tailwind alpha utilities compose via oklch(var(...) / <alpha>). */
 	--color-primary-70: oklch(var(--primary-70));
 	--color-primary-60: oklch(var(--primary-60));
@@ -169,9 +216,11 @@
 	--color-input: oklch(var(--input));
 	--color-border: oklch(var(--border));
 	--color-destructive: oklch(var(--destructive));
+	--color-destructive-70: oklch(var(--destructive-70));
 	--color-accent-foreground: oklch(var(--accent-foreground));
 	--color-accent: oklch(var(--accent));
 	--color-muted-foreground: oklch(var(--muted-foreground));
+	--color-on-surface-muted: oklch(var(--on-surface-muted));
 	--color-muted: oklch(var(--muted));
 	--color-secondary-foreground: oklch(var(--secondary-foreground));
 	--color-secondary: oklch(var(--secondary));

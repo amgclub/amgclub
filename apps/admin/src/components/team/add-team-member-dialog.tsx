@@ -100,7 +100,7 @@ export function AddTeamMemberDialog({
 								{...register("name")}
 							/>
 							{errors.name ? (
-								<p className="text-caption text-destructive">
+								<p className="text-caption text-destructive-70">
 									{errors.name.message}
 								</p>
 							) : null}
@@ -116,7 +116,7 @@ export function AddTeamMemberDialog({
 								{...register("email")}
 							/>
 							{errors.email ? (
-								<p className="text-caption text-destructive">
+								<p className="text-caption text-destructive-70">
 									{errors.email.message}
 								</p>
 							) : null}
@@ -134,7 +134,7 @@ export function AddTeamMemberDialog({
 								{...register("password")}
 							/>
 							{errors.password ? (
-								<p className="text-caption text-destructive">
+								<p className="text-caption text-destructive-70">
 									{errors.password.message}
 								</p>
 							) : null}

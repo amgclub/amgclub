@@ -120,7 +120,7 @@ export function ChangePasswordDialog({
 								{...register("newPassword")}
 							/>
 							{errors.newPassword ? (
-								<p className="font-sans text-caption text-destructive">
+								<p className="font-sans text-caption text-destructive-70">
 									{errors.newPassword.message}
 								</p>
 							) : null}
@@ -141,7 +141,7 @@ export function ChangePasswordDialog({
 								{...register("confirmPassword")}
 							/>
 							{errors.confirmPassword ? (
-								<p className="font-sans text-caption text-destructive">
+								<p className="font-sans text-caption text-destructive-70">
 									{errors.confirmPassword.message}
 								</p>
 							) : null}

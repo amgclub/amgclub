@@ -90,12 +90,13 @@ export function MembershipSettingsForm() {
 		return (
 			<Card>
 				<CardContent className="flex flex-col items-start gap-2">
-					<p className="text-body-sm text-destructive">
+					<p className="text-body-sm text-destructive-70">
 						Failed to load settings: {settingsQuery.error.message}
 					</p>
 					<Button
 						variant="outline"
 						size="sm"
+						className="min-h-11 min-w-11"
 						onClick={() => {
 							settingsQuery.refetch().catch(() => {
 								toast.error("Retry failed");
@@ -147,7 +148,7 @@ export function MembershipSettingsForm() {
 									{...register("monthlyPrice")}
 								/>
 								{errors.monthlyPrice ? (
-									<p className="text-caption text-destructive">
+									<p className="text-caption text-destructive-70">
 										{errors.monthlyPrice.message}
 									</p>
 								) : null}
@@ -165,7 +166,7 @@ export function MembershipSettingsForm() {
 									{...register("yearlyPrice")}
 								/>
 								{errors.yearlyPrice ? (
-									<p className="text-caption text-destructive">
+									<p className="text-caption text-destructive-70">
 										{errors.yearlyPrice.message}
 									</p>
 								) : null}
@@ -183,7 +184,7 @@ export function MembershipSettingsForm() {
 									{...register("expiringSoonDays")}
 								/>
 								{errors.expiringSoonDays ? (
-									<p className="text-caption text-destructive">
+									<p className="text-caption text-destructive-70">
 										{errors.expiringSoonDays.message}
 									</p>
 								) : null}

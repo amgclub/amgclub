@@ -95,10 +95,15 @@ export function MembersTable({
 					<TableRow>
 						<TableCell colSpan={8}>
 							<div className="flex flex-col items-center gap-2 py-8">
-								<p className="text-body-sm text-destructive">
+								<p className="text-body-sm text-destructive-70">
 									Failed to load members: {error.message}
 								</p>
-								<Button variant="outline" size="sm" onClick={onRetry}>
+								<Button
+									variant="outline"
+									size="sm"
+									className="min-h-11 min-w-11"
+									onClick={onRetry}
+								>
 									Try again
 								</Button>
 							</div>
@@ -167,7 +172,7 @@ function MembersTableRow({
 			<TableCell>{formatDate(member.startDate)}</TableCell>
 			<TableCell>
 				<div className="flex flex-col items-start gap-1">
-					<span className={expiring ? "text-destructive" : undefined}>
+					<span className={expiring ? "text-destructive-70" : undefined}>
 						{formatDate(member.endDate)}
 					</span>
 					{expiring ? <Badge variant="destructive">Expiring soon</Badge> : null}

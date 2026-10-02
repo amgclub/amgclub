@@ -102,10 +102,15 @@ export function ProductsTable({
 					<TableRow>
 						<TableCell colSpan={6}>
 							<div className="flex flex-col items-center gap-2 py-8">
-								<p className="text-body-sm text-destructive">
+								<p className="text-body-sm text-destructive-70">
 									Failed to load products: {error.message}
 								</p>
-								<Button variant="outline" size="sm" onClick={onRetry}>
+								<Button
+									variant="outline"
+									size="sm"
+									className="min-h-11 min-w-11"
+									onClick={onRetry}
+								>
 									Try again
 								</Button>
 							</div>
@@ -171,7 +176,7 @@ function ProductRow({
 					<div className="min-w-0">
 						<Link
 							href={`/shop/products/${product.id}` as Route}
-							className="max-w-52 truncate font-medium text-foreground hover:text-primary"
+							className="max-w-52 truncate font-medium text-foreground hover:text-primary-70"
 						>
 							{product.name}
 						</Link>

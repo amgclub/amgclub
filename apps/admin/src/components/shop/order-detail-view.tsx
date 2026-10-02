@@ -71,7 +71,7 @@ export function OrderDetailView() {
 	if (orderQuery.error || !orderQuery.data) {
 		return (
 			<div className="flex flex-col gap-4">
-				<p className="text-body-sm text-destructive">
+				<p className="text-body-sm text-destructive-70">
 					Failed to load order: {orderQuery.error?.message ?? "Not found"}
 				</p>
 				<Link href={"/shop/orders" as Route}>

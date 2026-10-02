@@ -68,9 +68,9 @@ After a fresh clone, run `pnpm install` to wire the husky hook (the `prepare` sc
 
 ### Typography
 
-All type roles resolve to **Inter** (`--font-sans`), loaded via `next/font/google` in `apps/web/src/app/layout.tsx` and bound to the `--font-sans` variable. The four DESIGN.md family names (`titleExtraBold`, `titleBold`, `textRegular`, `MBCorpoSText_Regular_Web`) are collapsed onto Inter; only the numeric weight and size differ per role.
+All type roles resolve to **Satoshi** (Fontshare), loaded via `next/font/local` (self-hosted variable woff2) in `apps/web/src/app/layout.tsx` and bound to the `--font-sans` variable. The four DESIGN.md family names (`titleExtraBold`, `titleBold`, `textRegular`, `MBCorpoSText_Regular_Web`) are collapsed onto Satoshi; only the numeric weight and size differ per role.
 
-**Use the role-named utility for the size bundle, then compose the weight separately.** Each `--text-<role>` in `globals.css` is a `"<size> <line-height> <letter-spacing>"` tuple, so a single `text-<role>` class applies the whole bundle:
+**Use the role-named utility for the size bundle, then compose the weight separately.** Each role in `globals.css` is declared as its own Tailwind variable per slot (`--text-<role>`, `--text-<role>--line-height`, `--text-<role>--letter-spacing`) inside the `@theme` block, so a single `text-<role>` class applies the whole bundle:
 
 ```tsx
 // Display headline (DESIGN.md: 34px @ md / 28px mobile, leading 1.06, weight 800)
@@ -99,9 +99,9 @@ All type roles resolve to **Inter** (`--font-sans`), loaded via `next/font/googl
 | `text-label-md` | Form labels | `font-medium` (500) | 14 |
 | `text-label-sm` | Chips, tags | `font-medium` (500) | 12 |
 
-**Responsive step:** every role has a mobile default in `:root` and a larger value at the `md` (768px) breakpoint, declared via `@media (min-width: 768px) { :root { --text-<role>: … } }`. Tailwind v4 reads the in-cascade variable when applying the utility, so a single class auto-scales — no `md:text-[34px]` workarounds.
+**Responsive step:** every role has a mobile default in `:root` and a larger value at the `md` (768px) breakpoint, declared via `@media (min-width: 768px) { :root { --text-<role>: … } }`. The roles live in a plain `@theme` block, so the utility references the variable at runtime and Tailwind v4 reads the in-cascade value, which auto-scales the single class with no `md:text-[34px]` workaround.
 
-**Add a new role:** add `--text-<name>: <size> <line-height> <letter-spacing>` inside `@theme inline` in `packages/ui/src/styles/globals.css` (mobile default) and redeclare it in the `@media (min-width: 768px) { :root { … } }` block if the spec calls for a desktop step. The `text-<name>` utility becomes available immediately.
+**Add a new role:** add `--text-<name>: <size>`, `--text-<name>--line-height: <value>` and `--text-<name>--letter-spacing: <value>` inside the `@theme` block in `packages/ui/src/styles/globals.css` (mobile default) and redeclare the same three variables in the `@media (min-width: 768px) { :root { … } }` block if the spec calls for a desktop step. The `text-<name>` utility becomes available immediately.
 
 <!-- antislop:start -->
 ## antislop

@@ -16,67 +16,67 @@ colors:
   surface-strong: "#000000"
 typography:
   headline-display:
-    fontFamily: "titleExtraBold"
+    fontFamily: "Satoshi"
     fontSize: "34px"
     fontWeight: 400
     lineHeight: "36px"
     letterSpacing: "0.15008px"
   headline-lg:
-    fontFamily: "titleExtraBold"
+    fontFamily: "Satoshi"
     fontSize: "28px"
     fontWeight: 400
     lineHeight: "36px"
     letterSpacing: "0.15008px"
   headline-md:
-    fontFamily: "titleBold"
+    fontFamily: "Satoshi"
     fontSize: "23px"
     fontWeight: 400
     lineHeight: "28px"
     letterSpacing: "0.15008px"
   headline-sm:
-    fontFamily: "textRegular"
+    fontFamily: "Satoshi"
     fontSize: "19px"
     fontWeight: 400
     lineHeight: "23px"
     letterSpacing: "0px"
   body-lg:
-    fontFamily: "textRegular"
+    fontFamily: "Satoshi"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: "24px"
     letterSpacing: "0.15008px"
   body-md:
-    fontFamily: "textRegular"
+    fontFamily: "Satoshi"
     fontSize: "16px"
     fontWeight: 400
     lineHeight: "24px"
     letterSpacing: "0.15008px"
   body-sm:
-    fontFamily: "textRegular"
+    fontFamily: "Satoshi"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: "20px"
     letterSpacing: "0.15008px"
   label-lg:
-    fontFamily: "MBCorpoSText_Regular_Web"
+    fontFamily: "Satoshi"
     fontSize: "16px"
     fontWeight: 500
     lineHeight: "24px"
     letterSpacing: "0px"
   label-md:
-    fontFamily: "MBCorpoSText_Regular_Web"
+    fontFamily: "Satoshi"
     fontSize: "14px"
     fontWeight: 500
     lineHeight: "20px"
     letterSpacing: "0px"
   label-sm:
-    fontFamily: "MBCorpoSText_Regular_Web"
+    fontFamily: "Satoshi"
     fontSize: "12px"
     fontWeight: 500
     lineHeight: "16px"
     letterSpacing: "0px"
   caption:
-    fontFamily: "textRegular"
+    fontFamily: "Satoshi"
     fontSize: "12px"
     fontWeight: 400
     lineHeight: "16px"
@@ -160,9 +160,9 @@ Mercedes-AMG’s visual language is aggressive, premium, and cinematic, with a n
 
 ## Typography
 
-The typographic system uses three custom families: `titleExtraBold` for large headlines, `titleBold` for mid-level editorial emphasis, and `textRegular` for body copy. Supporting UI labels and buttons use `MBCorpoSText_Regular_Web`, which reads as practical and slightly more mechanical than the display families.
+The typographic system is a single family, **Satoshi**, resolved in every role. The role names the design file originally carried (`titleExtraBold`, `titleBold`, `textRegular`, `MBCorpoSText_Regular_Web`) now map onto Satoshi at different weights and sizes: `font-extrabold` (800) for display and large headlines, `font-bold` (700) for mid-level editorial emphasis, `font-normal` (400) for body copy, and `font-medium` (500) for labels and buttons. No second family ships, and display type is never condensed with a `scaleX` transform or a text stroke: size and weight carry the emphasis.
 
-Headlines are weight-light in numeric terms but visually strong because of the custom display faces and tight line heights. The largest headings, like `headline-display` and `headline-lg`, should feel short, punchy, and all-caps friendly when used in marketing blocks.
+Headlines are strong through weight and tight line heights rather than through a bespoke face. The largest headings, like `headline-display` and `headline-lg`, should feel short, punchy, and all-caps friendly when used in marketing blocks.
 
 Body text is compact and highly readable at 16px with a 24px line height, suited for cookie notices, product descriptions, and support copy. Labels are slightly denser and semibold in function, giving buttons and nav items a clear, engineered feel without adding visual weight.
 

@@ -4,7 +4,7 @@ import { MembershipSettingsForm } from "@/components/settings/membership-setting
 import { ZiinaSettingsForm } from "@/components/settings/ziina-settings-form";
 
 export const metadata: Metadata = {
-	title: "Settings — General",
+	title: "Settings | General",
 };
 
 export default function SettingsGeneralPage() {

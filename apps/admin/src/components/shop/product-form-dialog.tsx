@@ -64,7 +64,7 @@ function FieldErrorText({ message }: { message?: string }) {
 	if (!message) {
 		return null;
 	}
-	return <p className="text-caption text-destructive">{message}</p>;
+	return <p className="text-caption text-destructive-70">{message}</p>;
 }
 
 const statusOptions = [

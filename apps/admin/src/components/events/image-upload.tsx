@@ -216,7 +216,9 @@ export function ImageUpload({
 				}}
 			/>
 
-			{error ? <p className="text-caption text-destructive">{error}</p> : null}
+			{error ? (
+				<p className="text-caption text-destructive-70">{error}</p>
+			) : null}
 
 			<p role="status" aria-live="polite" className="sr-only">
 				{announcement ?? "No active image upload."}

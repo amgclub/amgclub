@@ -90,10 +90,15 @@ export function OrdersTable({
 					<TableRow>
 						<TableCell colSpan={8}>
 							<div className="flex flex-col items-center gap-2 py-8">
-								<p className="text-body-sm text-destructive">
+								<p className="text-body-sm text-destructive-70">
 									Failed to load orders: {error.message}
 								</p>
-								<Button variant="outline" size="sm" onClick={onRetry}>
+								<Button
+									variant="outline"
+									size="sm"
+									className="min-h-11 min-w-11"
+									onClick={onRetry}
+								>
 									Try again
 								</Button>
 							</div>
@@ -143,7 +148,7 @@ function OrderRow({
 			<TableCell>
 				<Link
 					href={`/shop/orders/${order.id}` as Route}
-					className="font-medium text-foreground hover:text-primary"
+					className="font-medium text-foreground hover:text-primary-70"
 				>
 					{order.orderNumber}
 				</Link>

@@ -81,7 +81,7 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 				{forbidden ? (
 					<p
 						role="alert"
-						className="border border-destructive/40 bg-surface-weak p-3 font-sans text-caption text-destructive"
+						className="border border-destructive/40 bg-surface-weak p-3 font-sans text-caption text-destructive-70"
 					>
 						This console is restricted to admin accounts.
 					</p>
@@ -101,7 +101,7 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 								{...register("email")}
 							/>
 							{errors.email ? (
-								<p className="font-sans text-caption text-destructive">
+								<p className="font-sans text-caption text-destructive-70">
 									{errors.email.message}
 								</p>
 							) : null}
@@ -116,7 +116,7 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 								{...register("password")}
 							/>
 							{errors.password ? (
-								<p className="font-sans text-caption text-destructive">
+								<p className="font-sans text-caption text-destructive-70">
 									{errors.password.message}
 								</p>
 							) : null}
@@ -124,7 +124,7 @@ export function LoginForm({ redirectTo, forbidden }: LoginFormProps) {
 						{errors.root ? (
 							<p
 								role="alert"
-								className="font-sans text-caption text-destructive"
+								className="font-sans text-caption text-destructive-70"
 							>
 								{errors.root.message}
 							</p>

@@ -215,12 +215,13 @@ export function EventAttendeesView({ eventId }: { eventId: string }) {
 							<TableRow>
 								<TableCell colSpan={6}>
 									<div className="flex flex-col items-center gap-2 py-8">
-										<p className="text-body-sm text-destructive">
+										<p className="text-body-sm text-destructive-70">
 											Failed to load attendees: {attendeesQuery.error.message}
 										</p>
 										<Button
 											variant="outline"
 											size="sm"
+											className="min-h-11 min-w-11"
 											onClick={() => {
 												attendeesQuery.refetch().catch(() => {
 													toast.error("Retry failed");

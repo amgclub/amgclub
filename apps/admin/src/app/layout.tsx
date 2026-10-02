@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
 import "../index.css";
 import Providers from "@/components/providers";
 
-const inter = Inter({
-	subsets: ["latin"],
+const satoshi = localFont({
+	src: "./fonts/satoshi-variable.woff2",
+	weight: "300 900",
 	variable: "--font-sans",
 });
 
@@ -16,8 +18,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
 	title: {
-		default: "AMG Club UAE — Admin",
-		template: "%s — AMG Club UAE Admin",
+		default: "AMG Club UAE | Admin",
+		template: "%s | AMG Club UAE Admin",
 	},
 	description: "AMG Club UAE backend management console",
 	robots: { index: false, follow: false },
@@ -31,7 +33,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" className="dark" suppressHydrationWarning>
 			<body
-				className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+				className={`${satoshi.variable} ${jetbrainsMono.variable} font-sans antialiased`}
 			>
 				<Providers>{children}</Providers>
 			</body>

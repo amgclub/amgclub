@@ -6,7 +6,7 @@ import { requireAdminSession } from "@/lib/auth-server";
 export const metadata: Metadata = {
 	title: {
 		default: "Dashboard",
-		template: "%s — AMG Club UAE Admin",
+		template: "%s | AMG Club UAE Admin",
 	},
 };
 

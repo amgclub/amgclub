@@ -29,6 +29,7 @@ import {
 	CalendarXIcon,
 	CircleCheckIcon,
 	EllipsisVerticalIcon,
+	FlagIcon,
 	ImagesIcon,
 	PauseIcon,
 	PencilIcon,
@@ -89,10 +90,15 @@ export function EventsTable({
 					<TableRow>
 						<TableCell colSpan={7}>
 							<div className="flex flex-col items-center gap-2 py-8">
-								<p className="text-body-sm text-destructive">
+								<p className="text-body-sm text-destructive-70">
 									Failed to load events: {error.message}
 								</p>
-								<Button variant="outline" size="sm" onClick={onRetry}>
+								<Button
+									variant="outline"
+									size="sm"
+									className="min-h-11 min-w-11"
+									onClick={onRetry}
+								>
 									Try again
 								</Button>
 							</div>
@@ -161,7 +167,7 @@ function EventRow({
 					<div className="min-w-0">
 						<Link
 							href={`/events/${event.id}`}
-							className="max-w-52 truncate font-medium text-foreground hover:text-primary"
+							className="max-w-52 truncate font-medium text-foreground hover:text-primary-70"
 						>
 							{event.title}
 						</Link>
@@ -170,7 +176,7 @@ function EventRow({
 								href={event.mapUrl}
 								target="_blank"
 								rel="noreferrer"
-								className="text-caption text-muted-foreground underline underline-offset-4 hover:text-primary"
+								className="text-caption text-muted-foreground underline underline-offset-4 hover:text-primary-70"
 							>
 								Map link
 							</a>
@@ -227,6 +233,16 @@ function EventRow({
 								Pause
 							</DropdownMenuItem>
 						)}
+						{event.status !== "completed" ? (
+							<DropdownMenuItem
+								onClick={() => {
+									onStatusChange(event, "completed");
+								}}
+							>
+								<FlagIcon />
+								Set completed
+							</DropdownMenuItem>
+						) : null}
 						{event.status !== "canceled" ? (
 							<DropdownMenuItem
 								variant="destructive"

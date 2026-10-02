@@ -55,7 +55,7 @@ const eventFormSchema = z.object({
 		.optional()
 		.or(z.literal("")),
 	price: z.coerce.number().min(0, "Price must be zero or more").max(1_000_000),
-	status: z.enum(["active", "paused", "canceled"]),
+	status: z.enum(["active", "paused", "canceled", "completed"]),
 });
 
 type EventFormInput = z.input<typeof eventFormSchema>;
@@ -65,13 +65,14 @@ const statusOptions = [
 	{ value: "active", label: "Active" },
 	{ value: "paused", label: "Paused" },
 	{ value: "canceled", label: "Canceled" },
+	{ value: "completed", label: "Completed" },
 ] as const;
 
 function FieldErrorText({ message }: { message?: string }) {
 	if (!message) {
 		return null;
 	}
-	return <p className="text-caption text-destructive">{message}</p>;
+	return <p className="text-caption text-destructive-70">{message}</p>;
 }
 
 export function EventFormDialog({
