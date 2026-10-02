@@ -18,6 +18,7 @@ export const eventStatusEnum = pgEnum("event_status", [
 	"active",
 	"paused",
 	"canceled",
+	"completed",
 ]);
 
 export const eventAttendeeStatusEnum = pgEnum("event_attendee_status", [

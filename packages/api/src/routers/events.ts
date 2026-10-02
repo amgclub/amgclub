@@ -14,7 +14,12 @@ import {
 	registerRateLimitedProcedure,
 } from "../rate-limit";
 
-export const eventStatusSchema = z.enum(["active", "paused", "canceled"]);
+export const eventStatusSchema = z.enum([
+	"active",
+	"paused",
+	"canceled",
+	"completed",
+]);
 
 const dateString = z
 	.string()
@@ -72,7 +77,7 @@ export type EventDTO = {
 	eventDate: string;
 	startTime: string;
 	endTime: string | null;
-	status: "active" | "paused" | "canceled";
+	status: "active" | "paused" | "canceled" | "completed";
 	price: number;
 	totalAttendees: number;
 	createdAt: string;
@@ -299,6 +304,38 @@ export const eventsRouter = router({
 			.orderBy(asc(events.eventDate), asc(events.startTime));
 
 		return rows.map(toEventDTO);
+	}),
+
+	/**
+	 * The single next event the site should feature: active, not yet started,
+	 * nearest first. Today's events drop out once their start time passes, so
+	 * the homepage never advertises a race that is already over.
+	 */
+	publicNext: rateLimitedPublicProcedure.query(async () => {
+		const db = getDb();
+		// Dates and start times are entered as UAE wall clock, so the "has it
+		// started" test runs on Dubai time. The session clock is UTC, which
+		// would keep a started race on the homepage for the four-hour gap.
+		const dubaiNow = sql`(now() AT TIME ZONE 'Asia/Dubai')`;
+		const [row] = await db
+			.select()
+			.from(events)
+			.where(
+				and(
+					eq(events.status, "active"),
+					or(
+						sql`${events.eventDate} > ${dubaiNow}::date`,
+						and(
+							sql`${events.eventDate} = ${dubaiNow}::date`,
+							sql`${events.startTime} > ${dubaiNow}::time`,
+						),
+					),
+				),
+			)
+			.orderBy(asc(events.eventDate), asc(events.startTime))
+			.limit(1);
+
+		return row ? toEventDTO(row) : null;
 	}),
 
 	register: registerRateLimitedProcedure

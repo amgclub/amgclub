@@ -26,6 +26,7 @@ export type OverviewDTO = {
 		active: number;
 		paused: number;
 		canceled: number;
+		completed: number;
 		upcoming: number;
 		totalAttendees: number;
 	};
@@ -78,6 +79,7 @@ export const analyticsRouter = router({
 				active: sql<number>`count(*) filter (where ${events.status} = 'active')::int`,
 				paused: sql<number>`count(*) filter (where ${events.status} = 'paused')::int`,
 				canceled: sql<number>`count(*) filter (where ${events.status} = 'canceled')::int`,
+				completed: sql<number>`count(*) filter (where ${events.status} = 'completed')::int`,
 				upcoming: sql<number>`count(*) filter (
 					where ${events.status} = 'active' and ${events.eventDate} >= current_date
 				)::int`,
@@ -134,6 +136,7 @@ export const analyticsRouter = router({
 				active: eventStats?.active ?? 0,
 				paused: eventStats?.paused ?? 0,
 				canceled: eventStats?.canceled ?? 0,
+				completed: eventStats?.completed ?? 0,
 				upcoming: eventStats?.upcoming ?? 0,
 				totalAttendees: eventStats?.totalAttendees ?? 0,
 			},

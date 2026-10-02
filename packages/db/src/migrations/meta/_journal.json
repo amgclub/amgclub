@@ -36,6 +36,27 @@
 			"when": 1790101989817,
 			"tag": "0004_last_exiles",
 			"breakpoints": true
+		},
+		{
+			"idx": 5,
+			"version": "7",
+			"when": 1790109613747,
+			"tag": "0005_drop-unused-tables",
+			"breakpoints": true
+		},
+		{
+			"idx": 6,
+			"version": "7",
+			"when": 1790117098359,
+			"tag": "0006_add-payment-settings",
+			"breakpoints": true
+		},
+		{
+			"idx": 7,
+			"version": "7",
+			"when": 1790954101664,
+			"tag": "0007_add_event_status_completed",
+			"breakpoints": true
 		}
 	]
 }
