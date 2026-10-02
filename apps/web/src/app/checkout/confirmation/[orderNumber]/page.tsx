@@ -41,7 +41,7 @@ export default function OrderConfirmationPage() {
 				</h1>
 				<Link
 					href={"/shop" as Route}
-					className="mt-4 inline-block text-primary underline"
+					className="mt-4 inline-block text-primary-60 underline"
 				>
 					Back to shop
 				</Link>

@@ -8,9 +8,10 @@ import { CheckCircleIcon, XCircleIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { trpc } from "@/utils/trpc";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessInner() {
 	const searchParams = useSearchParams();
 	const intentId = searchParams.get("intent");
 
@@ -118,5 +119,13 @@ export default function PaymentSuccessPage() {
 				</CardContent>
 			</Card>
 		</div>
+	);
+}
+
+export default function PaymentSuccessPage() {
+	return (
+		<Suspense fallback={null}>
+			<PaymentSuccessInner />
+		</Suspense>
 	);
 }
