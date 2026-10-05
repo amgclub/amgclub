@@ -7,7 +7,10 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 export function PageMotion() {
 	useGSAP(
 		() => {
-			const root = document.querySelector("main");
+			// Scoped to <body>, not <main>: the shared header lives outside main
+			// but its entrance (hairline draw, issue/nav/cta fade) is part of the
+			// same opening timeline.
+			const root = document.body;
 			if (!root) return;
 
 			gsap.registerPlugin(ScrollTrigger);
@@ -55,7 +58,7 @@ export function PageMotion() {
 						const hair = spread.querySelector(".hair-spread");
 						const kicker = spread.querySelector(".spread-kicker");
 						const rows = spread.querySelectorAll(
-							".spread-intro, .format-row, .rec-col, .spread-photo, .season-row, .join-band-label, .join-band-note",
+							".spread-intro, .format-row, .rec-col, .spread-photo, .season-row, .join-band-label, .join-band-note, .statement",
 						);
 
 						// `play reset play reset` re-runs the reveal from the start every

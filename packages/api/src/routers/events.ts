@@ -1,7 +1,17 @@
 import { eventAttendees, events, getDb, paymentSettings } from "@amgclub/db";
 import { env } from "@amgclub/env/server";
 import { TRPCError } from "@trpc/server";
-import { and, asc, desc, eq, ilike, or, type SQL, sql } from "drizzle-orm";
+import {
+	and,
+	asc,
+	desc,
+	eq,
+	ilike,
+	inArray,
+	or,
+	type SQL,
+	sql,
+} from "drizzle-orm";
 import { z } from "zod";
 import { adminProcedure, router } from "../index";
 import {
@@ -290,15 +300,28 @@ export async function registerEventAttendee(
 }
 
 export const eventsRouter = router({
+	/**
+	 * Upcoming events, soonest first. Dates and start times are entered as
+	 * Dubai wall clock, so "upcoming" runs on the Dubai date and, once that
+	 * date is today, the start time — a UTC session date would leak yesterday's
+	 * late-night events and keep today's started ones registerable.
+	 */
 	publicList: rateLimitedPublicProcedure.query(async () => {
 		const db = getDb();
+		const dubaiNow = sql`(now() AT TIME ZONE 'Asia/Dubai')`;
 		const rows = await db
 			.select()
 			.from(events)
 			.where(
 				and(
 					eq(events.status, "active"),
-					sql`${events.eventDate} >= current_date`,
+					or(
+						sql`${events.eventDate} > ${dubaiNow}::date`,
+						and(
+							sql`${events.eventDate} = ${dubaiNow}::date`,
+							sql`${events.startTime} > ${dubaiNow}::time`,
+						),
+					),
 				),
 			)
 			.orderBy(asc(events.eventDate), asc(events.startTime));
@@ -336,6 +359,29 @@ export const eventsRouter = router({
 			.limit(1);
 
 		return row ? toEventDTO(row) : null;
+	}),
+
+	/**
+	 * Past events, newest first. An event counts as past once its date has
+	 * passed in Dubai (the timezone dates are entered in), and it must be
+	 * active or completed — so an event nobody flipped to completed still
+	 * shows once its date passes, while paused/canceled stay hidden.
+	 */
+	publicPast: rateLimitedPublicProcedure.query(async () => {
+		const db = getDb();
+		const dubaiToday = sql`(now() AT TIME ZONE 'Asia/Dubai')::date`;
+		const rows = await db
+			.select()
+			.from(events)
+			.where(
+				and(
+					inArray(events.status, ["active", "completed"]),
+					sql`${events.eventDate} < ${dubaiToday}`,
+				),
+			)
+			.orderBy(desc(events.eventDate), desc(events.startTime));
+
+		return rows.map(toEventDTO);
 	}),
 
 	register: registerRateLimitedProcedure
