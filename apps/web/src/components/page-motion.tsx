@@ -24,35 +24,41 @@ export function PageMotion() {
 						ease: "power2.inOut",
 					};
 
-					gsap
-						.timeline({ defaults: { ease: "power3.out" } })
-						.from(".hair-masthead", { ...draw, duration: 0.7 }, 0.1)
-						.from(
-							".r-cover-photo img",
-							{ scale: 1.05, duration: 1.2, ease: "power2.out" },
-							0,
-						)
-						.fromTo(
-							".t-issue, .masthead-nav a, .t-mcta, .mcta-mark",
-							{ opacity: 0 },
-							{ opacity: 1, duration: 0.4, stagger: 0.08 },
-							0.3,
-						)
-						.from(".h1", { y: 36, opacity: 0, duration: 0.7 }, 0.3)
-						.from(".red-rule", { ...draw, duration: 0.6 }, 0.6)
-						.from(
-							".t-kicker, .r-deck-left .deck, .r-deck-right .deck, .cta-join",
-							{
-								y: 16,
-								opacity: 0,
-								duration: 0.5,
-								stagger: 0.09,
-							},
-							0.55,
-						)
-						.from(".hair-next", { ...draw, duration: 0.6 }, 0.9)
-						.from(".t-num", { y: 14, opacity: 0, duration: 0.5 }, 1)
-						.from(".t-head", { y: 24, opacity: 0, duration: 0.6 }, 1.05);
+					const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+					// Skips targets this page doesn't have, so shared pages stay warning-free.
+					const from = (targets: string, vars: gsap.TweenVars, pos: number) => {
+						const els = gsap.utils.toArray(targets, root);
+						if (els.length > 0) tl.from(els, vars, pos);
+					};
+
+					from(".hair-masthead", { ...draw, duration: 0.7 }, 0.1);
+					from(
+						".r-cover-photo img",
+						{ scale: 1.05, duration: 1.2, ease: "power2.out" },
+						0,
+					);
+					tl.fromTo(
+						".t-issue, .masthead-nav a, .t-mcta, .mcta-mark",
+						{ opacity: 0 },
+						{ opacity: 1, duration: 0.4, stagger: 0.08 },
+						0.3,
+					);
+					from(".h1", { y: 36, opacity: 0, duration: 0.7 }, 0.3);
+					from(".red-rule", { ...draw, duration: 0.6 }, 0.6);
+					from(
+						".t-kicker, .r-deck-left .deck, .r-deck-right .deck, .cta-join",
+						{
+							y: 16,
+							opacity: 0,
+							duration: 0.5,
+							stagger: 0.09,
+						},
+						0.55,
+					);
+					from(".hair-next", { ...draw, duration: 0.6 }, 0.9);
+					from(".t-num", { y: 14, opacity: 0, duration: 0.5 }, 1);
+					from(".t-head", { y: 24, opacity: 0, duration: 0.6 }, 1.05);
 
 					gsap.utils.toArray<HTMLElement>(".spread").forEach((spread) => {
 						const hair = spread.querySelector(".hair-spread");
@@ -62,7 +68,7 @@ export function PageMotion() {
 						);
 
 						// `play reset play reset` re-runs the reveal from the start every
-						// time the spread enters the viewport — downwards or back up — and
+						// time the spread enters the viewport (downwards or back up) and
 						// rewinds it to its pre-animation state whenever it leaves again,
 						// so no `once` and no half-played spread left behind.
 						const tl = gsap.timeline({

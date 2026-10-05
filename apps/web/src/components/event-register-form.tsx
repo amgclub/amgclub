@@ -82,6 +82,7 @@ export default function EventRegisterForm({
 						<FieldLabel>Name</FieldLabel>
 						<FieldContent>
 							<Input
+								className="min-h-11"
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -102,6 +103,7 @@ export default function EventRegisterForm({
 						<FieldContent>
 							<Input
 								type="email"
+								className="min-h-11"
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -122,6 +124,7 @@ export default function EventRegisterForm({
 						<FieldContent>
 							<Input
 								type="tel"
+								className="min-h-11"
 								value={field.state.value}
 								onBlur={field.handleBlur}
 								onChange={(e) => field.handleChange(e.target.value)}
@@ -145,7 +148,7 @@ export default function EventRegisterForm({
 					<Button
 						type="submit"
 						disabled={!canSubmit || isSubmitting || register.isPending}
-						className="w-full"
+						className="min-h-12 w-full"
 					>
 						{isSubmitting || register.isPending
 							? isPaid
