@@ -1,5 +1,4 @@
 import { CoverVideo } from "@/components/cover-video";
-import { Masthead } from "@/components/header";
 import { PageMotion } from "@/components/page-motion";
 import UpcomingEvent from "@/components/upcoming-event";
 import {
@@ -30,35 +29,26 @@ export default function Home() {
 	return (
 		<main className="flex flex-1 flex-col">
 			<div className="comp-frame @container relative aspect-[2624/1472] w-full self-start overflow-hidden bg-background max-xl:flex max-xl:flex-col max-xl:gap-8 max-xl:overflow-visible max-xl:px-5 max-xl:pb-16 md:max-xl:gap-11 md:max-xl:px-12 md:max-xl:pb-24">
-				<Masthead />
-
-				<figure className="r-cover-photo absolute top-[10%] left-[20%] h-[60%] w-[80%] max-md:aspect-[16/9] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:aspect-[2099/587] max-xl:h-auto max-xl:w-auto max-xl:overflow-hidden">
+				<figure className="r-cover-photo absolute top-[4%] left-[20%] h-[60%] w-[80%] max-md:aspect-[16/9] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:aspect-[2099/587] max-xl:h-auto max-xl:w-auto max-xl:overflow-hidden">
 					<img
-						className="block h-full w-full object-cover max-xl:object-[50%_62%]"
+						className="block h-full w-full object-cover max-xl:object-[50%_62%] xl:absolute xl:top-0 xl:left-[0.9052%] xl:w-[99.0948%]"
 						src="/cover-photo.png"
 						alt="Black AMG GT leading an AMG Club convoy through a mountain pass"
 						width={1344}
 						height={768}
 					/>
 					<CoverVideo />
-					{/* The one permitted gradient in the system: a scrim over photography,
-				    so the video's bottom edge dissolves into flat black instead of
-				    cutting a hard line against it. */}
 					<span
 						className="cover-scrim pointer-events-none absolute inset-x-0 bottom-0 h-[40%] bg-linear-to-b from-transparent to-background"
 						aria-hidden="true"
 					/>
 				</figure>
 
-				{/* <figure className="r-collage-band absolute left-[20.7317cqw] top-[4.9924cqw] h-[0.6098cqw] w-[79.2683cqw] max-xl:hidden" aria-hidden="true">
-					<img className="block h-full w-full" src="/collage-band.png" alt="" width={2080} height={16} />
-				</figure> */}
-
 				<div
-					className="r-margin-rule absolute top-[10%] left-0 h-[90%] w-[10%] max-xl:hidden"
+					className="r-margin-rule absolute top-0 left-0 h-full w-[10%] max-xl:hidden"
 					aria-hidden="true"
 				>
-					<span className="hair-margin absolute top-[-1.9055cqw] left-[3.6242cqw] h-[52.3628cqw] w-[0.0572cqw] bg-foreground/40" />
+					<span className="hair-margin absolute top-0 left-[3.6242cqw] h-full w-[0.0572cqw] bg-foreground/40" />
 				</div>
 
 				<div className="r-margin-label absolute top-[50%] left-[4.8%] h-[4.08%] w-[5.49%] max-xl:static max-xl:order-1 max-xl:h-auto max-xl:w-auto">

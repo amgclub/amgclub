@@ -2,129 +2,88 @@
 import { ShoppingBagIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useCart } from "@/contexts/cart";
 import { JOIN_URL } from "@/lib/data";
+import { FOCUS_RING } from "@/lib/styles";
 
-import { ModeToggle } from "./mode-toggle";
-import UserMenu from "./user-menu";
+const NAV_LINK = `flex min-h-11 items-center font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 ${FOCUS_RING}`;
 
-export function Masthead() {
+const ISSUE =
+	"t-issue whitespace-nowrap font-medium font-sans text-foreground uppercase leading-none text-[0.9223cqw] max-xl:whitespace-normal max-xl:text-right max-xl:text-[clamp(10px,1.6vw,12px)] max-xl:leading-[1.3] xl:absolute xl:top-1/2 xl:left-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2";
+
+const JOIN = `t-mcta flex min-h-11 items-center self-stretch whitespace-nowrap pr-4 font-medium font-sans text-[0.9337cqw] text-primary-60 uppercase leading-[1.1] no-underline transition-colors hover:text-primary-70 md:pr-0 ${FOCUS_RING} max-xl:text-[clamp(13px,1.8vw,15px)]`;
+
+export default function Header() {
+	const { itemCount } = useCart();
+
 	return (
-		<header className="pointer-events-none absolute inset-0 z-[3] max-xl:static max-xl:-order-1 max-xl:flex max-xl:flex-wrap max-xl:items-center max-xl:gap-4 max-xl:py-3.5 md:max-xl:py-5">
-			<div className="r-masthead-wordmark absolute top-0 left-0 h-[10%] w-1/5 max-xl:static max-xl:h-auto max-xl:w-auto">
+		<header className="w-full">
+			<div className="relative flex min-h-13 flex-wrap items-center justify-between gap-x-6 gap-y-0 px-5 py-3 md:py-0 md:pr-13 md:pl-18">
 				<Link
 					href="/"
-					className="pointer-events-auto absolute top-[1.4364cqw] left-[20.6936cqw] block h-[0.6746cqw] w-[5.9832cqw] max-xl:static max-xl:flex max-xl:h-auto max-xl:min-h-11 max-xl:w-[clamp(132px,30vw,200px)] max-xl:items-center"
 					aria-label="AMG Club UAE, home"
+					className={`flex min-h-11 shrink-0 items-center ${FOCUS_RING}`}
 				>
 					<img
-						className="block h-full w-full max-xl:h-auto max-xl:w-auto"
+						className="block h-7 w-auto max-w-[45vw] md:h-5"
 						src="/logo.webp"
 						alt=""
 						width={1600}
 						height={276}
 					/>
 				</Link>
-			</div>
-			<div className="r-masthead-issue absolute top-[8.15%] left-[44.13%] h-[1.83%] w-[12.35%] max-xl:static max-xl:ml-auto max-xl:h-auto max-xl:w-auto">
-				<span className="t-issue absolute top-[-3.2519cqw] left-[2.6296cqw] whitespace-nowrap font-medium font-sans text-[0.9223cqw] text-foreground uppercase leading-none max-xl:static max-xl:whitespace-normal max-xl:text-right max-xl:text-[clamp(10px,1.6vw,12px)] max-xl:leading-[1.3]">
+
+				<span className="t-issue whitespace-nowrap font-medium font-sans text-[0.9223cqw] text-foreground uppercase leading-none max-xl:whitespace-normal max-xl:text-right max-xl:text-[clamp(10px,1.6vw,12px)] max-xl:leading-[1.3] xl:absolute xl:top-1/2 xl:left-[20.7317cqw] xl:-translate-y-1/2">
 					Season 2026 · Issue 001
 				</span>
-			</div>
-			<nav
-				className="masthead-nav absolute top-[1.26cqw] right-[20.5%] flex gap-[14px] whitespace-nowrap max-xl:static max-xl:order-5 max-xl:w-full max-xl:flex-wrap max-xl:gap-x-5 max-xl:gap-y-1 max-xl:pt-0.5"
-				aria-label="Primary"
-			>
-				<a
-					className="pointer-events-auto font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 focus-visible:outline-2 focus-visible:outline-primary-70 focus-visible:outline-solid focus-visible:outline-offset-[3px] max-xl:flex max-xl:min-h-11 max-xl:items-center"
-					href="#about"
-				>
-					About
-				</a>
-				<Link
-					className="pointer-events-auto font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 focus-visible:outline-2 focus-visible:outline-primary-70 focus-visible:outline-solid focus-visible:outline-offset-[3px] max-xl:flex max-xl:min-h-11 max-xl:items-center"
-					href={"/events" as Route}
-				>
-					Events
-				</Link>
-				<Link
-					className="pointer-events-auto font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 focus-visible:outline-2 focus-visible:outline-primary-70 focus-visible:outline-solid focus-visible:outline-offset-[3px] max-xl:flex max-xl:min-h-11 max-xl:items-center"
-					href={"/shop" as Route}
-				>
-					Shop
-				</Link>
-				<a
-					className="pointer-events-auto font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 focus-visible:outline-2 focus-visible:outline-primary-70 focus-visible:outline-solid focus-visible:outline-offset-[3px] max-xl:flex max-xl:min-h-11 max-xl:items-center"
-					href="#contact"
-				>
-					Contact
-				</a>
-			</nav>
-			<div className="r-masthead-cta group/mcta absolute top-0 right-0 flex h-13 items-center gap-[1.4cqw] max-xl:static max-xl:order-2 max-xl:h-11 max-xl:w-auto max-xl:shrink-0">
-				<a
-					className="t-mcta pointer-events-auto whitespace-nowrap font-medium font-sans text-[0.9337cqw] text-primary-60 uppercase leading-[1.1] no-underline transition-colors hover:text-primary-70 focus-visible:outline-2 focus-visible:outline-primary-70 focus-visible:outline-solid focus-visible:outline-offset-[3px] max-xl:flex max-xl:min-h-11 max-xl:items-center max-xl:text-[clamp(13px,1.8vw,15px)]"
-					href={JOIN_URL}
-					aria-label="Join now"
-				>
-					Join Now
-				</a>
-				<span
-					className="mcta-mark pointer-events-none h-full w-[2.716cqw] shrink-0 self-stretch bg-primary transition-opacity group-hover/mcta:opacity-90 max-xl:h-11 max-xl:w-[clamp(112px,26vw,172px)]"
-					aria-hidden="true"
-				/>
-			</div>
-			<div
-				className="r-masthead-rule absolute top-0 left-0 h-[10%] w-full max-xl:hidden"
-				aria-hidden="true"
-			>
-				<span className="hair-masthead absolute top-[3.6033cqw] left-0 h-[0.0591cqw] w-full bg-foreground/45" />
-			</div>
-		</header>
-	);
-}
 
-export default function Header() {
-	const pathname = usePathname();
-	const { itemCount } = useCart();
+				<div className="flex shrink-0 items-center gap-x-6 self-stretch max-lg:flex-col-reverse max-lg:items-start">
+					<nav
+						className="masthead-nav flex flex-wrap items-center gap-x-5 gap-y-0 md:gap-x-6 xl:absolute xl:top-1/2 xl:left-[47cqw] xl:-translate-y-1/2"
+						aria-label="Primary"
+					>
+						<a className={NAV_LINK} href="/#about">
+							About
+						</a>
+						<Link className={NAV_LINK} href={"/events" as Route}>
+							Events
+						</Link>
+						<Link className={NAV_LINK} href={"/shop" as Route}>
+							Shop
+						</Link>
+						<a className={NAV_LINK} href="/#contact">
+							Contact
+						</a>
+					</nav>
 
-	if (pathname === "/") {
-		return null;
-	}
-
-	const links = [
-		{ to: "/" as Route, label: "Home" },
-		{ to: "/events" as Route, label: "Events" },
-		{ to: "/shop" as Route, label: "Shop" },
-		{ to: "/dashboard" as Route, label: "Dashboard" },
-	] as const;
-
-	return (
-		<div>
-			<div className="flex flex-row items-center justify-between px-2 py-1">
-				<nav className="flex gap-4 text-lg">
-					{links.map(({ to, label }) => {
-						return (
-							<Link key={to} href={to}>
-								{label}
-							</Link>
-						);
-					})}
-				</nav>
-				<div className="flex items-center gap-2">
-					<Link href={"/cart" as Route} className="relative p-2">
-						<ShoppingBagIcon className="size-5" />
-						{itemCount > 0 && (
-							<span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground">
-								{itemCount}
-							</span>
-						)}
-					</Link>
-					<ModeToggle />
-					<UserMenu />
+					<div className="group/mcta -mr-5 flex shrink-0 items-center gap-0 self-stretch md:-mr-13">
+						<a className={JOIN} href={JOIN_URL} aria-label="Join now">
+							Join Now
+						</a>
+						<Link
+							href={"/cart" as Route}
+							className={`relative flex min-h-11 min-w-11 items-center justify-center self-stretch px-3 md:px-4 ${FOCUS_RING}`}
+							aria-label="Cart"
+						>
+							<ShoppingBagIcon className="size-5" />
+							{itemCount > 0 && (
+								<span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-primary font-bold text-[10px] text-primary-foreground">
+									{itemCount}
+								</span>
+							)}
+						</Link>
+						<span
+							className="mcta-mark pointer-events-none w-[2.716cqw] min-w-[42px] shrink-0 self-stretch bg-primary transition-opacity group-hover/mcta:opacity-90"
+							aria-hidden="true"
+						/>
+					</div>
 				</div>
 			</div>
-			<hr />
-		</div>
+
+			<span
+				className="hair-masthead block h-[1.5px] w-full bg-foreground/40"
+				aria-hidden="true"
+			/>
+		</header>
 	);
 }
