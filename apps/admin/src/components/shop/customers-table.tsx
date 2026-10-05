@@ -145,7 +145,7 @@ function CustomerRow({
 			</TableCell>
 			<TableCell>
 				<p className="text-body-sm text-muted-foreground">
-					{customer.phone ?? "—"}
+					{customer.phone ?? "–"}
 				</p>
 			</TableCell>
 			<TableCell>

@@ -185,7 +185,7 @@ function ProductRow({
 			</TableCell>
 			<TableCell>
 				<span className="text-caption text-muted-foreground">
-					{product.sku ?? "—"}
+					{product.sku ?? "–"}
 				</span>
 			</TableCell>
 			<TableCell>{formatAED(product.price)}</TableCell>

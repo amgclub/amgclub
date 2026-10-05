@@ -10,15 +10,15 @@
 
 ## Design System Enforcement (Mercedes-AMG Dark Motion)
 
-Source of truth: `DESIGN.md`. The palette is motorsport red on true black — **not** Petronas teal.
+Source of truth: `DESIGN.md`. The palette is motorsport red on true black, **not** Petronas teal.
 
 ### Forbidden Tailwind utilities
 
 These classes violate the shape language (`rounded.none` is 0; the only exception is `rounded-full` on chip-sized elements like `MessageAvatar`):
 
 - `rounded-lg`, `rounded-md`, `rounded-sm`, `rounded-xl`, `rounded-2xl`, `rounded-3xl`
-- `rounded-\[2px\]` — also forbidden; use `rounded-none` (the spec is `rounded.none`, not 2px)
-- `rounded-full` — forbidden **except** in `packages/ui/src/components/message.tsx` for `MessageAvatar`
+- `rounded-\[2px\]` is also forbidden; use `rounded-none` (the spec is `rounded.none`, not 2px)
+- `rounded-full` is forbidden **except** in `packages/ui/src/components/message.tsx` for `MessageAvatar`
 
 These classes violate the high-contrast palette (no soft blues, no generic grays as foreground, no off-brand reds):
 
@@ -27,8 +27,8 @@ These classes violate the high-contrast palette (no soft blues, no generic grays
 - `text-slate-*`, `text-gray-*`, `text-zinc-*`, `text-neutral-*` (use `text-foreground` / `text-muted-foreground`)
 - `bg-green-*`, `text-green-*` (success states use the AMG red ramp, not traffic-light greens)
 - `bg-red-*`, `text-red-*` with values other than the `--primary` token (e.g. `bg-red-500`)
-- Raw hex colors in className (`#fff`, `#000`, etc.) — go through tokens
-- `oklch(...)` literals in className outside `globals.css` — tokenize instead
+- Raw hex colors in className (`#fff`, `#000`, etc.): go through tokens
+- `oklch(...)` literals in className outside `globals.css`: tokenize instead
 
 ### Enforcement
 
@@ -45,7 +45,7 @@ The script scans every `.ts`/`.tsx` file under `packages/<name>/src` and `apps/<
 - `\brounded-(lg|md|sm|xl|2xl|3xl)\b`
 - `\brounded-\[2px\]`
 - `\b(?:bg|text|border|ring)-(blue|slate|gray|zinc|green|red|amber|orange|yellow|pink|purple|indigo|cyan|teal|sky|emerald|lime|rose|fuchsia|violet)-(50|100|200|300|400|500|600|700|800|900|950)\b`
-- Raw hex colors in className strings (`#fff`, `#000`, etc.) — the script excludes any file named `color.mjs`
+- Raw hex colors in className strings (`#fff`, `#000`, etc.). The script excludes any file named `color.mjs`
 
 The `MessageAvatar` `rounded-full` exception at `packages/ui/src/components/message.tsx:37` is whitelisted with an inline `// design-allow: chip` comment so the linter skips it. Any line containing the regex `/\bdesign-allow:\s*\S/` is treated as a per-line opt-out.
 
@@ -58,12 +58,12 @@ If a new component genuinely needs one of the forbidden utilities (e.g. a brand 
 - `biome check --write --no-errors-on-unmatched` runs on staged JS/TS/JSON files.
 - `node scripts/lint-design.mjs` runs on staged `.ts`/`.tsx` files inside `packages/ui/src/**` and `apps/**/src/**`.
 
-After a fresh clone, run `pnpm install` to wire the husky hook (the `prepare` script does this). Until then, design violations can still land via direct `git commit --no-verify` or pushes that bypass local hooks — CI should re-run `pnpm lint:design` as a final guard.
+After a fresh clone, run `pnpm install` to wire the husky hook (the `prepare` script does this). Until then, design violations can still land via direct `git commit --no-verify` or pushes that bypass local hooks. CI should re-run `pnpm lint:design` as a final guard.
 
 ### Adding a new component
 
-1. Inherit radius from tokens — do not pass a `rounded-*` class unless the element is a chip.
-2. Use semantic tokens (`bg-primary`, `text-foreground`, `bg-surface-weak`, `border-tertiary`) — never raw colors.
+1. Inherit radius from tokens; do not pass a `rounded-*` class unless the element is a chip.
+2. Use semantic tokens (`bg-primary`, `text-foreground`, `bg-surface-weak`, `border-tertiary`); never raw colors.
 3. If you need a new color, add a token in `globals.css` and a `color-*` mapping in `@theme inline`, then reference it via the utility class.
 
 ### Typography

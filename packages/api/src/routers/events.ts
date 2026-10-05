@@ -266,7 +266,7 @@ export async function registerEventAttendee(
 			paymentIntent = await createPaymentIntent({
 				amount: aedToFils(eventRow.price),
 				currency_code: "AED",
-				message: `AMG Club — ${eventRow.title}`,
+				message: `AMG Club | ${eventRow.title}`,
 				success_url: `${appUrl}/payment/success?intent={PAYMENT_INTENT_ID}`,
 				cancel_url: `${appUrl}/payment/cancel?intent={PAYMENT_INTENT_ID}`,
 				test: isTestMode,
