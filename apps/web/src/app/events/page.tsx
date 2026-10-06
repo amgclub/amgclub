@@ -46,7 +46,7 @@ const DATE =
 const DATE_EMPTY = `${DATE} italic`;
 
 const NAME =
-	"font-extrabold font-sans text-[2.2cqw] uppercase leading-[1.05] max-xl:text-[clamp(18px,4.6vw,28px)]";
+	"font-extrabold font-sans text-[1.6cqw] uppercase max-xl:text-[clamp(16px,3.6vw,22px)]";
 
 const META_ROW =
 	"mt-[1cqw] flex items-center justify-between gap-x-[2cqw] gap-y-4 max-xl:mt-4 max-xl:flex-col max-xl:items-start";
@@ -251,7 +251,7 @@ export default function EventsPage() {
 							</span>
 						</div>
 
-						<h1 className="h1 m-0 font-extrabold font-sans text-[clamp(3.5rem,7.9cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(52px,13vw,120px)] max-xl:leading-[0.9] max-xl:tracking-normal">
+						<h1 className="h1 m-0 font-extrabold font-sans text-[clamp(3.5rem,6.4cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal">
 							Events
 						</h1>
 						<span
@@ -385,7 +385,7 @@ export default function EventsPage() {
 								))}
 							</ol>
 						) : (
-							<p className="mt-[3.4cqw] font-normal font-sans text-body-md text-on-surface-muted max-xl:mt-6">
+							<p className={`mt-[3.4cqw] ${SPREAD_INTRO} max-xl:mt-6`}>
 								No drives logged yet.
 							</p>
 						)}

@@ -1,8 +1,8 @@
 "use client";
 
-import { Button } from "@amgclub/ui/components/button";
 import { Skeleton } from "@amgclub/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
+import { ArrowLeftIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -14,9 +14,12 @@ import {
 	FMT_DETAIL,
 	FMT_INDEX,
 	FMT_NAME,
+	FOCUS_RING,
 	FORMAT_ROW,
 	HAIR_SPREAD,
 	KICKER,
+	LABEL,
+	LABEL_SM,
 	SPREAD,
 	SPREAD_BODY,
 	SPREAD_INTRO,
@@ -24,6 +27,8 @@ import {
 import { trpc } from "@/utils/trpc";
 
 const FALLBACK_IMAGE = "/amg-race-track-gstudio_1080.webp";
+
+const BACK_LINK = `inline-flex min-h-11 cursor-pointer items-center gap-2 text-on-surface-muted transition-colors hover:text-primary-60 ${LABEL_SM} ${LABEL} ${FOCUS_RING}`;
 
 export default function EventDetailPage() {
 	const params = useParams<{ eventId: string }>();
@@ -53,7 +58,7 @@ export default function EventDetailPage() {
 							<div className="py-[1.1cqw] max-xl:py-4">
 								<Skeleton className="h-3 w-56" />
 							</div>
-							<Skeleton className="h-[clamp(52px,7.9cqw,168px)] w-2/3" />
+							<Skeleton className="h-[clamp(56px,6.4cqw,168px)] w-2/3 max-xl:h-[clamp(46px,8.6vw,116px)]" />
 							<Skeleton className="mt-5 h-4 w-[46cqw] max-xl:max-w-none" />
 						</div>
 					</header>
@@ -100,21 +105,39 @@ export default function EventDetailPage() {
 	if (!event) {
 		return (
 			<main className="flex flex-1 flex-col">
-				<div className="mx-auto max-w-2xl px-4 py-8 text-center">
-					<h1 className="font-extrabold font-sans text-foreground text-headline-lg">
-						Event not found
-					</h1>
-					<p className="mt-2 font-sans text-body-md text-muted-foreground">
-						The event you're looking for doesn't exist or is no longer active.
-					</p>
-					<div className="mt-5 flex justify-center">
-						<Link href={"/events" as Route}>
-							<Button variant="outline" className="min-h-11">
-								Browse all events
-							</Button>
-						</Link>
-					</div>
+				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
+					<span
+						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						aria-hidden="true"
+					/>
+					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
+						<span
+							className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+							aria-hidden="true"
+						/>
+						<div className={SPREAD_BODY}>
+							<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
+								<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
+									The Roll · The Run · The Roar
+								</span>
+							</div>
+							<h1 className="h1 font-extrabold font-sans text-[clamp(3.5rem,6.4cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal">
+								Event not found
+							</h1>
+							<span
+								className="red-rule mt-3 block h-px w-24 bg-primary"
+								aria-hidden="true"
+							/>
+							<div className="mt-6 flex max-xl:mt-5">
+								<Link href={"/events" as Route} className={BACK_LINK}>
+									<ArrowLeftIcon className="size-3.5" aria-hidden="true" />
+									Browse all events
+								</Link>
+							</div>
+						</div>
+					</header>
 				</div>
+				<PageMotion />
 			</main>
 		);
 	}
@@ -137,7 +160,7 @@ export default function EventDetailPage() {
 								The Roll · The Run · The Roar
 							</span>
 						</div>
-						<h1 className="h1 font-extrabold font-sans text-[clamp(3.5rem,7.9cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(52px,13vw,120px)] max-xl:leading-[0.9] max-xl:tracking-normal">
+						<h1 className="h1 font-extrabold font-sans text-[clamp(3.5rem,6.4cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal">
 							{event.title}
 						</h1>
 						<span
