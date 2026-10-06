@@ -64,7 +64,7 @@ export function PageMotion() {
 						const hair = spread.querySelector(".hair-spread");
 						const kicker = spread.querySelector(".spread-kicker");
 						const rows = spread.querySelectorAll(
-							".spread-intro, .format-row, .rec-col, .spread-photo, .season-row, .join-band-label, .join-band-note, .statement",
+							".spread-intro, .format-row, .rec-col, .spread-photo, .season-row, .join-band-label, .join-band-note, .statement, .shop-card, .shop-note",
 						);
 
 						// `play reset play reset` re-runs the reveal from the start every
