@@ -169,6 +169,8 @@ Body text is compact and highly readable at 16px with a 24px line height, suited
 
 Letter spacing is subtle and consistent, with a slight positive tracking on display and body styles. Keep uppercase or near-uppercase treatment for navigation and promotional headlines where the screenshot suggests a bold, branded voice.
 
+**Exception — transactional email bodies.** Outbound HTML email (e.g. the contact-form notification built in `packages/api/src/routers/contact.ts`) uses a web-safe font stack (`Helvetica, Arial, sans-serif`), off-ramp font sizes, and raw hex colors: email clients cannot load Satoshi or read CSS custom properties, so inline styles are the only reliable mechanism. These lines carry `// design-allow: email` opt-outs and are exempt from the type ramp and token rules; nothing in the site UI inherits this exception.
+
 ## Layout & Spacing
 
 The layout is built around full-bleed imagery with overlay panels rather than a strict boxed grid. Content is left-aligned and anchored with generous negative space, while the top navigation and cookie banner create strong horizontal bands.

@@ -5,7 +5,7 @@ const NAV_LINKS = [
 	{ label: "About", href: "/#about" },
 	{ label: "Events", href: "/events" },
 	{ label: "Shop", href: "/shop" },
-	{ label: "Contact", href: "/#contact" },
+	{ label: "Contact", href: "/contact" },
 ] as const;
 
 const linkClass =

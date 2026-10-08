@@ -51,9 +51,9 @@ export default function Header() {
 						<Link className={NAV_LINK} href={"/shop" as Route}>
 							Shop
 						</Link>
-						<a className={NAV_LINK} href="/#contact">
+						<Link className={NAV_LINK} href={"/contact" as Route}>
 							Contact
-						</a>
+						</Link>
 					</nav>
 
 					<div className="group/mcta -mr-5 flex shrink-0 items-center gap-0 self-stretch md:-mr-13">

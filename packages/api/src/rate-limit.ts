@@ -104,3 +104,8 @@ export const registerRateLimitedProcedure = withRateLimit("register", {
 	limit: 10,
 	window: "60 s",
 });
+
+export const contactRateLimitedProcedure = withRateLimit("contact", {
+	limit: 5,
+	window: "60 s",
+});

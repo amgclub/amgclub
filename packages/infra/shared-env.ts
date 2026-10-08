@@ -30,6 +30,12 @@ export interface CloudflareEnv {
 	readonly UPSTASH_REDIS_REST_URL: string;
 	readonly UPSTASH_REDIS_REST_TOKEN: string;
 	readonly ZIINA_API_TOKEN: string;
+	/** Resend API key for the contact form; empty = not configured. */
+	readonly RESEND_API_KEY: string;
+	/** Sender address for contact form emails. */
+	readonly RESEND_FROM_EMAIL: string;
+	/** Recipient inbox for contact form submissions. */
+	readonly CONTACT_TO_EMAIL: string;
 	/** Public URL of the web app (used for Ziina payment callback URLs). */
 	readonly PUBLIC_APP_URL: string;
 	readonly ASSETS: { fetch: typeof globalThis.fetch };
@@ -68,6 +74,15 @@ export const commonEnv = {
 	),
 	ZIINA_API_TOKEN: Config.redacted("ZIINA_API_TOKEN").pipe(
 		Config.withDefault(""),
+	),
+	RESEND_API_KEY: Config.redacted("RESEND_API_KEY").pipe(
+		Config.withDefault(""),
+	),
+	RESEND_FROM_EMAIL: Config.redacted("RESEND_FROM_EMAIL").pipe(
+		Config.withDefault("AMG Club UAE <onboarding@resend.dev>"),
+	),
+	CONTACT_TO_EMAIL: Config.redacted("CONTACT_TO_EMAIL").pipe(
+		Config.withDefault("hello@amgclub.ae"),
 	),
 	PUBLIC_APP_URL: Config.redacted("PUBLIC_APP_URL").pipe(
 		Config.withDefault("http://localhost:3001"),
