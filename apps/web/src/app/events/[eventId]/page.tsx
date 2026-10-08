@@ -58,7 +58,7 @@ export default function EventDetailPage() {
 							<div className="py-[1.1cqw] max-xl:py-4">
 								<Skeleton className="h-3 w-56" />
 							</div>
-							<Skeleton className="h-[clamp(56px,6.4cqw,168px)] w-2/3 max-xl:h-[clamp(46px,8.6vw,116px)]" />
+							<Skeleton className="h-[2.7763cqw] w-2/3 max-xl:h-[clamp(40px,7.4vw,96px)]" />
 							<Skeleton className="mt-5 h-4 w-[46cqw] max-xl:max-w-none" />
 						</div>
 					</header>
@@ -121,7 +121,7 @@ export default function EventDetailPage() {
 									The Roll · The Run · The Roar
 								</span>
 							</div>
-							<h1 className="h1 font-extrabold font-sans text-[clamp(3.5rem,6.4cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal">
+							<h1 className="h1 font-extrabold font-sans text-[2.7763cqw] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:text-[clamp(40px,7.4vw,96px)] max-xl:leading-[0.9] max-xl:tracking-normal">
 								Event not found
 							</h1>
 							<span
@@ -160,7 +160,7 @@ export default function EventDetailPage() {
 								The Roll · The Run · The Roar
 							</span>
 						</div>
-						<h1 className="h1 font-extrabold font-sans text-[clamp(3.5rem,6.4cqw,10.5rem)] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal">
+						<h1 className="h1 font-extrabold font-sans text-[2.7763cqw] text-foreground uppercase leading-[0.86] tracking-[-0.03em] max-xl:mt-1 max-xl:text-[clamp(40px,7.4vw,96px)] max-xl:leading-[0.9] max-xl:tracking-normal">
 							{event.title}
 						</h1>
 						<span

@@ -33,7 +33,7 @@ import {
 import { trpc } from "@/utils/trpc";
 
 const HEADING =
-	"m-0 font-extrabold font-sans uppercase leading-[0.86] tracking-[-0.03em] text-foreground text-[clamp(3.5rem,6.4cqw,10.5rem)] max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:break-words max-xl:leading-[0.9] max-xl:tracking-normal";
+	"m-0 font-extrabold font-sans uppercase leading-[0.86] tracking-[-0.03em] text-foreground text-[2.7763cqw] max-xl:text-[clamp(40px,7.4vw,96px)] max-xl:break-words max-xl:leading-[0.9] max-xl:tracking-normal";
 
 const META_DECK =
 	"mt-4 max-w-[46cqw] font-normal font-sans text-[0.8125rem] uppercase text-on-surface-muted max-xl:mt-4 max-xl:max-w-none max-xl:text-body-sm";
@@ -90,7 +90,7 @@ export default function ProductDetailPage() {
 							<div className="py-[1.1cqw] max-xl:py-4">
 								<Skeleton className="h-3 w-56" />
 							</div>
-							<Skeleton className="h-[clamp(56px,6.4cqw,168px)] w-2/3 max-xl:h-[clamp(46px,8.6vw,116px)]" />
+							<Skeleton className="h-[2.7763cqw] w-2/3 max-xl:h-[clamp(40px,7.4vw,96px)]" />
 							<Skeleton className="mt-5 h-4 w-[46cqw] max-xl:max-w-none" />
 						</div>
 					</header>
