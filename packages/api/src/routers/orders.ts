@@ -162,17 +162,7 @@ export const ordersRouter = router({
 
 				const productMap = new Map(productRows.map((p) => [p.id, p]));
 
-				// Validate all products exist
-				for (const item of input.items) {
-					if (!productMap.has(item.productId)) {
-						throw new TRPCError({
-							code: "BAD_REQUEST",
-							message: `Product not found: ${item.productId}`,
-						});
-					}
-				}
-
-				// Validate inventory
+				// Validate products and inventory
 				let subtotal = 0;
 				const orderItemValues: {
 					productId: string;
@@ -182,7 +172,13 @@ export const ordersRouter = router({
 				}[] = [];
 
 				for (const item of input.items) {
-					const product = productMap.get(item.productId)!;
+					const product = productMap.get(item.productId);
+					if (!product) {
+						throw new TRPCError({
+							code: "BAD_REQUEST",
+							message: `Product not found: ${item.productId}`,
+						});
+					}
 
 					if (product.inventory < item.quantity) {
 						throw new TRPCError({
@@ -240,7 +236,13 @@ export const ordersRouter = router({
 							phone: input.customerPhone,
 						})
 						.returning();
-					customerId = newCustomer!.id;
+					if (!newCustomer) {
+						throw new TRPCError({
+							code: "INTERNAL_SERVER_ERROR",
+							message: "Failed to create customer",
+						});
+					}
+					customerId = newCustomer.id;
 				}
 
 				// Create order

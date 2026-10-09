@@ -18,8 +18,8 @@ let globalRatelimit: Ratelimit | undefined;
 
 if (isRateLimitEnabled) {
 	redis = new Redis({
-		url: UPSTASH_URL!,
-		token: UPSTASH_TOKEN!,
+		url: UPSTASH_URL,
+		token: UPSTASH_TOKEN,
 	});
 
 	globalRatelimit = new Ratelimit({
@@ -48,13 +48,19 @@ function getLimiter(
 		window?: `${number} ${"ms" | "s" | "m" | "h" | "d"}`;
 	},
 ): Ratelimit {
-	if (!opts) return globalRatelimit!;
+	if (!globalRatelimit || !redis) {
+		throw new TRPCError({
+			code: "INTERNAL_SERVER_ERROR",
+			message: "Rate limiting is unavailable",
+		});
+	}
+	if (!opts) return globalRatelimit;
 
 	const cached = customLimiters.get(name);
 	if (cached) return cached;
 
 	const limiter = new Ratelimit({
-		redis: redis!,
+		redis,
 		limiter: Ratelimit.slidingWindow(opts.limit ?? 30, opts.window ?? "60 s"),
 		analytics: true,
 		timeout: 1000,

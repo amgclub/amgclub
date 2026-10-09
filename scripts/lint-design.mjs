@@ -34,7 +34,6 @@ const ALLOW_LINE = /\bdesign-allow:\s*\S/;
 const EXTS = new Set([".ts", ".tsx"]);
 
 const DEFAULT_BASES = ["packages", "apps"];
-const DEFAULT_SCAN_SUFFIX = "/src";
 
 function walk(target) {
 	const out = [];

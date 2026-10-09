@@ -14,8 +14,8 @@ let redis: Redis | undefined;
 
 if (isEnabled) {
 	redis = new Redis({
-		url: UPSTASH_URL!,
-		token: UPSTASH_TOKEN!,
+		url: UPSTASH_URL,
+		token: UPSTASH_TOKEN,
 	});
 }
 

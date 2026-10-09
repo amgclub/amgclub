@@ -28,7 +28,6 @@ import {
 import {
 	CircleCheckIcon,
 	CircleXIcon,
-	CreditCardIcon,
 	EllipsisVerticalIcon,
 	ShoppingBagIcon,
 	TruckIcon,
@@ -39,7 +38,6 @@ import Link from "next/link";
 import {
 	type OrderStatus,
 	OrderStatusBadge,
-	type PaymentStatus,
 	PaymentStatusBadge,
 } from "@/components/status-badge";
 import { formatAED, formatDateTime } from "@/lib/format";

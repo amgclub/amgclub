@@ -10,6 +10,8 @@
 		"includes": [
 			"**",
 			"!**/.next",
+			"!**/.open-next",
+			"!**/.impeccable",
 			"!**/dist",
 			"!**/.turbo",
 			"!**/.nx",
