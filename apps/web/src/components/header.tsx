@@ -8,9 +8,6 @@ import { FOCUS_RING } from "@/lib/styles";
 
 const NAV_LINK = `flex min-h-11 items-center font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 ${FOCUS_RING}`;
 
-const ISSUE =
-	"t-issue whitespace-nowrap font-medium font-sans text-foreground uppercase leading-none text-[0.9223cqw] max-xl:whitespace-normal max-xl:text-right max-xl:text-[clamp(10px,1.6vw,12px)] max-xl:leading-[1.3] xl:absolute xl:top-1/2 xl:left-1/2 xl:-translate-x-1/2 xl:-translate-y-1/2";
-
 const JOIN = `t-mcta flex min-h-11 items-center self-stretch whitespace-nowrap pr-4 font-medium font-sans text-[0.9337cqw] text-primary-60 uppercase leading-[1.1] no-underline transition-colors hover:text-primary-70 md:pr-0 ${FOCUS_RING} max-xl:text-[clamp(13px,1.8vw,15px)]`;
 
 export default function Header() {
@@ -42,9 +39,9 @@ export default function Header() {
 						className="masthead-nav flex flex-wrap items-center gap-x-5 gap-y-0 md:gap-x-6 xl:absolute xl:top-1/2 xl:left-[47cqw] xl:-translate-y-1/2"
 						aria-label="Primary"
 					>
-						<a className={NAV_LINK} href="/#about">
+						<Link className={NAV_LINK} href={"/about" as Route}>
 							About
-						</a>
+						</Link>
 						<Link className={NAV_LINK} href={"/events" as Route}>
 							Events
 						</Link>
