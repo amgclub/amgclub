@@ -11,7 +11,7 @@ import {
 import type { Route } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageMotion } from "@/components/page-motion";
 import { useCart } from "@/contexts/cart";
@@ -51,7 +51,7 @@ const CTA = `h-12 w-full text-label-lg uppercase tracking-[0.06em] ${FOCUS_RING}
 
 export default function ProductDetailPage() {
 	const params = useParams<{ slug: string }>();
-	const { addItem } = useCart();
+	const { addItem, items } = useCart();
 	const [quantity, setQuantity] = useState(1);
 	const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -61,6 +61,14 @@ export default function ProductDetailPage() {
 
 	const allImages = product?.images ?? [];
 
+	const alreadyInCart =
+		items.find((item) => item.productId === product?.id)?.quantity ?? 0;
+	const remaining = (product?.inventory ?? 0) - alreadyInCart;
+
+	useEffect(() => {
+		setQuantity((q) => Math.min(q, Math.max(remaining, 1)));
+	}, [remaining]);
+
 	function handleAddToCart() {
 		if (!product) return;
 		addItem({
@@ -69,6 +77,7 @@ export default function ProductDetailPage() {
 			price: product.price,
 			quantity,
 			imageUrl: product.images[0]?.url,
+			inventory: product.inventory,
 		});
 		toast.success("Added to cart");
 	}
@@ -317,11 +326,9 @@ export default function ProductDetailPage() {
 												<button
 													type="button"
 													onClick={() =>
-														setQuantity((q) =>
-															Math.min(product.inventory, q + 1),
-														)
+														setQuantity((q) => Math.min(remaining, q + 1))
 													}
-													disabled={quantity >= product.inventory}
+													disabled={quantity >= remaining}
 													aria-label="Increase quantity"
 													className={`${STEPPER_BTN} border-r-0 border-l-[1.5px]`}
 												>
@@ -341,7 +348,7 @@ export default function ProductDetailPage() {
 									</div>
 									<Button
 										onClick={handleAddToCart}
-										disabled={product.inventory <= 0}
+										disabled={remaining <= 0}
 										className={CTA}
 									>
 										Add to cart

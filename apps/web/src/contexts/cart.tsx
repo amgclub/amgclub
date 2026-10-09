@@ -18,7 +18,12 @@ export interface CartItem {
 
 interface CartContextValue {
 	items: CartItem[];
-	addItem: (item: Omit<CartItem, "quantity"> & { quantity?: number }) => void;
+	addItem: (
+		item: Omit<CartItem, "quantity"> & {
+			quantity?: number;
+			inventory?: number;
+		},
+	) => void;
 	removeItem: (productId: string) => void;
 	updateQuantity: (productId: string, quantity: number) => void;
 	clearCart: () => void;
@@ -63,18 +68,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 	}, [items, hydrated]);
 
 	const addItem = useCallback(
-		(item: Omit<CartItem, "quantity"> & { quantity?: number }) => {
+		(
+			item: Omit<CartItem, "quantity"> & {
+				quantity?: number;
+				inventory?: number;
+			},
+		) => {
+			const { inventory, quantity = 1, ...product } = item;
 			setItems((prev) => {
-				const qty = item.quantity ?? 1;
-				const existing = prev.find((i) => i.productId === item.productId);
+				const existing = prev.find((i) => i.productId === product.productId);
 				if (existing) {
+					const next = existing.quantity + quantity;
 					return prev.map((i) =>
-						i.productId === item.productId
-							? { ...i, quantity: i.quantity + qty }
+						i.productId === product.productId
+							? { ...i, quantity: inventory ? Math.min(next, inventory) : next }
 							: i,
 					);
 				}
-				return [...prev, { ...item, quantity: qty }];
+				return [
+					...prev,
+					{
+						...product,
+						quantity: inventory ? Math.min(quantity, inventory) : quantity,
+					},
+				];
 			});
 		},
 		[],

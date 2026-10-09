@@ -217,6 +217,45 @@ export const shopRouter = router({
 			});
 		}),
 
+	// ── Public: get products by ids ───────────────────────────────────────
+
+	publicGetByIds: rateLimitedPublicProcedure
+		.input(z.object({ ids: z.array(z.uuid()).min(1).max(500) }))
+		.query(async ({ input }) => {
+			const db = getDb();
+
+			const rows = await db
+				.select()
+				.from(products)
+				.where(
+					and(inArray(products.id, input.ids), eq(products.status, "active")),
+				);
+
+			const productIds = rows.map((r) => r.id);
+			const allImages =
+				productIds.length > 0
+					? await db
+							.select()
+							.from(productImages)
+							.where(inArray(productImages.productId, productIds))
+							.orderBy(asc(productImages.sortOrder))
+					: [];
+			const imagesByProduct = new Map<string, typeof allImages>();
+			for (const img of allImages) {
+				const list = imagesByProduct.get(img.productId) ?? [];
+				list.push(img);
+				imagesByProduct.set(img.productId, list);
+			}
+
+			return {
+				items: rows.map((r) =>
+					toProductDTO(r, {
+						images: (imagesByProduct.get(r.id) ?? []).map(toImageDTO),
+					}),
+				),
+			};
+		}),
+
 	// ── Admin: list products ──────────────────────────────────────────────
 
 	list: adminProcedure.input(listProductsSchema).query(async ({ input }) => {

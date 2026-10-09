@@ -153,12 +153,22 @@ export const ordersRouter = router({
 			const db = getDb();
 
 			const result = await db.transaction(async (tx) => {
-				// Fetch products for all items
-				const productIds = input.items.map((i) => i.productId);
+				// Merge duplicate lines so stock is checked against the true total
+				const quantityByProductId = new Map<string, number>();
+				for (const item of input.items) {
+					quantityByProductId.set(
+						item.productId,
+						(quantityByProductId.get(item.productId) ?? 0) + item.quantity,
+					);
+				}
+
+				// FOR UPDATE: lock product rows until commit so two concurrent
+				// orders cannot both pass the stock check on the last unit
 				const productRows = await tx
 					.select()
 					.from(products)
-					.where(inArray(products.id, productIds));
+					.where(inArray(products.id, [...quantityByProductId.keys()]))
+					.for("update");
 
 				const productMap = new Map(productRows.map((p) => [p.id, p]));
 
@@ -171,16 +181,16 @@ export const ordersRouter = router({
 					quantity: number;
 				}[] = [];
 
-				for (const item of input.items) {
-					const product = productMap.get(item.productId);
+				for (const [productId, quantity] of quantityByProductId) {
+					const product = productMap.get(productId);
 					if (!product) {
 						throw new TRPCError({
 							code: "BAD_REQUEST",
-							message: `Product not found: ${item.productId}`,
+							message: `Product not found: ${productId}`,
 						});
 					}
 
-					if (product.inventory < item.quantity) {
+					if (product.inventory < quantity) {
 						throw new TRPCError({
 							code: "BAD_REQUEST",
 							message: `Insufficient stock for "${product.name}". Available: ${product.inventory}`,
@@ -188,19 +198,19 @@ export const ordersRouter = router({
 					}
 
 					const price = product.price;
-					subtotal += price * item.quantity;
+					subtotal += price * quantity;
 
 					orderItemValues.push({
 						productId: product.id,
 						name: product.name,
 						price,
-						quantity: item.quantity,
+						quantity,
 					});
 
 					// Decrement product inventory
 					await tx
 						.update(products)
-						.set({ inventory: sql`${products.inventory} - ${item.quantity}` })
+						.set({ inventory: sql`${products.inventory} - ${quantity}` })
 						.where(eq(products.id, product.id));
 				}
 

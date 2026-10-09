@@ -178,23 +178,27 @@ export default function CheckoutPage() {
 	}
 
 	async function onSubmit(values: CheckoutOutput) {
-		await orderMutation.mutateAsync({
-			customerName: values.customerName,
-			customerEmail: values.customerEmail,
-			customerPhone: values.customerPhone,
-			items: items.map((item) => ({
-				productId: item.productId,
-				quantity: item.quantity,
-			})),
-			shippingAddress: {
-				name: values.customerName,
-				phone: values.customerPhone,
-				address: values.address,
-				city: values.city,
-				zip: values.zip,
-			},
-			notes: values.notes,
-		});
+		try {
+			await orderMutation.mutateAsync({
+				customerName: values.customerName,
+				customerEmail: values.customerEmail,
+				customerPhone: values.customerPhone,
+				items: items.map((item) => ({
+					productId: item.productId,
+					quantity: item.quantity,
+				})),
+				shippingAddress: {
+					name: values.customerName,
+					phone: values.customerPhone,
+					address: values.address,
+					city: values.city,
+					zip: values.zip,
+				},
+				notes: values.notes,
+			});
+		} catch {
+			// Rejection is already surfaced as a toast by onError
+		}
 	}
 
 	return (

@@ -1,9 +1,11 @@
 "use client";
 import { Button } from "@amgclub/ui/components/button";
 import { Skeleton } from "@amgclub/ui/components/skeleton";
+import { useQuery } from "@tanstack/react-query";
 import { MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
+import { useMemo } from "react";
 import { PageMotion } from "@/components/page-motion";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
@@ -14,6 +16,7 @@ import {
 	LABEL_SM,
 	SPREAD_BODY,
 } from "@/lib/styles";
+import { trpc } from "@/utils/trpc";
 
 const HEADING =
 	"m-0 font-extrabold font-sans uppercase leading-[0.86] tracking-[-0.03em] text-foreground text-[clamp(3.5rem,6.4cqw,10.5rem)] max-xl:text-[clamp(46px,8.6vw,116px)] max-xl:leading-[0.9] max-xl:tracking-normal";
@@ -99,6 +102,26 @@ export default function CartPage() {
 		itemCount,
 		hydrated,
 	} = useCart();
+
+	const ids = useMemo(
+		() => [...new Set(items.map((item) => item.productId))].sort(),
+		[items],
+	);
+
+	const inventoryQuery = useQuery(
+		trpc.shop.publicGetByIds.queryOptions(
+			{ ids },
+			{ enabled: hydrated && items.length > 0 },
+		),
+	);
+
+	const inventoryById = useMemo(() => {
+		const map = new Map<string, number>();
+		for (const product of inventoryQuery.data?.items ?? []) {
+			map.set(product.id, product.inventory);
+		}
+		return map;
+	}, [inventoryQuery.data]);
 
 	const isEmpty = hydrated && items.length === 0;
 	const deck = isEmpty
@@ -202,87 +225,106 @@ export default function CartPage() {
 						) : (
 							<div className="grid max-xl:grid-cols-1 max-xl:gap-y-8 xl:grid-cols-[minmax(0,1fr)_26cqw] xl:gap-x-[3cqw]">
 								<ol className={LEDGER}>
-									{items.map((item, position) => (
-										<li key={item.productId} className={`format-row ${ROW}`}>
-											<span className={ROW_INDEX}>
-												{String(position + 1).padStart(2, "0")}
-											</span>
-											<span className="flex min-w-0 items-center gap-[1.6cqw] max-xl:gap-3">
-												<span className={PLATE}>
-													{item.imageUrl ? (
-														<img
-															src={item.imageUrl}
-															alt=""
-															className="absolute inset-0 block h-full w-full object-cover object-center"
-														/>
-													) : (
-														<span className="absolute inset-0 flex items-center justify-center">
-															<ShoppingBagIcon
-																className="size-5 text-muted-foreground"
-																aria-hidden="true"
-															/>
-														</span>
-													)}
+									{items.map((item, position) => {
+										const maxQty = inventoryById.get(item.productId);
+										return (
+											<li key={item.productId} className={`format-row ${ROW}`}>
+												<span className={ROW_INDEX}>
+													{String(position + 1).padStart(2, "0")}
 												</span>
-												<span className="flex min-w-0 flex-col gap-1.5">
-													<span
-														className={`${ROW_NAME} ${ROW_NAME_TEXT}`}
-														title={item.name}
-													>
-														{item.name}
+												<span className="flex min-w-0 items-center gap-[1.6cqw] max-xl:gap-3">
+													<span className={PLATE}>
+														{item.imageUrl ? (
+															<img
+																src={item.imageUrl}
+																alt=""
+																className="absolute inset-0 block h-full w-full object-cover object-center"
+															/>
+														) : (
+															<span className="absolute inset-0 flex items-center justify-center">
+																<ShoppingBagIcon
+																	className="size-5 text-muted-foreground"
+																	aria-hidden="true"
+																/>
+															</span>
+														)}
 													</span>
-													<span className="flex min-w-0 items-center justify-between gap-3">
-														<span className={ROW_META}>
-															{formatAED(item.price)} each
+													<span className="flex min-w-0 flex-col gap-1.5">
+														<span
+															className={`${ROW_NAME} ${ROW_NAME_TEXT}`}
+															title={item.name}
+														>
+															{item.name}
 														</span>
+														<span className="flex min-w-0 items-center justify-between gap-3">
+															<span className={ROW_META}>
+																{formatAED(item.price)} each
+															</span>
+															<button
+																type="button"
+																className={REMOVE}
+																onClick={() => removeItem(item.productId)}
+																aria-label={`Remove ${item.name} from cart`}
+															>
+																<Trash2Icon
+																	className="size-4"
+																	aria-hidden="true"
+																/>
+															</button>
+														</span>
+													</span>
+												</span>
+												<span className={CONTROLS}>
+													<span className={STEPPER}>
 														<button
 															type="button"
-															className={REMOVE}
-															onClick={() => removeItem(item.productId)}
-															aria-label={`Remove ${item.name} from cart`}
+															className={STEPPER_BTN}
+															onClick={() =>
+																updateQuantity(
+																	item.productId,
+																	item.quantity - 1,
+																)
+															}
+															disabled={item.quantity <= 1}
+															aria-label={`Decrease quantity of ${item.name}`}
 														>
-															<Trash2Icon
-																className="size-4"
+															<MinusIcon
+																className="size-3.5"
+																aria-hidden="true"
+															/>
+														</button>
+														<span className={STEPPER_QTY}>{item.quantity}</span>
+														<button
+															type="button"
+															className={`${STEPPER_BTN} border-r-0 border-l-[1.5px]`}
+															onClick={() =>
+																updateQuantity(
+																	item.productId,
+																	maxQty === undefined
+																		? item.quantity + 1
+																		: Math.min(maxQty, item.quantity + 1),
+																)
+															}
+															disabled={
+																maxQty === undefined
+																	? false
+																	: item.quantity >= maxQty
+															}
+															aria-label={`Increase quantity of ${item.name}`}
+														>
+															<PlusIcon
+																className="size-3.5"
 																aria-hidden="true"
 															/>
 														</button>
 													</span>
+													<span className={LINE_TOTAL}>
+														{formatAED(item.price * item.quantity)}
+													</span>
 												</span>
-											</span>
-											<span className={CONTROLS}>
-												<span className={STEPPER}>
-													<button
-														type="button"
-														className={STEPPER_BTN}
-														onClick={() =>
-															updateQuantity(item.productId, item.quantity - 1)
-														}
-														disabled={item.quantity <= 1}
-														aria-label={`Decrease quantity of ${item.name}`}
-													>
-														<MinusIcon
-															className="size-3.5"
-															aria-hidden="true"
-														/>
-													</button>
-													<span className={STEPPER_QTY}>{item.quantity}</span>
-													<button
-														type="button"
-														className={`${STEPPER_BTN} border-r-0 border-l-[1.5px]`}
-														onClick={() =>
-															updateQuantity(item.productId, item.quantity + 1)
-														}
-														aria-label={`Increase quantity of ${item.name}`}
-													>
-														<PlusIcon className="size-3.5" aria-hidden="true" />
-													</button>
-												</span>
-												<span className={LINE_TOTAL}>
-													{formatAED(item.price * item.quantity)}
-												</span>
-											</span>
-										</li>
-									))}
+											</li>
+										);
+									})}
 								</ol>
 
 								<aside className="flex flex-col items-start gap-4 xl:sticky xl:top-6">
