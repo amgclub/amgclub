@@ -158,6 +158,7 @@ Mercedes-AMG’s visual language is aggressive, premium, and cinematic, with a n
 - **Surface-weak (#111111):** A slightly lifted dark tone for nested panels, input fields, or low-contrast containers.
 - **Surface-strong (#000000):** The deepest black reserved for the most immersive areas, especially full-bleed hero backgrounds.
 - **Stripe-mark colours (#FFFFFF, #E92626, #0A733B):** The five-bar stripe artwork drawn in `apps/web/src/components/logo-stripes.tsx` uses the mark's own sampled colours, exempted per line with `// design-allow: logo stripe colour` so the design lint skips them. They live only inside that SVG as `<fill>` values and never become UI tokens, `className` colours, or text.
+- **Third-party logo artwork:** `packages/ui/src/components/smoothui/shared/logos.tsx` vendors third-party marks (Canva, Strava, Duolingo and similar) whose colours are part of those trademarks. Each colour line carries `// design-allow: third-party logo colour` rather than being recoloured, since repainting a trademark to the AMG palette would misrepresent it. These marks are smooth-ui demo defaults only and are never rendered by the AMG Club site, which passes its own sponsor logos to `LogoMarquee`.
 
 ## Typography
 

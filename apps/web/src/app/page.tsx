@@ -1,5 +1,6 @@
 import { CoverVideo } from "@/components/cover-video";
 import { PageMotion } from "@/components/page-motion";
+import Sponsors from "@/components/sponsors";
 import UpcomingEvent from "@/components/upcoming-event";
 import {
 	DECK_LEFT,
@@ -184,10 +185,12 @@ export default function Home() {
 
 					<UpcomingEvent />
 
-					<section id="perks" className={SPREAD} aria-label="006: Member perks">
+					<Sponsors />
+
+					<section id="perks" className={SPREAD} aria-label="007: Member perks">
 						<span className={HAIR_SPREAD} aria-hidden="true" />
 						<p className={`spread-kicker ${KICKER}`}>
-							006 /
+							007 /
 							<br />
 							Member perks
 						</p>
