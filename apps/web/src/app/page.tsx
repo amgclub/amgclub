@@ -30,8 +30,8 @@ import {
 export default function Home() {
 	return (
 		<main className="flex flex-1 flex-col">
-			<div className="comp-frame @container relative aspect-[2624/1472] w-full self-start overflow-hidden bg-background max-xl:flex max-xl:flex-col max-xl:gap-8 max-xl:overflow-visible max-xl:px-5 max-xl:pb-16 md:max-xl:gap-11 md:max-xl:px-12 md:max-xl:pb-24">
-				<figure className="r-cover-photo absolute top-[4%] left-[20%] h-[60%] w-[80%] max-md:aspect-[16/9] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:aspect-[2099/587] max-xl:h-auto max-xl:w-auto max-xl:overflow-hidden">
+			<div className="comp-frame @container relative aspect-[2624/1472] w-full self-start overflow-hidden bg-background max-xl:flex max-xl:flex-col max-xl:gap-8 max-xl:overflow-visible max-xl:px-5 max-xl:pb-0 md:max-xl:gap-11 md:max-xl:px-12 md:max-xl:pb-6">
+				<figure className="r-cover-photo absolute top-[4%] left-[20%] h-[60%] w-[80%] max-md:aspect-[16/9] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:-mx-5 max-xl:aspect-[2099/587] max-xl:h-auto max-xl:w-auto max-xl:overflow-hidden md:max-xl:-mx-12">
 					<img
 						className="block h-full w-full object-cover max-xl:object-[50%_62%] xl:absolute xl:top-0 xl:left-[0.9052%] xl:w-[99.0948%]"
 						src="/cover-photo.png"
@@ -84,7 +84,7 @@ export default function Home() {
 					</p>
 				</div>
 
-				<div className="r-cta-join absolute top-[70.5%] left-[20.31%] h-[12.77%] w-[8.46%] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:order-5 max-xl:h-[168px] max-xl:w-[min(320px,74vw)]">
+				<div className="r-cta-join absolute top-[70.5%] left-[20.31%] h-[12.77%] w-[8.46%] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:order-5 max-xl:h-[88px] max-xl:w-[min(200px,56vw)]">
 					<a
 						className={`cta-join group/cta absolute top-[0.4192cqw] left-[0.3811cqw] flex h-[7.6982cqw] w-[7.8506cqw] items-end justify-center bg-primary p-5 text-primary-foreground no-underline ${FOCUS_RING} max-xl:inset-0 max-xl:h-auto max-xl:w-auto max-xl:items-end max-xl:justify-start max-xl:p-5`}
 						href={JOIN_URL}

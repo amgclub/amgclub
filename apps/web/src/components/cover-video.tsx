@@ -29,7 +29,7 @@ export function CoverVideo() {
 	return (
 		<video
 			ref={videoRef}
-			className="pointer-events-none absolute top-0 left-[0.9052%] block h-full w-[99.0948%] object-cover brightness-50 data-[reduced=true]:hidden"
+			className="pointer-events-none absolute top-0 left-[0.9052%] block h-full w-[99.0948%] object-cover brightness-50 data-[reduced=true]:hidden max-xl:left-0 max-xl:w-full max-xl:object-[50%_62%]"
 			data-reduced={reduced ? "true" : undefined}
 			src="/hero-clip.mp4"
 			poster="/cover-photo.png"
