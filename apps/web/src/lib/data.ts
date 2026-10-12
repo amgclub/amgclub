@@ -16,11 +16,13 @@ export const RUN_FORMATS = [
 	{ index: "05", name: "Club socials", detail: "Year-round" },
 ] as const;
 
+// Numeric values so record-value.tsx can count them up; the "+" lives in the
+// suffix so the roll animates the digits only.
 export const RECORD = [
-	{ value: "2018", label: "Founded" },
-	{ value: "275+", label: "Members" },
-	{ value: "100+", label: "Events a season" },
-	{ value: "20+", label: "Tracks" },
+	{ value: 2018, label: "Founded" },
+	{ value: 275, suffix: "+", label: "Members" },
+	{ value: 100, suffix: "+", label: "Events a season" },
+	{ value: 20, suffix: "+", label: "Tracks" },
 ] as const;
 
 export const MEMBER_PERKS = [

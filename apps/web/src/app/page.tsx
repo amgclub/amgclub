@@ -1,5 +1,6 @@
 import { CoverVideo } from "@/components/cover-video";
 import { PageMotion } from "@/components/page-motion";
+import { RecordValue } from "@/components/record-value";
 import Sponsors from "@/components/sponsors";
 import UpcomingEvent from "@/components/upcoming-event";
 import {
@@ -175,7 +176,12 @@ export default function Home() {
 											{entry.label}
 										</dt>
 										<dd className="rec-value m-0 font-extrabold font-sans text-[5.1067cqw] leading-[0.95] tracking-[-0.02em] max-xl:text-[clamp(44px,10vw,72px)]">
-											{entry.value}
+											{/* The Founded entry carries no suffix key, hence the `in` check. */}
+											<RecordValue
+												value={entry.value}
+												suffix={"suffix" in entry ? entry.suffix : undefined}
+												index={i}
+											/>
 										</dd>
 									</div>
 								))}

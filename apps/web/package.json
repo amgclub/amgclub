@@ -17,6 +17,7 @@
 		"@amgclub/ui": "workspace:*",
 		"@gsap/react": "^2.1.2",
 		"@hookform/resolvers": "^5.9.1",
+		"@number-flow/react": "^0.6.2",
 		"@opennextjs/cloudflare": "catalog:",
 		"@swc/helpers": "^0.5.23",
 		"@tanstack/react-form": "^1.33.2",
