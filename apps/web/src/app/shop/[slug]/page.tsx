@@ -2,18 +2,14 @@
 import { Button } from "@amgclub/ui/components/button";
 import { Skeleton } from "@amgclub/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import {
-	ArrowLeftIcon,
-	MinusIcon,
-	PlusIcon,
-	ShoppingBagIcon,
-} from "lucide-react";
+import { ArrowLeftIcon, ShoppingBagIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageMotion } from "@/components/page-motion";
+import { QuantityInput } from "@/components/quantity-input";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
 import {
@@ -39,8 +35,6 @@ const META_DECK =
 	"mt-4 max-w-[46cqw] font-normal font-sans text-[0.8125rem] uppercase text-on-surface-muted max-xl:mt-4 max-xl:max-w-none max-xl:text-body-sm";
 
 const BACK_LINK = `inline-flex min-h-11 cursor-pointer items-center gap-2 text-on-surface-muted transition-colors hover:text-primary-60 ${LABEL_SM} ${LABEL} ${FOCUS_RING}`;
-
-const STEPPER_BTN = `flex size-11 cursor-pointer select-none items-center justify-center border-r-[1.5px] border-foreground/[0.41] text-foreground transition-colors hover:text-primary-60 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-foreground ${FOCUS_RING}`;
 
 const THUMB = `flex size-16 shrink-0 cursor-pointer border-[1.5px] transition-colors max-xl:size-14 ${FOCUS_RING}`;
 
@@ -310,31 +304,14 @@ export default function ProductDetailPage() {
 											>
 												Quantity
 											</span>
-											<div className="flex w-fit items-stretch border-[1.5px] border-foreground/[0.41]">
-												<button
-													type="button"
-													onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-													disabled={quantity <= 1}
-													aria-label="Decrease quantity"
-													className={STEPPER_BTN}
-												>
-													<MinusIcon className="size-3.5" aria-hidden="true" />
-												</button>
-												<span className="flex w-12 items-center justify-center font-medium font-sans text-label-lg tabular-nums">
-													{quantity}
-												</span>
-												<button
-													type="button"
-													onClick={() =>
-														setQuantity((q) => Math.min(remaining, q + 1))
-													}
-													disabled={quantity >= remaining}
-													aria-label="Increase quantity"
-													className={`${STEPPER_BTN} border-r-0 border-l-[1.5px]`}
-												>
-													<PlusIcon className="size-3.5" aria-hidden="true" />
-												</button>
-											</div>
+											<QuantityInput
+												value={quantity}
+												onChange={setQuantity}
+												min={1}
+												max={remaining}
+												decreaseLabel="Decrease quantity"
+												increaseLabel="Increase quantity"
+											/>
 										</div>
 										<p
 											className={`m-0 ${LABEL} ${LABEL_SM} ${

@@ -2,11 +2,12 @@
 import { Button } from "@amgclub/ui/components/button";
 import { Skeleton } from "@amgclub/ui/components/skeleton";
 import { useQuery } from "@tanstack/react-query";
-import { MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon } from "lucide-react";
+import { ShoppingBagIcon, Trash2Icon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { useMemo } from "react";
 import { PageMotion } from "@/components/page-motion";
+import { QuantityInput } from "@/components/quantity-input";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
 import {
@@ -49,14 +50,6 @@ const PLATE =
 
 const CONTROLS =
 	"flex items-center justify-end gap-[1.2cqw] max-xl:col-start-2 max-xl:mt-1 max-xl:gap-3";
-
-const STEPPER =
-	"flex w-fit shrink-0 items-stretch border-[1.5px] border-foreground/[0.41]";
-
-const STEPPER_BTN = `flex size-11 cursor-pointer select-none items-center justify-center border-r-[1.5px] border-foreground/[0.41] text-foreground transition-colors hover:text-primary-60 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:text-foreground ${FOCUS_RING}`;
-
-const STEPPER_QTY =
-	"flex w-12 items-center justify-center font-medium font-sans text-label-lg tabular-nums";
 
 const REMOVE = `flex size-11 shrink-0 cursor-pointer select-none items-center justify-center text-on-surface-muted transition-colors hover:text-primary-60 ${FOCUS_RING}`;
 
@@ -275,49 +268,20 @@ export default function CartPage() {
 													</span>
 												</span>
 												<span className={CONTROLS}>
-													<span className={STEPPER}>
-														<button
-															type="button"
-															className={STEPPER_BTN}
-															onClick={() =>
-																updateQuantity(
-																	item.productId,
-																	item.quantity - 1,
-																)
-															}
-															disabled={item.quantity <= 1}
-															aria-label={`Decrease quantity of ${item.name}`}
-														>
-															<MinusIcon
-																className="size-3.5"
-																aria-hidden="true"
-															/>
-														</button>
-														<span className={STEPPER_QTY}>{item.quantity}</span>
-														<button
-															type="button"
-															className={`${STEPPER_BTN} border-r-0 border-l-[1.5px]`}
-															onClick={() =>
-																updateQuantity(
-																	item.productId,
-																	maxQty === undefined
-																		? item.quantity + 1
-																		: Math.min(maxQty, item.quantity + 1),
-																)
-															}
-															disabled={
-																maxQty === undefined
-																	? false
-																	: item.quantity >= maxQty
-															}
-															aria-label={`Increase quantity of ${item.name}`}
-														>
-															<PlusIcon
-																className="size-3.5"
-																aria-hidden="true"
-															/>
-														</button>
-													</span>
+													<QuantityInput
+														value={item.quantity}
+														onChange={(next) =>
+															updateQuantity(item.productId, next)
+														}
+														min={1}
+														max={
+															maxQty === undefined
+																? Number.POSITIVE_INFINITY
+																: maxQty
+														}
+														decreaseLabel={`Decrease quantity of ${item.name}`}
+														increaseLabel={`Increase quantity of ${item.name}`}
+													/>
 													<span className={LINE_TOTAL}>
 														{formatAED(item.price * item.quantity)}
 													</span>

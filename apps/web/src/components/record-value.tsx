@@ -17,10 +17,9 @@ type RecordValueProps = {
 };
 
 export function RecordValue({ value, suffix, index }: RecordValueProps) {
-	// Hydration has to see the final figure — the server HTML renders it and
-	// the client's first render must match — so the rewind to 0 lives in the
-	// useGSAP layout effect below, which runs before paint and never flashes
-	// the finished number.
+	// Hydration has to see the final figure: the server HTML renders it and the
+	// client's first render must match it. So the rewind to 0 lives in the useGSAP
+	// layout effect below, which runs before paint and never flashes the number.
 	const [display, setDisplay] = useState(value);
 	const flow = useRef<NumberFlowElement>(null);
 
