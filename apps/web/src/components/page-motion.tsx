@@ -39,7 +39,7 @@ export function PageMotion() {
 						0,
 					);
 					tl.fromTo(
-						".t-issue, .masthead-nav a, .t-mcta, .mcta-mark",
+						".t-issue, .masthead-nav a, .t-mcta",
 						{ opacity: 0 },
 						{ opacity: 1, duration: 0.4, stagger: 0.08 },
 						0.3,
