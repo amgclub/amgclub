@@ -2,6 +2,7 @@ import type { Route } from "next";
 import Link from "next/link";
 
 const NAV_LINKS = [
+	{ label: "Home", href: "/" },
 	{ label: "About", href: "/about" },
 	{ label: "Events", href: "/events" },
 	{ label: "Shop", href: "/shop" },

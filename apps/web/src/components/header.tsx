@@ -6,9 +6,9 @@ import { useCart } from "@/contexts/cart";
 import { JOIN_URL } from "@/lib/data";
 import { FOCUS_RING } from "@/lib/styles";
 
-const NAV_LINK = `flex min-h-11 items-center font-medium font-sans text-foreground text-label-md uppercase no-underline transition-colors hover:text-primary-60 ${FOCUS_RING}`;
+const NAV_LINK = `flex min-h-11 items-center font-medium font-sans text-foreground text-label-md uppercase max-[365px]:text-label-sm no-underline transition-colors hover:text-primary-60 ${FOCUS_RING}`;
 
-const JOIN = `t-mcta flex min-h-11 items-center self-stretch whitespace-nowrap pr-4 font-medium font-sans text-[0.9337cqw] text-primary-60 uppercase leading-[1.1] no-underline transition-colors hover:text-primary-70 md:pr-0 ${FOCUS_RING} max-xl:text-[clamp(13px,1.8vw,15px)]`;
+const JOIN = `t-mcta flex min-h-11 items-center self-stretch whitespace-nowrap pr-4 max-lg:pr-0 font-medium font-sans text-[0.9337cqw] text-primary-60 uppercase leading-[1.1] no-underline transition-colors hover:text-primary-70 md:pr-0 ${FOCUS_RING} max-xl:text-[clamp(13px,1.8vw,15px)]`;
 
 export default function Header() {
 	const { itemCount } = useCart();
@@ -32,7 +32,7 @@ export default function Header() {
 					className={`flex min-h-11 shrink-0 items-center max-lg:order-1 ${FOCUS_RING}`}
 				>
 					<img
-						className="block h-7 w-auto max-w-[45vw] md:h-5"
+						className="block h-7 w-auto max-w-[45vw] max-[365px]:h-6 md:h-5"
 						src="/logo.webp"
 						alt=""
 						width={1600}
@@ -52,6 +52,9 @@ export default function Header() {
 						className="masthead-nav flex flex-wrap items-center gap-x-5 gap-y-0 max-lg:order-4 max-lg:w-full md:gap-x-6 xl:absolute xl:top-1/2 xl:left-[47cqw] xl:-translate-y-1/2"
 						aria-label="Primary"
 					>
+						<Link className={NAV_LINK} href={"/" as Route}>
+							Home
+						</Link>
 						<Link className={NAV_LINK} href={"/about" as Route}>
 							About
 						</Link>
