@@ -14,6 +14,7 @@ import {
 import { z } from "zod";
 import { shopCache } from "../cache";
 import { adminProcedure, router } from "../index";
+import { isForeignKeyViolation } from "../lib/postgres";
 import { rateLimitedPublicProcedure } from "../rate-limit";
 
 // ---------------------------------------------------------------------------
@@ -467,10 +468,22 @@ export const shopRouter = router({
 
 	delete: adminProcedure.input(z.uuid()).mutation(async ({ input }) => {
 		const db = getDb();
-		const [row] = await db
-			.delete(products)
-			.where(eq(products.id, input))
-			.returning({ id: products.id, slug: products.slug });
+		let row: { id: string; slug: string } | undefined;
+		try {
+			[row] = await db
+				.delete(products)
+				.where(eq(products.id, input))
+				.returning({ id: products.id, slug: products.slug });
+		} catch (error) {
+			if (isForeignKeyViolation(error)) {
+				throw new TRPCError({
+					code: "CONFLICT",
+					message:
+						"This product is still referenced by other records and cannot be deleted.",
+				});
+			}
+			throw error;
+		}
 		if (!row) {
 			throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
 		}

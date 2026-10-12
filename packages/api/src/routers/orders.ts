@@ -82,7 +82,9 @@ const listOrdersSchema = z.object({
 
 export type OrderItemDTO = {
 	id: string;
-	productId: string;
+	// null once the product has been deleted; name/price/quantity still describe
+	// what was actually bought.
+	productId: string | null;
 	name: string;
 	price: number;
 	quantity: number;
@@ -645,6 +647,10 @@ export const ordersRouter = router({
 				.where(eq(orderItems.orderId, input));
 
 			for (const item of items) {
+				// A deleted product has nothing to restore stock to. Skipping is
+				// correct rather than a loss: the units were never going back into
+				// a product that no longer exists.
+				if (!item.productId) continue;
 				await tx
 					.update(products)
 					.set({ inventory: sql`${products.inventory} + ${item.quantity}` })
