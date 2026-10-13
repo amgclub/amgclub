@@ -73,9 +73,13 @@ export default function Header() {
 					    flush-to-hairline position; -mr-5 / md:-mr-13 bleed it to
 					    the edge against the header's own px-5 / md:pr-13. */}
 					<div className="group/mcta -mr-5 flex shrink-0 items-center gap-4 self-stretch max-lg:order-2 md:-mr-13">
-						<a className={JOIN} href={JOIN_URL} aria-label="Join now">
+						<Link
+							className={JOIN}
+							href={JOIN_URL as Route}
+							aria-label="Join now"
+						>
 							Join Now
-						</a>
+						</Link>
 						<Link
 							href={"/cart" as Route}
 							className={`relative flex min-h-11 min-w-11 items-center justify-center self-stretch bg-primary px-5 text-primary-foreground transition-opacity group-hover/mcta:opacity-90 ${FOCUS_RING}`}

@@ -1,3 +1,5 @@
+import type { Route } from "next";
+import Link from "next/link";
 import { CoverVideo } from "@/components/cover-video";
 import { PageMotion } from "@/components/page-motion";
 import { RecordValue } from "@/components/record-value";
@@ -85,16 +87,16 @@ export default function Home() {
 				</div>
 
 				<div className="r-cta-join absolute top-[70.5%] left-[20.31%] h-[12.77%] w-[8.46%] max-xl:relative max-xl:top-auto max-xl:left-auto max-xl:order-5 max-xl:h-[88px] max-xl:w-[min(200px,56vw)]">
-					<a
+					<Link
 						className={`cta-join group/cta absolute top-[0.4192cqw] left-[0.3811cqw] flex h-[7.6982cqw] w-[7.8506cqw] items-end justify-center bg-primary p-5 text-primary-foreground no-underline ${FOCUS_RING} max-xl:inset-0 max-xl:h-auto max-xl:w-auto max-xl:items-end max-xl:justify-start max-xl:p-5`}
-						href={JOIN_URL}
+						href={JOIN_URL as Route}
 					>
 						<span
 							className={`t-cta-label whitespace-nowrap font-medium font-sans text-[0.87653cqw] text-primary-foreground uppercase leading-none transition-opacity group-hover/cta:opacity-85 ${LABEL_LG}`}
 						>
 							Join the club
 						</span>
-					</a>
+					</Link>
 				</div>
 
 				<div
@@ -230,9 +232,9 @@ export default function Home() {
 					className="spread relative p-0"
 					aria-label="Join the club"
 				>
-					<a
+					<Link
 						className={`join-band group/cta relative flex min-h-[16cqw] items-end justify-between gap-[2cqw] bg-primary pt-[5cqw] pr-[3.6242cqw] pb-[3.2cqw] pl-[20.7317cqw] text-primary-foreground no-underline ${FOCUS_RING} max-xl:min-h-0 max-xl:flex-col max-xl:items-start max-xl:gap-5 max-xl:p-10 md:max-xl:p-16`}
-						href={JOIN_URL}
+						href={JOIN_URL as Route}
 					>
 						<span className="join-band-label font-extrabold font-sans text-[4.534cqw] uppercase leading-[0.95] transition-opacity group-hover/cta:opacity-85 max-xl:text-[clamp(40px,11vw,72px)]">
 							Join the club
@@ -242,7 +244,7 @@ export default function Home() {
 						>
 							By form · Season 2026
 						</span>
-					</a>
+					</Link>
 				</section>
 			</div>
 

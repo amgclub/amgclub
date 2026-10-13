@@ -73,6 +73,7 @@ export function MembersTable({
 					<TableHead>Name</TableHead>
 					<TableHead>Email</TableHead>
 					<TableHead>Phone</TableHead>
+					<TableHead>Car</TableHead>
 					<TableHead>Status</TableHead>
 					<TableHead>Start Date</TableHead>
 					<TableHead>End Date</TableHead>
@@ -84,7 +85,7 @@ export function MembersTable({
 				{loading ? (
 					Array.from({ length: 8 }).map((_, index) => (
 						<TableRow key={`skeleton-${String(index)}`}>
-							{Array.from({ length: 8 }).map((__, cell) => (
+							{Array.from({ length: 9 }).map((__, cell) => (
 								<TableCell key={`skeleton-${String(index)}-${String(cell)}`}>
 									<Skeleton className="h-4 w-full" />
 								</TableCell>
@@ -93,7 +94,7 @@ export function MembersTable({
 					))
 				) : error ? (
 					<TableRow>
-						<TableCell colSpan={8}>
+						<TableCell colSpan={9}>
 							<div className="flex flex-col items-center gap-2 py-8">
 								<p className="text-body-sm text-destructive-70">
 									Failed to load members: {error.message}
@@ -111,7 +112,7 @@ export function MembersTable({
 					</TableRow>
 				) : members.length === 0 ? (
 					<TableRow>
-						<TableCell colSpan={8}>
+						<TableCell colSpan={9}>
 							<Empty className="border-none">
 								<EmptyHeader>
 									<EmptyMedia variant="icon">
@@ -166,6 +167,11 @@ function MembersTableRow({
 			<TableCell className="font-medium">{member.memberName}</TableCell>
 			<TableCell>{member.email}</TableCell>
 			<TableCell>{member.phone}</TableCell>
+			<TableCell>
+				<span className="block max-w-40 truncate">
+					{member.carModel ?? "–"}
+				</span>
+			</TableCell>
 			<TableCell>
 				<MembershipStatusBadge status={member.status} />
 			</TableCell>

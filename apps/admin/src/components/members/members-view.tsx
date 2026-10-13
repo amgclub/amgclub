@@ -135,7 +135,7 @@ export function MembersView({
 					<SearchIcon className="absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
 					<Input
 						type="search"
-						placeholder="Search name, email, phone…"
+						placeholder="Search name, email, phone, car…"
 						className="pl-8"
 						value={search}
 						onChange={(event) => {

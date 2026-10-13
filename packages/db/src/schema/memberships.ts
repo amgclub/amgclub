@@ -50,6 +50,8 @@ export const memberships = pgTable(
 		startDate: date("start_date").notNull(),
 		endDate: date("end_date").notNull(),
 		source: membershipSourceEnum("source").notNull().default("manual"),
+		/** The AMG the applicant owns, for club-run content and events. */
+		carModel: text("car_model"),
 		notes: text("notes"),
 		createdAt: timestamp("created_at", { withTimezone: true })
 			.defaultNow()

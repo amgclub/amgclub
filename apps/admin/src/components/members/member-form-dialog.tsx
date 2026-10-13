@@ -38,6 +38,11 @@ const memberFormSchema = z.object({
 		.string()
 		.min(1, "End date is required")
 		.regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date"),
+	carModel: z
+		.string()
+		.trim()
+		.max(120, "Model must be 120 characters or less")
+		.optional(),
 	notes: z.string().max(2000).optional(),
 });
 
@@ -94,6 +99,7 @@ export function MemberFormDialog({
 					price: member.price,
 					startDate: member.startDate,
 					endDate: member.endDate,
+					carModel: member.carModel ?? "",
 					notes: member.notes ?? "",
 				}
 			: {
@@ -105,6 +111,7 @@ export function MemberFormDialog({
 					price: monthlyPrice,
 					startDate: todayISO(),
 					endDate: computeEndDate(todayISO(), "monthly"),
+					carModel: "",
 					notes: "",
 				},
 	});
@@ -229,6 +236,17 @@ export function MemberFormDialog({
 								<FieldErrorText message={errors.price?.message} />
 							</Field>
 						</div>
+
+						<Field>
+							<FieldLabel htmlFor="member-car-model">Car model</FieldLabel>
+							<Input
+								id="member-car-model"
+								placeholder="AMG C 63 S E Performance"
+								aria-invalid={Boolean(errors.carModel)}
+								{...register("carModel")}
+							/>
+							<FieldErrorText message={errors.carModel?.message} />
+						</Field>
 
 						<div className="grid gap-4 sm:grid-cols-2">
 							<Field>

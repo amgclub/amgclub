@@ -115,3 +115,11 @@ export const contactRateLimitedProcedure = withRateLimit("contact", {
 	limit: 5,
 	window: "60 s",
 });
+
+export const membershipApplyRateLimitedProcedure = withRateLimit(
+	"membership-apply",
+	{
+		limit: 5,
+		window: "60 s",
+	},
+);

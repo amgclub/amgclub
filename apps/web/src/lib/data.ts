@@ -6,7 +6,12 @@ export const DECK_LEFT =
 export const DECK_RIGHT =
 	"founded in 2018. 275+ members and 100+ events a season across 20+ tracks. Five run formats, from the Apr 7 Annual Desert Drive to open track days. Join by form.";
 
-export const JOIN_URL = "https://forms.gle/fvR3TBKgyiF4aU1Y8";
+/**
+ * The join CTA target. This used to be the club's Google Form; it is now the
+ * site's own `/members-join` application, which writes straight into the same
+ * memberships table the admin console reviews.
+ */
+export const JOIN_URL = "/members-join";
 
 export const RUN_FORMATS = [
 	{ index: "01", name: "Annual Desert Drive", detail: "Apr 7" },
