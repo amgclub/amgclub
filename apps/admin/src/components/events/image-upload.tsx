@@ -18,12 +18,6 @@ export interface ImageUploadHandle {
 	uploadFile: () => Promise<string | null>;
 }
 
-/**
- * Image picker for the event form. Holds the selected file in memory and shows
- * a local preview. The actual upload to storage is deferred — callers invoke
- * `uploadFile()` (via a ref) only after the parent entity is persisted, so no
- * orphaned storage objects are created when the user cancels.
- */
 export function ImageUpload({
 	imageUrl,
 	onChange,
@@ -66,6 +60,7 @@ export function ImageUpload({
 				contentType: file.type,
 				size: file.size,
 				fileName: file.name,
+				folder: "events",
 			});
 
 			const uploadResponse = await fetch(uploadUrl, {

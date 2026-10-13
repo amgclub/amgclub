@@ -15,6 +15,7 @@ export const storageRouter = router({
 				contentType: z.string(),
 				size: z.number().int().positive(),
 				fileName: z.string().optional(),
+				folder: z.enum(["events", "products"]).optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -22,7 +23,10 @@ export const storageRouter = router({
 				return await getSignedUploadUrl(input, ctx.session.user.id);
 			} catch (error) {
 				if (error instanceof StorageError) {
-					if (error.code === "invalid-type") {
+					if (
+						error.code === "invalid-type" ||
+						error.code === "invalid-folder"
+					) {
 						throw new TRPCError({
 							code: "BAD_REQUEST",
 							message: error.message,

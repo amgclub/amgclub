@@ -1,4 +1,5 @@
 import { getDb, productImages, products } from "@amgclub/db";
+import { deleteStoredObject } from "@amgclub/storage";
 import { TRPCError } from "@trpc/server";
 import {
 	and,
@@ -468,6 +469,12 @@ export const shopRouter = router({
 
 	delete: adminProcedure.input(z.uuid()).mutation(async ({ input }) => {
 		const db = getDb();
+
+		const imageRows = await db
+			.select({ url: productImages.url })
+			.from(productImages)
+			.where(eq(productImages.productId, input));
+
 		let row: { id: string; slug: string } | undefined;
 		try {
 			[row] = await db
@@ -487,7 +494,17 @@ export const shopRouter = router({
 		if (!row) {
 			throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
 		}
+
+		const failedUrls: string[] = [];
+		for (const image of imageRows) {
+			try {
+				await deleteStoredObject(image.url);
+			} catch {
+				failedUrls.push(image.url);
+			}
+		}
+
 		await shopCache.invalidateProduct(row.slug);
-		return row;
+		return { ...row, orphanedImages: failedUrls };
 	}),
 });

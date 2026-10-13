@@ -25,6 +25,7 @@ export type StorageErrorCode =
 	| "unauthorized"
 	| "too-large"
 	| "invalid-type"
+	| "invalid-folder"
 	| "upload-failed"
 	| "delete-failed";
 
@@ -33,6 +34,7 @@ const STORAGE_ERROR_MESSAGES: Readonly<Record<StorageErrorCode, string>> =
 		unauthorized: "An authenticated user is required.",
 		"too-large": "Image exceeds the maximum allowed size.",
 		"invalid-type": "Unsupported image type.",
+		"invalid-folder": "Unsupported media folder.",
 		"upload-failed": "Failed to upload the image to storage.",
 		"delete-failed": "Failed to delete the object from storage.",
 	});
@@ -68,6 +70,11 @@ export interface GetSignedUploadUrlInput {
 	contentType: string;
 	size: number;
 	fileName?: string;
+	/**
+	 * Storage folder the object lands in. Defaults to "events" so callers that
+	 * predate folder scoping keep their existing behaviour.
+	 */
+	folder?: MediaFolder;
 }
 
 /** Result returned when a signed upload URL is generated. */
@@ -130,9 +137,32 @@ export function validateImageUpload(input: {
 	return { ext };
 }
 
-/** Builds the storage key for a new image, scoped to the actor's own folder. */
-function buildKey(ext: string, actor: string): string {
-	return `${actor}/events/${randomUUID()}.${ext}`;
+/**
+ * Folders an upload may target. Constrained to a fixed set rather than accepted
+ * free-form, because the folder becomes a literal segment of the object key.
+ */
+export const MEDIA_FOLDERS = ["events", "products"] as const;
+
+/** A folder the media bucket accepts uploads into. */
+export type MediaFolder = (typeof MEDIA_FOLDERS)[number];
+
+/** Folder used when a caller does not specify one. */
+export const DEFAULT_MEDIA_FOLDER: MediaFolder = "events";
+
+/**
+ * Builds the storage key for a new image: `{actor}/{folder}/{uuid}.{ext}`.
+ * The actor prefix keeps each admin's uploads under their own folder.
+ */
+function buildKey(ext: string, actor: string, folder: MediaFolder): string {
+	// Defence in depth: the folder is part of an object key, so a value outside
+	// the allow-list must never be interpolated, even from an untyped caller.
+	if (!(MEDIA_FOLDERS as readonly string[]).includes(folder)) {
+		throw new StorageError(
+			"invalid-folder",
+			`Unsupported media folder "${folder}".`,
+		);
+	}
+	return `${actor}/${folder}/${randomUUID()}.${ext}`;
 }
 
 // ---------------------------------------------------------------------------
@@ -158,7 +188,7 @@ export async function getSignedUploadUrl(
 		contentType: input.contentType,
 		size: input.size,
 	});
-	const key = buildKey(ext, userId);
+	const key = buildKey(ext, userId, input.folder ?? DEFAULT_MEDIA_FOLDER);
 
 	if (storageProvider() === "s3") {
 		const bucket = getEnvString("AWS_MEDIA_BUCKET_NAME") ?? "";
@@ -214,6 +244,7 @@ export async function getSignedUploadUrl(
 export async function uploadImage(
 	file: ImageFile,
 	actor: string,
+	folder?: MediaFolder,
 ): Promise<StoredImage> {
 	const userId = actor.trim();
 	if (userId === "") {
@@ -223,7 +254,7 @@ export async function uploadImage(
 		contentType: file.contentType,
 		size: file.bytes.byteLength,
 	});
-	const key = buildKey(ext, userId);
+	const key = buildKey(ext, userId, folder ?? DEFAULT_MEDIA_FOLDER);
 
 	if (storageProvider() === "s3") {
 		return uploadToS3(file, key);

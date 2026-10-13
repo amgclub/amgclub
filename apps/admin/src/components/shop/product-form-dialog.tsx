@@ -360,6 +360,9 @@ export function ProductFormDialog({
 								contentType: slot.file.type,
 								size: slot.file.size,
 								fileName: slot.file.name,
+								// Shop media belongs in its own folder; the storage
+								// default is "events".
+								folder: "products",
 							});
 
 						const uploadResponse = await fetch(uploadUrl, {

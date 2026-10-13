@@ -49,8 +49,14 @@ export function ProductsView() {
 
 	const deleteMutation = useMutation({
 		...trpc.shop.delete.mutationOptions(),
-		onSuccess: () => {
-			toast.success("Product deleted");
+		onSuccess: (result) => {
+			if (result.orphanedImages.length > 0) {
+				toast.warning(
+					`Product deleted, but ${result.orphanedImages.length} image(s) could not be removed from storage.`,
+				);
+			} else {
+				toast.success("Product deleted");
+			}
 			queryClient.invalidateQueries();
 			setDeleteTarget(null);
 		},
