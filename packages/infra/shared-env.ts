@@ -46,10 +46,19 @@ export const commonEnv = {
 	DATABASE_URL: Config.redacted("DATABASE_URL"),
 	BETTER_AUTH_SECRET: Config.redacted("BETTER_AUTH_SECRET"),
 	BETTER_AUTH_URL: Cloudflare.Worker.URL,
-	STORAGE_PROVIDER: Config.redacted("STORAGE_PROVIDER"),
-	SUPABASE_URL: Config.redacted("SUPABASE_URL"),
-	SUPABASE_SECRET_KEY: Config.redacted("SUPABASE_SECRET_KEY"),
-	SUPABASE_STORAGE_BUCKET: Config.redacted("SUPABASE_STORAGE_BUCKET"),
+	// Optional: web does not import @amgclub/storage, so it has no storage
+	// backend to select. Defaults to "" rather than being required, which would
+	// otherwise block deploying web.
+	STORAGE_PROVIDER: Config.redacted("STORAGE_PROVIDER").pipe(
+		Config.withDefault(""),
+	),
+	SUPABASE_URL: Config.redacted("SUPABASE_URL").pipe(Config.withDefault("")),
+	SUPABASE_SECRET_KEY: Config.redacted("SUPABASE_SECRET_KEY").pipe(
+		Config.withDefault(""),
+	),
+	SUPABASE_STORAGE_BUCKET: Config.redacted("SUPABASE_STORAGE_BUCKET").pipe(
+		Config.withDefault(""),
+	),
 	AWS_ACCESS_KEY_ID: Config.redacted("AWS_ACCESS_KEY_ID").pipe(
 		Config.withDefault(""),
 	),

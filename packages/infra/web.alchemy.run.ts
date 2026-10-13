@@ -3,10 +3,16 @@ import * as Cloudflare from "alchemy/Cloudflare";
 import { config } from "dotenv";
 import * as Effect from "effect/Effect";
 
+import { createHyperdrive } from "./hyperdrive.ts";
 import { commonEnv } from "./shared-env.ts";
 
 config({ path: "./.env" });
 config({ path: "../../apps/web/.env.production" });
+
+export const hyperdriveDb = createHyperdrive(
+	"web-hyperdrive",
+	"amgclub-web-db",
+);
 
 export const web = Cloudflare.Website.StaticSite("web", {
 	name: "web",
@@ -15,12 +21,16 @@ export const web = Cloudflare.Website.StaticSite("web", {
 	memo: false,
 	outdir: ".open-next/assets",
 	main: "../../apps/web/.open-next/worker.js",
-	// NOTE: intentionally no `bundle: false` here — see admin.alchemy.run.ts.
-	// The prebuilt path follows pnpm symlinks and uploads ~85 MB (> 64 MiB).
 	compatibility: {
 		flags: ["nodejs_compat", "global_fetch_strictly_public"],
 	},
-	env: commonEnv,
+	placement: {
+		mode: "smart",
+	},
+	env: {
+		...commonEnv,
+		HYPERDRIVE: hyperdriveDb,
+	},
 	dev: {
 		command: "pnpm run dev:bare",
 		url: "http://localhost:3001",
