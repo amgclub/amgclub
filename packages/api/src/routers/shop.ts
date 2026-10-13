@@ -495,14 +495,12 @@ export const shopRouter = router({
 			throw new TRPCError({ code: "NOT_FOUND", message: "Product not found" });
 		}
 
-		const failedUrls: string[] = [];
-		for (const image of imageRows) {
-			try {
-				await deleteStoredObject(image.url);
-			} catch {
-				failedUrls.push(image.url);
-			}
-		}
+		const results = await Promise.allSettled(
+			imageRows.map((image) => deleteStoredObject(image.url)),
+		);
+		const failedUrls = imageRows
+			.filter((_, index) => results[index]?.status === "rejected")
+			.map((image) => image.url);
 
 		await shopCache.invalidateProduct(row.slug);
 		return { ...row, orphanedImages: failedUrls };

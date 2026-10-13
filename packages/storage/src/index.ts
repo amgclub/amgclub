@@ -415,6 +415,7 @@ function getS3Client(): S3Client {
 			accessKeyId: getEnvString("AWS_ACCESS_KEY_ID") ?? "",
 			secretAccessKey: getEnvString("AWS_SECRET_ACCESS_KEY") ?? "",
 		},
+		requestChecksumCalculation: "WHEN_REQUIRED",
 	});
 	return s3Client;
 }
@@ -422,14 +423,16 @@ function getS3Client(): S3Client {
 async function uploadToS3(file: ImageFile, key: string): Promise<StoredImage> {
 	const bucket = getEnvString("AWS_MEDIA_BUCKET_NAME") ?? "";
 	try {
-		await getS3Client().send(
-			new PutObjectCommand({
-				Bucket: bucket,
-				Key: key,
-				Body: file.bytes,
-				ContentType: file.contentType,
-				CacheControl: "public, max-age=31536000, immutable",
-			}),
+		await withRetry(() =>
+			getS3Client().send(
+				new PutObjectCommand({
+					Bucket: bucket,
+					Key: key,
+					Body: file.bytes,
+					ContentType: file.contentType,
+					CacheControl: "public, max-age=31536000, immutable",
+				}),
+			),
 		);
 	} catch (cause) {
 		throw new StorageError("upload-failed", undefined, cause);
@@ -440,11 +443,13 @@ async function uploadToS3(file: ImageFile, key: string): Promise<StoredImage> {
 async function deleteFromS3(urlOrKey: string): Promise<void> {
 	const key = parseS3Key(urlOrKey);
 	try {
-		await getS3Client().send(
-			new DeleteObjectCommand({
-				Bucket: getEnvString("AWS_MEDIA_BUCKET_NAME") ?? "",
-				Key: key,
-			}),
+		await withRetry(() =>
+			getS3Client().send(
+				new DeleteObjectCommand({
+					Bucket: getEnvString("AWS_MEDIA_BUCKET_NAME") ?? "",
+					Key: key,
+				}),
+			),
 		);
 	} catch (cause) {
 		// Deleting a missing object is a no-op: treat HTTP 404 as success.
@@ -457,13 +462,65 @@ async function deleteFromS3(urlOrKey: string): Promise<void> {
 
 /** Duck-types the AWS SDK v3 service exception to detect HTTP 404 responses. */
 function isNotFoundError(error: unknown): boolean {
+	return httpStatus(error) === 404;
+}
+
+/**
+ * HTTP statuses worth another attempt: throttling plus transient upstream
+ * faults.
+ */
+const RETRYABLE_STATUS: ReadonlySet<number> = new Set([
+	429, 500, 502, 503, 504,
+]);
+
+/** Attempts in total (the first call plus retries) and the base backoff delay. */
+const RETRY_ATTEMPTS = 3;
+const RETRY_BASE_MS = 150;
+
+/** Extracts the HTTP status from an AWS SDK v3 error, or undefined if absent. */
+function httpStatus(error: unknown): number | undefined {
 	if (typeof error !== "object" || error === null) {
-		return false;
+		return undefined;
 	}
-	return (
-		(error as { $metadata?: { httpStatusCode?: number } }).$metadata
-			?.httpStatusCode === 404
-	);
+	const status = (error as { $metadata?: { httpStatusCode?: number } })
+		.$metadata?.httpStatusCode;
+	if (typeof status === "number") {
+		return status;
+	}
+	// Some S3 errors surface only as a name when the status never made it back.
+	const name = (error as { name?: string }).name;
+	return name === "SlowDown"
+		? 503
+		: name === "RequestTimeout" || name === "ServiceUnavailable"
+			? 503
+			: undefined;
+}
+
+/**
+ * Runs `operation`, retrying throttled and transient failures with exponential
+ * backoff. Non-retryable errors (a 403, a bad key) propagate on the first
+ * attempt, so a genuine permission problem is never masked by three slow tries.
+ */
+async function withRetry<T>(operation: () => Promise<T>): Promise<T> {
+	let attempt = 1;
+	for (;;) {
+		try {
+			return await operation();
+		} catch (error) {
+			const status = httpStatus(error);
+			if (
+				attempt >= RETRY_ATTEMPTS ||
+				status === undefined ||
+				!RETRYABLE_STATUS.has(status)
+			) {
+				throw error;
+			}
+			await new Promise((resolve) =>
+				setTimeout(resolve, RETRY_BASE_MS * 2 ** (attempt - 1)),
+			);
+			attempt += 1;
+		}
+	}
 }
 
 /** Removes a single trailing slash from a base URL so segments join cleanly. */
