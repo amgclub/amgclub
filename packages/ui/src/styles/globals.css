@@ -23,6 +23,10 @@
 	--primary-60: 0.5796 0.1596 21.7;
 	--primary-70: 0.654 0.1347 19.7;
 
+	/* Yellow: the second brand accent */
+	--yellow: 0.8691 0.1777 91.3;
+	--yellow-70: 0.635 0.118 88.5;
+
 	/* Neutral structure */
 	--secondary: 1 0 0;
 	--secondary-foreground: 0 0 0;
@@ -67,16 +71,10 @@
 	--sidebar-accent-foreground: 1 0 0;
 	--sidebar-border: 0.3729 0.0306 259.7;
 	--sidebar-ring: 1 0 0;
-
-	/* Type roles live in the @theme block below; utilities reference these
-     variables at runtime, so the @media block below re-declares the ones
-     that step up at the md breakpoint. */
 }
 
 @media (min-width: 768px) {
 	:root {
-		/* Headlines step up at md; body/label sizes step up where DESIGN.md
-       spec demands larger long-form reading sizes. */
 		--text-headline-display: 2.125rem;
 		--text-headline-display--line-height: 1.0588;
 		--text-headline-lg: 1.75rem;
@@ -103,6 +101,8 @@
 	--primary-foreground: 1 0 0;
 	--primary-60: 0.5796 0.1596 21.7;
 	--primary-70: 0.654 0.1347 19.7;
+	--yellow: 0.8691 0.1777 91.3;
+	--yellow-70: 0.635 0.118 88.5;
 	--secondary: 1 0 0;
 	--secondary-foreground: 0 0 0;
 	--muted: 0.1776 0 0;
@@ -131,25 +131,14 @@
 }
 
 @theme {
-	/* Families resolve at runtime: next/font sets --font-sans on <body> from
-     apps/web/src/app/layout.tsx, so the utility must reference the variable
-     rather than inline a family name. */
 	--font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
 	--font-mono: ui-monospace, "JetBrains Mono", monospace;
 
-	/* Weight tokens — also exposed as font-<name> utilities for role coupling. */
-	--font-weight-extra-bold: 800; /* titleExtraBold */
-	--font-weight-bold: 700; /* titleBold */
-	--font-weight-medium: 500; /* MBCorpoSText_Regular_Web (label family) */
-	--font-weight-normal: 400; /* textRegular */
+	--font-weight-extra-bold: 800;
+	--font-weight-bold: 700;
+	--font-weight-medium: 500;
+	--font-weight-normal: 400;
 
-	/* Typography — all roles resolve to Satoshi; only weight + size differ.
-     Tailwind wants each slot of a role in its own variable, so a role is
-     declared as <size> plus the --line-height / --letter-spacing companions
-     and one utility class (e.g. text-headline-display) applies the whole role.
-     Compose with font-sans (always Satoshi) + font-extrabold/font-bold/font-medium
-     for the documented weight. Mobile default; the @media block in :root
-     re-declares each role at the md breakpoint. */
 	--text-headline-display: 1.75rem;
 	--text-headline-display--line-height: 1.0714;
 	--text-headline-display--letter-spacing: -0.005em; /* weight 800 */
@@ -199,6 +188,8 @@
 	/* AMG red ramp — Tailwind alpha utilities compose via oklch(var(...) / <alpha>). */
 	--color-primary-70: oklch(var(--primary-70));
 	--color-primary-60: oklch(var(--primary-60));
+	--color-yellow-70: oklch(var(--yellow-70));
+	--color-yellow: oklch(var(--yellow));
 	--color-sidebar-ring: oklch(var(--sidebar-ring));
 	--color-sidebar-border: oklch(var(--sidebar-border));
 	--color-sidebar-accent-foreground: oklch(var(--sidebar-accent-foreground));

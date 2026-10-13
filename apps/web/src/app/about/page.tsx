@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CustomGauge } from "@/components/gauge";
 import { GaugeReveal } from "@/components/gauge-reveal";
 import { PageMotion } from "@/components/page-motion";
+import { Year } from "@/components/year";
 import { DECK_LEFT, DECK_RIGHT, JOIN_URL } from "@/lib/data";
 import {
 	FOCUS_RING,
@@ -52,19 +53,19 @@ export default function AboutPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · About
+								Season <Year /> · About
 							</span>
 						</div>
 
@@ -143,7 +144,7 @@ export default function AboutPage() {
 						<span
 							className={`join-band-note pb-[0.7cqw] max-xl:pb-0 ${LABEL_SM} ${LABEL}`}
 						>
-							By form · Season 2026
+							By form · Season <Year />
 						</span>
 					</Link>
 				</section>

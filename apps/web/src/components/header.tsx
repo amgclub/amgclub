@@ -2,6 +2,7 @@
 import { ShoppingBagIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
+import { Year } from "@/components/year";
 import { useCart } from "@/contexts/cart";
 import { JOIN_URL } from "@/lib/data";
 import { FOCUS_RING } from "@/lib/styles";
@@ -41,7 +42,7 @@ export default function Header() {
 				</Link>
 
 				<span className="t-issue whitespace-nowrap font-medium font-sans text-[0.87653cqw] text-primary-60 uppercase leading-none max-lg:order-3 max-lg:w-full max-lg:text-left max-xl:whitespace-normal max-xl:text-right max-xl:text-[clamp(10px,1.6vw,12px)] max-xl:leading-[1.3] xl:absolute xl:top-1/2 xl:left-[20.7317cqw] xl:-translate-y-1/2">
-					Season 2026 · Issue 001
+					Season <Year /> · Issue 001
 				</span>
 
 				{/* Below lg the wrapper dissolves so the nav and the CTA cluster become
@@ -103,7 +104,7 @@ export default function Header() {
 			</div>
 
 			<span
-				className="hair-masthead block h-[1.5px] w-full bg-foreground/40"
+				className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 				aria-hidden="true"
 			/>
 		</header>

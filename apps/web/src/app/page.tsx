@@ -1,10 +1,12 @@
 import type { Route } from "next";
 import Link from "next/link";
 import { CoverVideo } from "@/components/cover-video";
+import { FormatIcon } from "@/components/format-icons";
 import { PageMotion } from "@/components/page-motion";
 import { RecordValue } from "@/components/record-value";
 import Sponsors from "@/components/sponsors";
 import UpcomingEvent from "@/components/upcoming-event";
+import { Year } from "@/components/year";
 import {
 	DECK_LEFT,
 	DECK_RIGHT,
@@ -16,6 +18,8 @@ import {
 import {
 	FMT_DETAIL,
 	FMT_INDEX,
+	FMT_MARK,
+	FMT_MARK_SIZE,
 	FMT_NAME,
 	FOCUS_RING,
 	FORMAT_ROW,
@@ -52,7 +56,7 @@ export default function Home() {
 					className="r-margin-rule absolute top-0 left-0 h-full w-[10%] max-xl:hidden"
 					aria-hidden="true"
 				>
-					<span className="hair-margin absolute top-0 left-[3.6242cqw] h-full w-[0.0572cqw] bg-foreground/40" />
+					<span className="hair-margin absolute top-0 left-[3.6242cqw] h-full w-[0.0572cqw] bg-foreground/[0.41]" />
 				</div>
 
 				<div className="r-margin-label absolute top-[50%] left-[4.8%] h-[4.08%] w-[5.49%] max-xl:static max-xl:order-1 max-xl:h-auto max-xl:w-auto">
@@ -122,7 +126,7 @@ export default function Home() {
 			<div className="spreads @container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<div className="spreads-run relative">
 					<span
-						className="spreads-margin absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="spreads-margin absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 
@@ -137,7 +141,7 @@ export default function Home() {
 								track days, morning runs up Jebel Jais, night meets across
 								Dubai, and club socials.
 							</p>
-							<ol className="formats mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+							<ol className="formats mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 								{RUN_FORMATS.map((format) => (
 									<li key={format.index} className={`format-row ${FORMAT_ROW}`}>
 										<span
@@ -149,8 +153,12 @@ export default function Home() {
 										<span className={`fmt-name ${FMT_NAME}`}>
 											{format.name}
 										</span>
-										<span className={`fmt-detail ${FMT_DETAIL}`}>
-											{format.detail}
+										<span className={`fmt-mark ${FMT_MARK}`}>
+											<FormatIcon
+												name={format.icon}
+												className={FMT_MARK_SIZE}
+											/>
+											<span className="sr-only">{format.detail}</span>
 										</span>
 									</li>
 								))}
@@ -170,7 +178,7 @@ export default function Home() {
 								{RECORD.map((entry, i) => (
 									<div
 										key={entry.label}
-										className={`rec-col flex flex-col-reverse pl-[2cqw] max-xl:pl-0 md:max-xl:pl-6 ${i > 0 ? "border-foreground/28 border-l-[1.5px] max-xl:border-l-0 md:max-xl:border-l-[1.5px]" : ""}`}
+										className={`rec-col flex flex-col-reverse pl-[2cqw] max-xl:pl-0 md:max-xl:pl-6 ${i > 0 ? "border-foreground/[0.41] border-l max-xl:border-l-0 md:max-xl:border-l" : ""}`}
 									>
 										<dt
 											className={`rec-label mb-[1.1cqw] text-on-surface-muted max-xl:mb-2 ${LABEL_SM} ${LABEL}`}
@@ -207,7 +215,7 @@ export default function Home() {
 								Four things run with the membership: the roll, the season
 								calendar, the tracks, and the club issue.
 							</p>
-							<ol className="formats mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+							<ol className="formats mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 								{MEMBER_PERKS.map((perk) => (
 									<li key={perk.index} className={`format-row ${FORMAT_ROW}`}>
 										<span
@@ -218,7 +226,16 @@ export default function Home() {
 										</span>
 										<span className={`fmt-name ${FMT_NAME}`}>{perk.name}</span>
 										<span className={`fmt-detail ${FMT_DETAIL}`}>
-											{perk.detail}
+											{/* Only the club issue leads with the season year; the
+											    other details are fixed facts. The `in` check
+											    mirrors the one on RECORD's suffix. */}
+											{"season" in perk && perk.season ? (
+												<>
+													Season <Year /> · {perk.detail}
+												</>
+											) : (
+												perk.detail
+											)}
 										</span>
 									</li>
 								))}
@@ -242,7 +259,7 @@ export default function Home() {
 						<span
 							className={`join-band-note pb-[0.7cqw] max-xl:pb-0 ${LABEL_SM} ${LABEL}`}
 						>
-							By form · Season 2026
+							By form · Season <Year />
 						</span>
 					</Link>
 				</section>

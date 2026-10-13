@@ -43,7 +43,7 @@ const ROW =
 const LINK = `group col-start-1 col-end-3 row-start-1 block no-underline max-xl:col-end-2 ${FOCUS_RING}`;
 
 const LEAD =
-	"season-lead mt-[2.4cqw] flex items-baseline gap-[2cqw] border-foreground/[0.41] border-y-[1.5px] py-[1.6cqw] max-xl:mt-5 max-xl:flex-wrap max-xl:gap-3 max-xl:py-4";
+	"season-lead mt-[2.4cqw] flex items-baseline gap-[2cqw] border-foreground/[0.41] border-y py-[1.6cqw] max-xl:mt-5 max-xl:flex-wrap max-xl:gap-3 max-xl:py-4";
 
 const DATE =
 	"season-date font-extrabold font-sans text-[4.1921cqw] uppercase leading-[0.95] max-xl:text-[clamp(40px,11vw,64px)]";
@@ -74,7 +74,7 @@ const EMPTY_ROW =
 const EMPTY_TEXT = "flex flex-col justify-between gap-6 max-xl:gap-5";
 
 const LEAD_EMPTY =
-	"season-lead flex flex-col gap-[1.6cqw] border-foreground/[0.41] border-y-[1.5px] py-[1.6cqw] max-xl:gap-3 max-xl:py-4";
+	"season-lead flex flex-col gap-[1.6cqw] border-foreground/[0.41] border-y py-[1.6cqw] max-xl:gap-3 max-xl:py-4";
 
 // Like the photo, the pattern reaches back through the spread body's right
 // padding; at max-xl that padding is gone, so the bleed drops with it. Explicit

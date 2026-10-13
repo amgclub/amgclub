@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { PageMotion } from "@/components/page-motion";
+import { Year } from "@/components/year";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
 import {
@@ -46,7 +47,7 @@ const FIELD_TEXTAREA = `flex min-h-24 w-full resize-none rounded-none border-[1.
 const ERROR = "font-normal font-sans text-destructive-70 text-caption";
 
 const RAIL_BLOCK =
-	"flex flex-col gap-2.5 border-foreground/[0.41] border-t-[1.5px] pt-4";
+	"flex flex-col gap-2.5 border-foreground/[0.41] border-t pt-4";
 
 const RAIL_ROW = "flex items-baseline justify-between gap-3 text-body-sm";
 
@@ -120,19 +121,19 @@ export default function CheckoutPage() {
 			<main className="flex flex-1 flex-col">
 				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 					<span
-						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 
 					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 						<span
-							className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+							className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 							aria-hidden="true"
 						/>
 						<div className={SPREAD_BODY}>
 							<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 								<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-									Season 2026 · Checkout
+									Season <Year /> · Checkout
 								</span>
 							</div>
 
@@ -153,7 +154,7 @@ export default function CheckoutPage() {
 							The manifest
 						</p>
 						<div className={SPREAD_BODY}>
-							<div className="border-foreground/[0.41] border-t-[1.5px] pt-[2.4cqw] max-xl:pt-6">
+							<div className="border-foreground/[0.41] border-t pt-[2.4cqw] max-xl:pt-6">
 								<p className="m-0 font-extrabold font-sans text-[clamp(22px,4cqw,56px)] text-foreground uppercase leading-[1.05]">
 									Your cart is empty
 								</p>
@@ -205,19 +206,19 @@ export default function CheckoutPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · Checkout
+								Season <Year /> · Checkout
 							</span>
 						</div>
 
@@ -379,7 +380,7 @@ export default function CheckoutPage() {
 											<span className={RAIL_VALUE}>Free</span>
 										</div>
 									</div>
-									<div className="flex items-baseline justify-between gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex items-baseline justify-between gap-3 border-foreground/[0.41] border-t pt-4">
 										<span className={TOTAL_LABEL}>Total</span>
 										<span className={TOTAL_VALUE}>{formatAED(total)}</span>
 									</div>

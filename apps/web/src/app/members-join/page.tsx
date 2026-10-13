@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { JoinMotion, type JoinPhase } from "@/components/join-motion";
 import { LogoStripes } from "@/components/logo-stripes";
 import { PageMotion } from "@/components/page-motion";
+import { Year } from "@/components/year";
 import * as COPY from "@/lib/join-copy";
 import {
 	formatFee,
@@ -67,11 +68,10 @@ const STATEMENT_BODY = "pl-[5.1448cqw] pr-[3.6242cqw] max-xl:pl-0 max-xl:pr-0";
 
 // Fee ledger: ruled pairs on the spread's hairlines, no card and no fill. The
 // fee is the one row that carries display weight, the rest are scannable terms.
-const LEDGER =
-	"m-0 mt-4 list-none border-foreground/[0.41] border-t-[1.5px] p-0";
+const LEDGER = "m-0 mt-4 list-none border-foreground/[0.41] border-t p-0";
 
 const FEE_ROW =
-	"grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-[1.6cqw] border-foreground/28 border-b-[1.5px] py-[1.1cqw] max-xl:grid-cols-1 max-xl:gap-y-1 max-xl:py-3";
+	"grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-[1.6cqw] border-foreground/[0.41] border-b py-[1.1cqw] max-xl:grid-cols-1 max-xl:gap-y-1 max-xl:py-3";
 
 const FEE_LABEL = `text-on-surface-muted ${LABEL_SM} ${LABEL}`;
 
@@ -97,7 +97,7 @@ const CHECK_BOX =
 	"peer absolute inset-0 size-5 cursor-pointer appearance-none opacity-0";
 
 const CHECK_FRAME =
-	"pointer-events-none flex size-5 shrink-0 items-center justify-center rounded-none border-[1.5px] border-foreground/60 bg-transparent transition-colors peer-checked:border-primary peer-checked:bg-primary peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-primary-70 peer-focus-visible:outline-offset-[3px] peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-aria-invalid:border-destructive";
+	"pointer-events-none flex size-5 shrink-0 items-center justify-center rounded-none border border-foreground/60 bg-transparent transition-colors peer-checked:border-primary peer-checked:bg-primary peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-primary-70 peer-focus-visible:outline-offset-[3px] peer-disabled:cursor-not-allowed peer-disabled:opacity-50 peer-aria-invalid:border-destructive";
 
 // `peer-*` only reaches direct siblings of the input, so the tick is a sibling
 // of the frame rather than a child of it.
@@ -127,7 +127,7 @@ const RESULT = "join-result flex flex-col items-start outline-none";
  * alternative on a black field is a second red block competing with the CTA.
  */
 const MEDALLION =
-	"join-medallion flex size-14 shrink-0 items-center justify-center rounded-full border-[1.5px] border-primary text-primary"; // design-allow: status medallion
+	"join-medallion flex size-14 shrink-0 items-center justify-center rounded-full border border-primary text-primary"; // design-allow: status medallion
 
 const MEDALLION_MARK = "join-mark size-7 overflow-visible";
 
@@ -243,19 +243,19 @@ export default function MembersJoinPage() {
 
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								{COPY.ISSUE_LINE}
+								{COPY.ISSUE_SEASON} <Year /> · {COPY.ISSUE_SECTION}
 							</span>
 						</div>
 
@@ -433,7 +433,9 @@ export default function MembersJoinPage() {
 									{phase === "submitting" && (
 										<div className={OVERLAY} aria-hidden="true">
 											<LogoStripes className={OVERLAY_STRIPES} />
-											<p className={OVERLAY_LABEL}>{COPY.ISSUE_LINE}</p>
+											<p className={OVERLAY_LABEL}>
+												{COPY.ISSUE_SEASON} <Year /> · {COPY.ISSUE_SECTION}
+											</p>
 											<p>
 												<span className={OVERLAY_CLIP}>
 													<span className={OVERLAY_LINE}>Entering you</span>

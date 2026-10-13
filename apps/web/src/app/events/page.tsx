@@ -36,7 +36,7 @@ const PHOTO =
 const FALLBACK_IMAGE = "/amg-race-track-gstudio_1080.webp";
 
 const LEAD =
-	"mt-[1.6cqw] flex items-baseline gap-[2cqw] border-foreground/[0.41] border-y-[1.5px] py-[1.2cqw] max-xl:mt-5 max-xl:flex-wrap max-xl:gap-3 max-xl:py-4";
+	"mt-[1.6cqw] flex items-baseline gap-[2cqw] border-foreground/[0.41] border-y py-[1.2cqw] max-xl:mt-5 max-xl:flex-wrap max-xl:gap-3 max-xl:py-4";
 
 const DATE =
 	"font-extrabold font-sans text-[4.1921cqw] uppercase leading-[0.95] max-xl:text-[clamp(40px,11vw,64px)]";
@@ -64,7 +64,7 @@ const PANEL_TEXT =
 	"font-normal font-sans text-on-surface-muted text-caption max-xl:text-body-md";
 
 const LEDGER =
-	"mt-[2.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6";
+	"mt-[2.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6";
 
 // The upcoming spread sits closest to the fold, so its top padding tightens
 // on desktop only; the kicker is absolutely positioned to the section top and
@@ -235,13 +235,13 @@ export default function EventsPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>

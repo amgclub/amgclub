@@ -5,6 +5,7 @@ import { ShoppingBagIcon } from "lucide-react";
 import type { Route } from "next";
 import Link from "next/link";
 import { PageMotion } from "@/components/page-motion";
+import { Year } from "@/components/year";
 import { formatAED } from "@/lib/format";
 import {
 	FOCUS_RING,
@@ -60,19 +61,19 @@ export default function ShopPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · Club merchandise
+								Season <Year /> · Club merchandise
 							</span>
 						</div>
 
@@ -114,7 +115,7 @@ export default function ShopPage() {
 								))}
 							</div>
 						) : products.length === 0 ? (
-							<div className="border-foreground/[0.41] border-t-[1.5px] pt-[2.4cqw] max-xl:pt-6">
+							<div className="border-foreground/[0.41] border-t pt-[2.4cqw] max-xl:pt-6">
 								<p className="m-0 font-extrabold font-sans text-[clamp(22px,4cqw,56px)] text-foreground uppercase leading-[1.05]">
 									No products found
 								</p>

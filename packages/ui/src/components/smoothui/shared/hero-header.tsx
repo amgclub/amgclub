@@ -174,7 +174,7 @@ export const HeroHeader = () => {
 												? { opacity: 1 }
 												: { opacity: 1, scale: SCALE_MAX, y: 0 }
 										}
-										className="mb-6 w-full flex-wrap items-center justify-end space-y-8 rounded-none border bg-background p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent"
+										className="mb-6 w-full flex-wrap items-center justify-end space-y-8 rounded-none border bg-background p-6 shadow-2xl shadow-zinc-300/20 md:flex-nowrap lg:m-0 lg:flex lg:w-fit lg:gap-6 lg:space-y-0 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none dark:shadow-none dark:lg:bg-transparent" // design-allow: smoothui demo default, never rendered by the AMG site
 										exit={
 											shouldReduceMotion
 												? { opacity: 0, transition: { duration: 0 } }

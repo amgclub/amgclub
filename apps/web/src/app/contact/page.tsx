@@ -10,6 +10,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { PageMotion } from "@/components/page-motion";
+import { Year } from "@/components/year";
 import {
 	FOCUS_RING,
 	HAIR_SPREAD,
@@ -43,7 +44,7 @@ const FIELD_TEXTAREA = `flex min-h-24 w-full resize-none rounded-none border-[1.
 const ERROR = "font-normal font-sans text-destructive-70 text-caption";
 
 const RAIL_BLOCK =
-	"flex flex-col gap-2.5 border-foreground/[0.41] border-t-[1.5px] pt-4";
+	"flex flex-col gap-2.5 border-foreground/[0.41] border-t pt-4";
 
 const CTA_FULL = `h-12 w-full sm:w-auto sm:px-10 text-label-lg uppercase tracking-[0.06em] ${FOCUS_RING}`;
 
@@ -87,19 +88,19 @@ export default function ContactPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · Contact
+								Season <Year /> · Contact
 							</span>
 						</div>
 

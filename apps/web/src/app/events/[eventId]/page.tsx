@@ -46,12 +46,12 @@ export default function EventDetailPage() {
 			<main className="flex flex-1 flex-col">
 				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 					<span
-						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 						<span
-							className="block h-[1.5px] w-full bg-foreground/[0.41]"
+							className="block h-px w-full bg-foreground/[0.41]"
 							aria-hidden="true"
 						/>
 						<div className={SPREAD_BODY}>
@@ -69,7 +69,7 @@ export default function EventDetailPage() {
 								<div className="min-w-0">
 									<Skeleton className="aspect-[2099/587] w-full max-xl:aspect-[3/2]" />
 									<Skeleton className="mt-[2.4cqw] h-4 w-3/4 max-xl:mt-5" />
-									<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+									<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 										{[0, 1, 2].map((row) => (
 											<li key={row} className={FORMAT_ROW}>
 												<Skeleton className="h-3 w-6" />
@@ -79,9 +79,9 @@ export default function EventDetailPage() {
 										))}
 									</ol>
 								</div>
-								<aside className="border-foreground/[0.41] max-xl:border-t-[1.5px] max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l-[1.5px] xl:pl-[2cqw]">
+								<aside className="border-foreground/[0.41] max-xl:border-t max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l xl:pl-[2cqw]">
 									<Skeleton className="h-8 w-32" />
-									<div className="mt-5 flex flex-col gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="mt-5 flex flex-col gap-3 border-foreground/[0.41] border-t pt-4">
 										<Skeleton className="h-3 w-full" />
 										<Skeleton className="h-3 w-full" />
 										<Skeleton className="h-3 w-2/3" />
@@ -107,12 +107,12 @@ export default function EventDetailPage() {
 			<main className="flex flex-1 flex-col">
 				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 					<span
-						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 						<span
-							className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+							className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 							aria-hidden="true"
 						/>
 						<div className={SPREAD_BODY}>
@@ -146,12 +146,12 @@ export default function EventDetailPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
@@ -203,7 +203,7 @@ export default function EventDetailPage() {
 								>
 									{event.description || "Details and schedule to follow."}
 								</p>
-								<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+								<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 									<li className={`format-row ${FORMAT_ROW}`}>
 										<span className={FMT_INDEX} aria-hidden="true">
 											01
@@ -234,12 +234,12 @@ export default function EventDetailPage() {
 									</li>
 								</ol>
 							</div>
-							<aside className="detail-rail border-foreground/[0.41] max-xl:border-t-[1.5px] max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l-[1.5px] xl:pl-[2cqw]">
+							<aside className="detail-rail border-foreground/[0.41] max-xl:border-t max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l xl:pl-[2cqw]">
 								<div className="flex flex-col gap-5 xl:sticky xl:top-6">
 									<p className="font-extrabold font-sans text-[2.2cqw] text-foreground uppercase leading-none max-xl:text-[34px]">
 										{priceLabel}
 									</p>
-									<dl className="m-0 flex flex-col gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<dl className="m-0 flex flex-col gap-3 border-foreground/[0.41] border-t pt-4">
 										<div className="flex items-baseline justify-between gap-3">
 											<dt className="font-medium font-sans text-[0.87653cqw] text-on-surface-muted uppercase leading-[1.4] tracking-[0.06em] max-xl:text-label-sm">
 												Date

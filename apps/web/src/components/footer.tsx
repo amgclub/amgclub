@@ -1,6 +1,8 @@
 import type { Route } from "next";
 import Link from "next/link";
 
+import { Year } from "@/components/year";
+
 const NAV_LINKS = [
 	{ label: "Home", href: "/" },
 	{ label: "About", href: "/about" },
@@ -18,7 +20,7 @@ const labelClass =
 export default function Footer() {
 	return (
 		<footer className="bg-background text-foreground">
-			<div className="flex flex-col items-start gap-5 border-border border-t px-5 pt-8 md:flex-row md:items-center md:justify-between md:gap-8 md:pt-10 md:pr-13 md:pl-18">
+			<div className="flex flex-col items-start gap-5 border-foreground/[0.41] border-t px-5 pt-8 md:flex-row md:items-center md:justify-between md:gap-8 md:pt-10 md:pr-13 md:pl-18">
 				<img
 					className="h-8 w-auto md:h-11"
 					src="/logo.webp"
@@ -42,11 +44,13 @@ export default function Footer() {
 					))}
 				</nav>
 
-				<p className={labelClass}>Season 2026 · Issue 001</p>
+				<p className={labelClass}>
+					Season <Year /> · Issue 001
+				</p>
 			</div>
 
 			<p className="px-5 pt-6 pb-8 font-sans text-[0.75rem] text-caption text-on-surface-muted leading-[1.3333] md:pt-4 md:pr-13 md:pb-10 md:pl-18">
-				© 2026 AMG Club UAE
+				© <Year /> AMG Club UAE
 			</p>
 		</footer>
 	);

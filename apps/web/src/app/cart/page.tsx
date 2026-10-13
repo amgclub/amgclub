@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import { PageMotion } from "@/components/page-motion";
 import { QuantityInput } from "@/components/quantity-input";
+import { Year } from "@/components/year";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
 import {
@@ -30,10 +31,10 @@ const SECTION =
 
 const KICKER = `absolute left-[5.1448cqw] top-[4cqw] text-primary-60 max-xl:static max-xl:mb-6 ${LABEL_SM} ${LABEL}`;
 
-const LEDGER = "m-0 list-none border-t-[1.5px] border-foreground/[0.41] p-0";
+const LEDGER = "m-0 list-none border-t border-foreground/[0.41] p-0";
 
 const ROW =
-	"grid grid-cols-[5.6cqw_minmax(0,1fr)_auto] items-center gap-x-[1.6cqw] border-b-[1.5px] border-foreground/28 py-[1.5cqw] max-xl:grid-cols-[44px_1fr] max-xl:gap-y-2 max-xl:py-4";
+	"grid grid-cols-[5.6cqw_minmax(0,1fr)_auto] items-center gap-x-[1.6cqw] border-b border-foreground/[0.41] py-[1.5cqw] max-xl:grid-cols-[44px_1fr] max-xl:gap-y-2 max-xl:py-4";
 
 const ROW_INDEX =
 	"font-medium font-sans tracking-[0.06em] text-[0.87653cqw] text-primary-60 max-xl:text-label-sm";
@@ -125,19 +126,19 @@ export default function CartPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · The manifest
+								Season <Year /> · The manifest
 							</span>
 						</div>
 
@@ -187,11 +188,11 @@ export default function CartPage() {
 								</div>
 								<div className="flex flex-col gap-4 xl:sticky xl:top-6">
 									<p className={RAIL_LABEL}>Order summary</p>
-									<div className="flex flex-col gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex flex-col gap-3 border-foreground/[0.41] border-t pt-4">
 										<Skeleton className={SKEL_RAIL} />
 										<Skeleton className={SKEL_RAIL} />
 									</div>
-									<div className="flex items-baseline justify-between gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex items-baseline justify-between gap-3 border-foreground/[0.41] border-t pt-4">
 										<Skeleton className="block h-4 w-16" />
 										<Skeleton className="block h-6 w-24" />
 									</div>
@@ -202,7 +203,7 @@ export default function CartPage() {
 								</span>
 							</div>
 						) : isEmpty ? (
-							<div className="border-foreground/[0.41] border-t-[1.5px] pt-[2.4cqw] max-xl:pt-6">
+							<div className="border-foreground/[0.41] border-t pt-[2.4cqw] max-xl:pt-6">
 								<p className={EMPTY_TITLE}>Your cart is empty</p>
 								<p className={`mt-3 ${NOTE_TEXT}`}>
 									Browse the shop and add some items
@@ -293,7 +294,7 @@ export default function CartPage() {
 
 								<aside className="flex flex-col items-start gap-4 xl:sticky xl:top-6">
 									<p className={RAIL_LABEL}>Order summary</p>
-									<div className="flex w-full flex-col gap-2.5 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex w-full flex-col gap-2.5 border-foreground/[0.41] border-t pt-4">
 										<div className={RAIL_ROW}>
 											<span className="text-on-surface-muted">
 												Subtotal ({itemCount}{" "}
@@ -306,7 +307,7 @@ export default function CartPage() {
 											<span className={RAIL_VALUE}>Free</span>
 										</div>
 									</div>
-									<div className="flex w-full items-baseline justify-between gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex w-full items-baseline justify-between gap-3 border-foreground/[0.41] border-t pt-4">
 										<span className={TOTAL_LABEL}>Total</span>
 										<span className={TOTAL_VALUE}>{formatAED(total)}</span>
 									</div>

@@ -1,7 +1,12 @@
 /** Copy for the membership application page, `/members-join`. */
 
-/** The masthead running line, matching the header band's "Season 2026 · Issue 001". */
-export const ISSUE_LINE = "Season 2026 · Membership";
+/**
+ * The masthead running line, matching the header band's season line. Split so the
+ * caller can slot the live year between the season and the section name; the
+ * pages are statically prerendered, so the year has to resolve on the client.
+ */
+export const ISSUE_SEASON = "Season";
+export const ISSUE_SECTION = "Membership";
 
 export const HEADLINE = "Join the club";
 

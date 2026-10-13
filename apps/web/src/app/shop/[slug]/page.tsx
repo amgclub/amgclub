@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { PageMotion } from "@/components/page-motion";
 import { QuantityInput } from "@/components/quantity-input";
+import { Year } from "@/components/year";
 import { useCart } from "@/contexts/cart";
 import { formatAED } from "@/lib/format";
 import {
@@ -81,12 +82,12 @@ export default function ProductDetailPage() {
 			<main className="flex flex-1 flex-col">
 				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 					<span
-						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 						<span
-							className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+							className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 							aria-hidden="true"
 						/>
 						<div className={SPREAD_BODY}>
@@ -104,7 +105,7 @@ export default function ProductDetailPage() {
 								<div className="min-w-0">
 									<Skeleton className="aspect-[1.1] w-full" />
 									<Skeleton className="mt-6 h-4 w-3/4 max-xl:mt-5" />
-									<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+									<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 										{[0, 1, 2].map((row) => (
 											<li key={row} className={FORMAT_ROW}>
 												<Skeleton className="h-3 w-6" />
@@ -114,9 +115,9 @@ export default function ProductDetailPage() {
 										))}
 									</ol>
 								</div>
-								<aside className="border-foreground/[0.41] max-xl:border-t-[1.5px] max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l-[1.5px] xl:pl-[2cqw]">
+								<aside className="border-foreground/[0.41] max-xl:border-t max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l xl:pl-[2cqw]">
 									<Skeleton className="h-8 w-32" />
-									<div className="mt-5 flex items-center justify-between gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="mt-5 flex items-center justify-between gap-3 border-foreground/[0.41] border-t pt-4">
 										<Skeleton className="h-4 w-20" />
 										<Skeleton className="h-11 w-36" />
 									</div>
@@ -136,18 +137,18 @@ export default function ProductDetailPage() {
 			<main className="flex flex-1 flex-col">
 				<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 					<span
-						className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+						className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 						aria-hidden="true"
 					/>
 					<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 						<span
-							className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+							className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 							aria-hidden="true"
 						/>
 						<div className={SPREAD_BODY}>
 							<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 								<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-									Season 2026 · The Stock
+									Season <Year /> · The Stock
 								</span>
 							</div>
 							<h1 className={`h1 ${HEADING}`}>Product not found</h1>
@@ -176,18 +177,18 @@ export default function ProductDetailPage() {
 		<main className="flex flex-1 flex-col">
 			<div className="@container relative bg-background text-foreground max-xl:px-5 md:max-xl:px-12">
 				<span
-					className="absolute top-0 left-[3.6242cqw] h-full w-[1.5px] bg-foreground/40 max-xl:hidden"
+					className="absolute top-0 left-[3.6242cqw] h-full w-px bg-foreground/[0.41] max-xl:hidden"
 					aria-hidden="true"
 				/>
 				<header className="relative pt-[2.2cqw] pb-[1.2cqw] max-xl:pt-6 max-xl:pb-6">
 					<span
-						className="hair-masthead block h-[1.5px] w-full bg-foreground/[0.41]"
+						className="hair-masthead block h-px w-full bg-foreground/[0.41]"
 						aria-hidden="true"
 					/>
 					<div className={SPREAD_BODY}>
 						<div className="flex items-baseline justify-between gap-4 py-[1.1cqw] max-xl:py-4">
 							<span className="t-issue font-medium font-sans text-[0.9223cqw] text-primary-60 uppercase leading-none max-xl:text-[clamp(10px,1.6vw,12px)]">
-								Season 2026 · The Stock
+								Season <Year /> · The Stock
 							</span>
 							<Link href={"/shop" as Route} className={BACK_LINK}>
 								<ArrowLeftIcon className="size-3.5" aria-hidden="true" />
@@ -242,7 +243,7 @@ export default function ProductDetailPage() {
 												onClick={() => setSelectedImageIndex(i)}
 												aria-label={`Show image ${i + 1}`}
 												aria-pressed={i === selectedImageIndex}
-												className={`${THUMB} ${i === selectedImageIndex ? "border-primary" : "border-foreground/40 hover:border-foreground/70"}`}
+												className={`${THUMB} ${i === selectedImageIndex ? "border-primary" : "border-foreground/[0.41] hover:border-foreground/70"}`}
 											>
 												<img
 													src={img.url}
@@ -260,7 +261,7 @@ export default function ProductDetailPage() {
 										{product.description}
 									</p>
 								)}
-								<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t-[1.5px] p-0 max-xl:mt-6">
+								<ol className="mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
 									<li className={`format-row ${FORMAT_ROW}`}>
 										<span className={FMT_INDEX} aria-hidden="true">
 											01
@@ -294,10 +295,10 @@ export default function ProductDetailPage() {
 									)}
 								</ol>
 							</div>
-							<aside className="detail-rail border-foreground/[0.41] max-xl:border-t-[1.5px] max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l-[1.5px] xl:pl-[2cqw]">
+							<aside className="detail-rail border-foreground/[0.41] max-xl:border-t max-xl:border-l-0 max-xl:pt-6 max-xl:pl-0 xl:border-l xl:pl-[2cqw]">
 								<div className="flex flex-col gap-5 xl:sticky xl:top-6">
 									<p className={RAIL_PRICE}>{formatAED(product.price)}</p>
-									<div className="flex flex-col gap-3 border-foreground/[0.41] border-t-[1.5px] pt-4">
+									<div className="flex flex-col gap-3 border-foreground/[0.41] border-t pt-4">
 										<div className="flex items-center justify-between gap-3">
 											<span
 												className={`text-on-surface-muted ${LABEL_SM} ${LABEL}`}

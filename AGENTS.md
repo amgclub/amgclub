@@ -26,6 +26,7 @@ These classes violate the high-contrast palette (no soft blues, no generic grays
 - `bg-slate-*`, `bg-gray-*`, `bg-zinc-*`, `bg-neutral-*` (use `bg-background` / `bg-surface-weak` / `bg-muted` instead)
 - `text-slate-*`, `text-gray-*`, `text-zinc-*`, `text-neutral-*` (use `text-foreground` / `text-muted-foreground`)
 - `bg-green-*`, `text-green-*` (success states use the AMG red ramp, not traffic-light greens)
+- The **numbered** steps of any Tailwind palette scale, on any utility prefix, e.g. `fill-yellow-500`, `stroke-amber-400`. The bare token utilities (`text-primary`, `fill-yellow`, `fill-yellow-70`) are the sanctioned ones and pass.
 - `bg-red-*`, `text-red-*` with values other than the `--primary` token (e.g. `bg-red-500`)
 - Raw hex colors in className (`#fff`, `#000`, etc.): go through tokens
 - `oklch(...)` literals in className outside `globals.css`: tokenize instead
@@ -44,7 +45,7 @@ The script scans every `.ts`/`.tsx` file under `packages/<name>/src` and `apps/<
 
 - `\brounded-(lg|md|sm|xl|2xl|3xl)\b`
 - `\brounded-\[2px\]`
-- `\b(?:bg|text|border|ring)-(blue|slate|gray|zinc|green|red|amber|orange|yellow|pink|purple|indigo|cyan|teal|sky|emerald|lime|rose|fuchsia|violet)-(50|100|200|300|400|500|600|700|800|900|950)\b`
+- `\b(?:bg|text|border|ring|fill|stroke|decoration|divide|outline|shadow)-(blue|slate|gray|zinc|green|red|amber|orange|yellow|pink|purple|indigo|cyan|teal|sky|emerald|lime|rose|fuchsia|violet)-(50|100|200|300|400|500|600|700|800|900|950)\b`
 - Raw hex colors in className strings (`#fff`, `#000`, etc.). The script excludes any file named `color.mjs`
 
 The `MessageAvatar` `rounded-full` exception at `packages/ui/src/components/message.tsx:37` is whitelisted with an inline `// design-allow: chip` comment so the linter skips it. Any line containing the regex `/\bdesign-allow:\s*\S/` is treated as a per-line opt-out.

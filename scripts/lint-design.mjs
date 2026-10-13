@@ -26,7 +26,11 @@ const SKIP_FILES = new Set(["color.mjs"]);
 const FORBIDDEN = [
 	/\brounded-(?:lg|md|sm|xl|2xl|3xl)\b/,
 	/\brounded-\[2px\]/,
-	/\b(?:bg|text|border|ring)-(?:blue|slate|gray|zinc|green|red|amber|orange|yellow|pink|purple|indigo|cyan|teal|sky|emerald|lime|rose|fuchsia|violet)-(?:50|100|200|300|400|500|600|700|800|900|950)\b/,
+	// fill/stroke are listed alongside the text utilities because the site now
+	// paints SVG artwork with tokens (see the format marks in DESIGN.md).
+	// The numbered steps are the raw Tailwind scale; the bare token utilities
+	// (`fill-yellow`, `fill-yellow-70`) are the sanctioned ones and pass.
+	/\b(?:bg|text|border|ring|fill|stroke|decoration|divide|outline|shadow)-(?:blue|slate|gray|zinc|green|red|amber|orange|yellow|pink|purple|indigo|cyan|teal|sky|emerald|lime|rose|fuchsia|violet)-(?:50|100|200|300|400|500|600|700|800|900|950)\b/,
 	/(?<![A-Za-z0-9_])#[0-9a-fA-F]{3,8}\b/,
 ];
 
