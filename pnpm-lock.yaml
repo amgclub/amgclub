@@ -208,9 +208,6 @@ importers:
       '@amgclub/api':
         specifier: workspace:*
         version: link:../../packages/api
-      '@amgclub/auth':
-        specifier: workspace:*
-        version: link:../../packages/auth
       '@amgclub/env':
         specifier: workspace:*
         version: link:../../packages/env
@@ -250,9 +247,6 @@ importers:
       babel-plugin-react-compiler:
         specifier: ^1.0.0
         version: 1.0.0
-      better-auth:
-        specifier: 'catalog:'
-        version: 1.7.1(@cloudflare/workers-types@5.20260905.1)(drizzle-kit@0.31.10)(drizzle-orm@0.45.2(@cloudflare/workers-types@5.20260905.1)(@electric-sql/pglite@0.3.15)(@libsql/client@0.17.4)(@types/pg@8.23.1)(@upstash/redis@1.38.4)(kysely@0.29.5)(pg@8.23.0)(postgres@3.4.9))(next@16.3.4(@types/node@26.4.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(pg@8.23.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(vitest@4.1.11(@types/node@26.4.1)(vite@8.2.2(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(terser@5.16.9)(tsx@4.23.13)(yaml@2.9.0)))
       dotenv:
         specifier: 'catalog:'
         version: 17.4.2
