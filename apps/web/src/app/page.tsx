@@ -23,6 +23,7 @@ import {
 	FMT_NAME,
 	FOCUS_RING,
 	FORMAT_ROW,
+	fmtMarkTilt,
 	HAIR_SPREAD,
 	KICKER,
 	LABEL,
@@ -142,21 +143,26 @@ export default function Home() {
 								Dubai, and club socials.
 							</p>
 							<ol className="formats mt-[3.4cqw] list-none border-foreground/[0.41] border-t p-0 max-xl:mt-6">
-								{RUN_FORMATS.map((format) => (
-									<li key={format.index} className={`format-row ${FORMAT_ROW}`}>
+								{RUN_FORMATS.map((format, rowIndex) => (
+									<li
+										key={format.index}
+										className={`format-row relative ${FORMAT_ROW}`}
+									>
 										<span
 											className={`fmt-index ${FMT_INDEX}`}
 											aria-hidden="true"
 										>
 											{format.index}
 										</span>
-										<span className={`fmt-name ${FMT_NAME}`}>
+										<span
+											className={`fmt-name ${FMT_NAME} max-xl:pr-[4.5rem] xl:pr-[4cqw]`}
+										>
 											{format.name}
 										</span>
 										<span className={`fmt-mark ${FMT_MARK}`}>
 											<FormatIcon
 												name={format.icon}
-												className={FMT_MARK_SIZE}
+												className={`${FMT_MARK_SIZE} ${fmtMarkTilt(rowIndex)}`}
 											/>
 											<span className="sr-only">{format.detail}</span>
 										</span>

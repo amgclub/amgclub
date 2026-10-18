@@ -18,10 +18,27 @@ export const FMT_NAME =
 
 export const FMT_DETAIL = `text-right text-on-surface-muted max-xl:col-start-2 max-xl:text-left ${LABEL_SM} ${LABEL}`;
 
+/**
+ * The 003 run-format marks: boxed on a yellow tint and pinned to the row's
+ * right edge at every width — the plate rides the rule line rather than
+ * sitting in the grid, so it never pushes the name around. Below `xl` they
+ * lighten, because the rows are tighter and a full-strength plate crowds the
+ * type. The name reserves the plate's band (`xl:pr-[4cqw]`) so a long format
+ * never runs underneath it.
+ */
 export const FMT_MARK =
-	"flex items-center justify-end self-center max-xl:col-start-2 max-xl:justify-start";
+	"absolute right-0 top-1/2 flex -translate-y-1/2 items-center justify-center bg-yellow/[0.14] p-[0.55cqw] max-xl:bg-yellow/[0.07] max-xl:p-2 max-xl:opacity-70";
 
 export const FMT_MARK_SIZE = "size-[2.4cqw] max-xl:size-9";
+
+/**
+ * The mark tilts alternating row to row — `10deg, -10deg, 10deg…` — so five
+ * identical boxed plates don't read as one stamped pattern. Driven by the
+ * row's index, not by an `odd`/`even` variant, because the tilt has to stay
+ * stable across breakpoints.
+ */
+export const fmtMarkTilt = (index: number) =>
+	index % 2 === 0 ? "rotate-[10deg]" : "-rotate-[10deg]";
 
 export const SPREAD_INTRO =
 	"max-w-[46cqw] text-[1.029cqw] leading-[1.5] font-normal font-sans text-on-surface-muted max-xl:max-w-none max-xl:text-body-lg md:max-xl:max-w-[720px]";
