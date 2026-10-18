@@ -250,7 +250,7 @@ export default function Home() {
 					aria-label="Join the club"
 				>
 					<Link
-						className={`join-band group/cta relative flex min-h-[16cqw] items-end justify-between gap-[2cqw] bg-primary pt-[5cqw] pr-[3.6242cqw] pb-[3.2cqw] pl-[20.7317cqw] text-primary-foreground no-underline ${FOCUS_RING} max-xl:min-h-0 max-xl:flex-col max-xl:items-start max-xl:gap-5 max-xl:p-10 md:max-xl:p-16`}
+						className={`join-band group/cta relative flex min-h-[16cqw] items-end justify-between gap-[2cqw] bg-primary pt-[5cqw] pr-[3.6242cqw] pb-[3.2cqw] pl-[20.7317cqw] text-primary-foreground no-underline ${FOCUS_RING} max-xl:-mx-5 max-xl:min-h-0 max-xl:flex-col max-xl:items-start max-xl:gap-5 max-xl:p-10 md:max-xl:-mx-12 md:max-xl:p-16`}
 						href={JOIN_URL as Route}
 					>
 						<span className="join-band-label font-extrabold font-sans text-[4.534cqw] uppercase leading-[0.95] transition-opacity group-hover/cta:opacity-85 max-xl:text-[clamp(40px,11vw,72px)]">
