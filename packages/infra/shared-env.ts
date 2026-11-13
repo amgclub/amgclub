@@ -17,6 +17,8 @@ export interface CloudflareEnv {
 	readonly HYPERDRIVE?: HyperdriveBinding;
 	readonly BETTER_AUTH_SECRET: string;
 	readonly BETTER_AUTH_URL: string;
+	/** Extra origins accepted by better-auth's CSRF/origin check (comma-separated). */
+	readonly BETTER_AUTH_TRUSTED_ORIGINS: string;
 	readonly STORAGE_PROVIDER: string;
 	readonly SUPABASE_URL: string;
 	readonly SUPABASE_SECRET_KEY: string;
@@ -45,7 +47,16 @@ export const commonEnv = {
 	IMAGES: Cloudflare.Images.Images(),
 	DATABASE_URL: Config.redacted("DATABASE_URL"),
 	BETTER_AUTH_SECRET: Config.redacted("BETTER_AUTH_SECRET"),
-	BETTER_AUTH_URL: Cloudflare.Worker.URL,
+	// Read the public origin from each app's `.env.production` instead of
+	// `Cloudflare.Worker.URL`: Worker.URL resolves to the `*.workers.dev` URL,
+	// which better-auth then treats as its baseURL and only trusted origin, so
+	// sign-in from the custom domain fails with 403 INVALID_ORIGIN.
+	BETTER_AUTH_URL: Config.string("BETTER_AUTH_URL"),
+	// Optional comma-separated extras (e.g. the workers.dev hostname) so those
+	// hosts keep working alongside the custom domain.
+	BETTER_AUTH_TRUSTED_ORIGINS: Config.string(
+		"BETTER_AUTH_TRUSTED_ORIGINS",
+	).pipe(Config.withDefault("")),
 	// Optional: web does not import @amgclub/storage, so it has no storage
 	// backend to select. Defaults to "" rather than being required, which would
 	// otherwise block deploying web.

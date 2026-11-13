@@ -10,13 +10,28 @@ import { cache } from "react";
 export function createAuth() {
 	const db = createDb();
 
+	// Custom domain plus any explicitly configured extras (the workers.dev
+	// hostname). Without the custom domain here better-auth rejects every
+	// sign-in from it with `INVALID_ORIGIN`.
+	const trustedOrigins = [
+		...new Set(
+			[
+				env.BETTER_AUTH_URL,
+				...(env.BETTER_AUTH_TRUSTED_ORIGINS ?? "")
+					.split(",")
+					.map((origin) => origin.trim())
+					.filter(Boolean),
+			].filter(Boolean),
+		),
+	];
+
 	return betterAuth({
 		database: drizzleAdapter(db, {
 			provider: "pg",
 
 			schema: schema,
 		}),
-		trustedOrigins: [env.BETTER_AUTH_URL],
+		trustedOrigins,
 		emailAndPassword: {
 			enabled: true,
 		},
